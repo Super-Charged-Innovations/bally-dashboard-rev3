@@ -3180,8 +3180,203 @@ async def initialize_sample_data():
             )
         ]
         
+        # Enhanced Advanced Analytics & Predictive Models
+        
+        # Create comprehensive analytics data
+        analysis_types = ["customer_ltv", "churn_prediction", "revenue_forecast", "operational_efficiency", 
+                         "market_analysis", "risk_assessment", "trend_analysis", "performance_optimization"]
+        
+        enhanced_analytics_reports = []
+        for i in range(40):  # 40 advanced analytics reports
+            analysis_type = analysis_types[i % len(analysis_types)]
+            
+            # Generate realistic insights and recommendations based on type
+            insights_data = {
+                "customer_ltv": [
+                    f"VIP customers show 8.5x higher lifetime value than Ruby tier members",
+                    f"Gaming revenue comprises 72% of total customer lifetime value",
+                    f"Birthday campaign participants show 28% higher retention rates",
+                    f"Average customer lifetime: {150 + (i * 10)} days with {i % 15 + 5} visits"
+                ],
+                "churn_prediction": [
+                    f"Members inactive for {45 + i}+ days have {75 + i % 20}% churn probability",
+                    f"Declining gaming frequency is strongest predictor (correlation: 0.{85 + i % 15})",
+                    f"Social engagement reduces churn risk by {35 + i % 25}%",
+                    f"Model accuracy: {88 + i % 10}.{i % 10}% with F1-score of 0.{82 + i % 18}"
+                ],
+                "revenue_forecast": [
+                    f"Projected monthly revenue increase of {5 + i % 15}% based on current trends",
+                    f"Gaming floor optimization could yield additional ${(i + 1) * 5000} monthly",
+                    f"VIP segment expected to grow by {15 + i % 10}% in next quarter",
+                    f"Seasonal patterns show {20 + i % 30}% increase during festive periods"
+                ],
+                "operational_efficiency": [
+                    f"Peak hours show {30 + i % 20}% staff utilization gap",
+                    f"Service response time: {15 + i % 10} minutes (target: 10 minutes)",
+                    f"Gaming floor capacity utilization at {80 + i % 15}%",
+                    f"Equipment downtime reduced by {i % 20 + 5}% compared to last month"
+                ]
+            }
+            
+            recommendations_data = {
+                "customer_ltv": [
+                    "Focus VIP acquisition and retention programs",
+                    "Develop tier-specific gaming experiences",
+                    "Implement personalized reward structures",
+                    "Enhance birthday celebration offerings"
+                ],
+                "churn_prediction": [
+                    "Implement 30-day re-engagement campaign",
+                    "Create gaming frequency alerts for account managers",
+                    "Boost social features and community events",
+                    "Develop personalized retention offers"
+                ],
+                "revenue_forecast": [
+                    "Optimize gaming floor layout for peak hours",
+                    "Introduce dynamic pricing for VIP services",
+                    "Expand marketing during high-revenue periods",
+                    "Develop seasonal promotional campaigns"
+                ],
+                "operational_efficiency": [
+                    "Optimize shift scheduling for peak periods",
+                    "Implement automated service request system",
+                    "Add gaming capacity during weekend evenings",
+                    "Introduce predictive maintenance scheduling"
+                ]
+            }
+            
+            analytics_report = AdvancedAnalytics(
+                analysis_type=analysis_type,
+                analysis_date=datetime.utcnow() - timedelta(days=i % 30),
+                time_period=["daily", "weekly", "monthly", "quarterly"][i % 4],
+                data_points={
+                    "sample_size": 1000 + (i * 100),
+                    "confidence_interval": f"{90 + i % 9}%",
+                    "data_quality_score": round(85.5 + (i % 15) * 0.8, 1),
+                    "processing_time_seconds": 45 + (i % 120),
+                    "variables_analyzed": 15 + (i % 25)
+                },
+                insights=insights_data.get(analysis_type, [f"Insight {j+1} for {analysis_type}" for j in range(4)]),
+                recommendations=recommendations_data.get(analysis_type, [f"Recommendation {j+1}" for j in range(4)]),
+                confidence_score=round(80.0 + (i % 20), 1),
+                created_by=admin_users[i % 2]["id"]
+            )
+            enhanced_analytics_reports.append(analytics_report.dict())
+        
+        advanced_analytics_col.delete_many({})
+        advanced_analytics_col.insert_many(enhanced_analytics_reports)
+        
+        # Create diverse predictive models
+        model_types = ["churn_prediction", "demand_forecasting", "price_optimization", "staff_scheduling", 
+                      "fraud_detection", "customer_segmentation", "inventory_optimization", "risk_scoring"]
+        
+        enhanced_predictive_models = []
+        for i in range(20):  # 20 predictive models
+            model_type = model_types[i % len(model_types)]
+            
+            model = PredictiveModel(
+                model_name=f"{model_type.replace('_', ' ').title()} Model v{i//4 + 1}.{i % 4}",
+                model_type=model_type,
+                description=f"Advanced {model_type} model using ensemble methods and deep learning",
+                input_features=[
+                    "member_tier", "visit_frequency", "avg_spend", "session_duration", "game_preference",
+                    "time_of_visit", "social_score", "age_group", "location", "payment_method"
+                ][i % 10:i % 10 + (i % 5) + 3],
+                target_variable=f"{model_type}_score" if "prediction" in model_type else f"{model_type}_value",
+                algorithm_used=["Random Forest", "XGBoost", "Neural Network", "SVM", "Logistic Regression"][i % 5],
+                training_data_size=5000 + (i * 500),
+                accuracy_score=round(0.82 + (i % 15) * 0.01, 3),
+                precision_score=round(0.78 + (i % 18) * 0.01, 3),
+                recall_score=round(0.75 + (i % 20) * 0.01, 3),
+                last_trained=datetime.utcnow() - timedelta(days=i % 30),
+                model_version=f"{i//4 + 1}.{i % 4}",
+                is_production=i % 3 == 0,
+                predictions_made=i * 150 + (i % 1000),
+                success_rate=round(85.0 + (i % 12), 1),
+                created_by=admin_users[i % 2]["id"]
+            )
+            enhanced_predictive_models.append(model.dict())
+        
         predictive_models_col.delete_many({})
-        predictive_models_col.insert_many([model.dict() for model in models_data])
+        predictive_models_col.insert_many(enhanced_predictive_models)
+        
+        # Create comprehensive cost optimization opportunities
+        optimization_areas = ["staffing", "energy", "inventory", "marketing", "operations", "technology", "facilities"]
+        
+        enhanced_cost_optimization = []
+        for i in range(25):  # 25 optimization opportunities
+            area = optimization_areas[i % len(optimization_areas)]
+            
+            optimization_details = {
+                "staffing": {
+                    "current_cost": 450000 + (i * 25000),
+                    "projected_savings": 35000 + (i * 5000),
+                    "description": "Optimize shift schedules and reduce overtime costs"
+                },
+                "energy": {
+                    "current_cost": 85000 + (i * 8000),
+                    "projected_savings": 12000 + (i * 2000),
+                    "description": "LED lighting upgrade and HVAC optimization"
+                },
+                "inventory": {
+                    "current_cost": 120000 + (i * 15000),
+                    "projected_savings": 18000 + (i * 3000),
+                    "description": "Just-in-time inventory management system"
+                },
+                "marketing": {
+                    "current_cost": 200000 + (i * 20000),
+                    "projected_savings": 25000 + (i * 4000),
+                    "description": "Digital marketing optimization and campaign efficiency"
+                },
+                "operations": {
+                    "current_cost": 320000 + (i * 30000),
+                    "projected_savings": 40000 + (i * 6000),
+                    "description": "Process automation and workflow optimization"
+                }
+            }
+            
+            details = optimization_details.get(area, {
+                "current_cost": 100000 + (i * 10000),
+                "projected_savings": 15000 + (i * 2500),
+                "description": f"General {area} optimization initiatives"
+            })
+            
+            current_cost = details["current_cost"]
+            projected_savings = details["projected_savings"]
+            implementation_cost = projected_savings * 0.3  # 30% of savings as implementation cost
+            roi = (projected_savings / implementation_cost) * 100
+            
+            optimization = CostOptimization(
+                optimization_area=area,
+                current_cost=current_cost,
+                projected_savings=projected_savings,
+                implementation_cost=implementation_cost,
+                roi_percentage=round(roi, 1),
+                timeline_weeks=8 + (i % 24),
+                implementation_status=["proposed", "approved", "in_progress", "completed"][i % 4],
+                priority_level=["low", "medium", "high", "critical"][i % 4],
+                responsible_department=departments[i % len(departments)],
+                success_metrics=[
+                    f"Reduce {area} costs by {round((projected_savings/current_cost)*100, 1)}%",
+                    f"Improve {area} efficiency by {15 + i % 25}%",
+                    f"ROI target: {round(roi, 0)}%"
+                ],
+                risks=[
+                    f"Implementation complexity in {area} domain",
+                    f"Staff resistance to {area} changes",
+                    f"Technology integration challenges"
+                ],
+                mitigation_strategies=[
+                    f"Comprehensive {area} training program",
+                    f"Phased implementation approach",
+                    f"Regular monitoring and adjustments"
+                ],
+                actual_savings=round(projected_savings * (0.8 + (i % 4) * 0.1), 2) if i % 4 == 0 else None
+            )
+            enhanced_cost_optimization.append(optimization.dict())
+        
+        cost_optimization_col.delete_many({})
+        cost_optimization_col.insert_many(enhanced_cost_optimization)
         
         # Phase 4 Sample Data - Enterprise Features
         
