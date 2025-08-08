@@ -585,6 +585,406 @@ class BallyCasinoAPITester:
         
         return success
 
+    # Phase 3 Tests - Staff Management & Advanced Analytics
+    
+    def test_staff_dashboard(self):
+        """Test staff management dashboard"""
+        success, response = self.run_test(
+            "Staff Management Dashboard",
+            "GET",
+            "api/staff/dashboard",
+            200
+        )
+        if success:
+            required_fields = ['total_staff', 'staff_by_department', 'training_completion_rate', 
+                             'average_performance_score', 'upcoming_reviews', 'recent_training_enrollments']
+            for field in required_fields:
+                if field not in response:
+                    print(f"   Warning: Missing field '{field}' in staff dashboard")
+                else:
+                    if field == 'total_staff':
+                        print(f"   Total active staff: {response[field]}")
+                    elif field == 'staff_by_department':
+                        print(f"   Staff by department: {response[field]}")
+                    elif field == 'training_completion_rate':
+                        print(f"   Training completion rate: {response[field]}%")
+                    elif field == 'average_performance_score':
+                        print(f"   Average performance score: {response[field]}/100")
+        return success
+
+    def test_staff_members(self):
+        """Test staff members management"""
+        success, response = self.run_test(
+            "Get Staff Members",
+            "GET",
+            "api/staff/members?limit=10",
+            200
+        )
+        if success and 'staff_members' in response:
+            print(f"   Found {response['total']} total staff members")
+            print(f"   Retrieved {len(response['staff_members'])} staff members")
+            
+            # Show departments
+            departments = {}
+            for staff in response['staff_members']:
+                dept = staff.get('department', 'unknown')
+                departments[dept] = departments.get(dept, 0) + 1
+            print(f"   Departments: {departments}")
+        
+        # Test filtering by department
+        for dept in ["Gaming", "F&B", "Security", "Management"]:
+            success2, response2 = self.run_test(
+                f"Get {dept} Staff",
+                "GET",
+                f"api/staff/members?department={dept}&limit=5",
+                200
+            )
+            if not success2:
+                return False
+        
+        # Test search functionality
+        success3, response3 = self.run_test(
+            "Search Staff Members",
+            "GET",
+            "api/staff/members?search=Staff&limit=5",
+            200
+        )
+        
+        return success and success3
+
+    def test_training_courses(self):
+        """Test training courses management"""
+        success, response = self.run_test(
+            "Get Training Courses",
+            "GET",
+            "api/staff/training/courses",
+            200
+        )
+        if success and isinstance(response, list):
+            print(f"   Found {len(response)} training courses")
+            
+            # Show course categories
+            categories = {}
+            for course in response:
+                category = course.get('category', 'unknown')
+                categories[category] = categories.get(category, 0) + 1
+            print(f"   Course categories: {categories}")
+        
+        # Test filtering by category
+        success2, response2 = self.run_test(
+            "Get Safety Training Courses",
+            "GET",
+            "api/staff/training/courses?category=safety",
+            200
+        )
+        
+        return success and success2
+
+    def test_create_training_course(self):
+        """Test creating a new training course"""
+        course_data = {
+            "course_name": "API Test Training Course",
+            "description": "Test course created during API testing",
+            "category": "technical",
+            "difficulty_level": "beginner",
+            "duration_hours": 4,
+            "required_for_positions": ["Gaming Dealer", "Floor Supervisor"],
+            "prerequisites": [],
+            "content_modules": ["Module 1: Basics", "Module 2: Advanced"],
+            "assessment_questions": [
+                {"question": "Test question?", "options": ["A", "B", "C", "D"], "correct": "A"}
+            ],
+            "passing_score": 80,
+            "is_mandatory": False,
+            "is_active": True
+        }
+        
+        success, response = self.run_test(
+            "Create Training Course",
+            "POST",
+            "api/staff/training/courses",
+            200,
+            data=course_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created training course with ID: {response['id']}")
+        
+        return success
+
+    def test_training_records(self):
+        """Test training records management"""
+        success, response = self.run_test(
+            "Get Training Records",
+            "GET",
+            "api/staff/training/records?limit=10",
+            200
+        )
+        if success and 'training_records' in response:
+            print(f"   Found {response['total']} total training records")
+            print(f"   Retrieved {len(response['training_records'])} records")
+            
+            # Show training statuses
+            statuses = {}
+            for record in response['training_records']:
+                status = record.get('status', 'unknown')
+                statuses[status] = statuses.get(status, 0) + 1
+            print(f"   Training statuses: {statuses}")
+        
+        # Test filtering by status
+        for status in ["enrolled", "completed", "in_progress"]:
+            success2, response2 = self.run_test(
+                f"Get {status.title()} Training Records",
+                "GET",
+                f"api/staff/training/records?status={status}&limit=5",
+                200
+            )
+            if not success2:
+                return False
+        
+        return success
+
+    def test_create_performance_review(self):
+        """Test creating a performance review"""
+        # First get a staff member ID
+        success, response = self.run_test(
+            "Get Staff for Review Test",
+            "GET",
+            "api/staff/members?limit=1",
+            200
+        )
+        
+        if success and response.get('staff_members'):
+            staff_id = response['staff_members'][0]['id']
+            
+            review_data = {
+                "staff_id": staff_id,
+                "review_period_start": "2024-01-01T00:00:00Z",
+                "review_period_end": "2024-06-30T23:59:59Z",
+                "overall_rating": 4,
+                "performance_areas": {
+                    "customer_service": 4,
+                    "technical_skills": 5,
+                    "teamwork": 4,
+                    "punctuality": 5
+                },
+                "achievements": ["Completed advanced training", "Excellent customer feedback"],
+                "areas_for_improvement": ["Time management", "Leadership skills"],
+                "goals_set": ["Complete leadership training", "Mentor new staff"],
+                "training_recommendations": ["Leadership Development Course"],
+                "employee_comments": "Looking forward to growth opportunities",
+                "reviewer_comments": "Strong performer with leadership potential",
+                "review_status": "completed"
+            }
+            
+            success2, response2 = self.run_test(
+                "Create Performance Review",
+                "POST",
+                "api/staff/performance/reviews",
+                200,
+                data=review_data
+            )
+            
+            if success2 and 'id' in response2:
+                print(f"   Created performance review with ID: {response2['id']}")
+            
+            return success2
+        else:
+            print("   Skipping performance review creation - no staff members found")
+            return True
+
+    def test_advanced_analytics(self):
+        """Test advanced analytics endpoints"""
+        success, response = self.run_test(
+            "Get Advanced Analytics",
+            "GET",
+            "api/analytics/advanced?limit=10",
+            200
+        )
+        if success and isinstance(response, list):
+            print(f"   Found {len(response)} analytics reports")
+            
+            # Show analysis types
+            analysis_types = {}
+            for analysis in response:
+                analysis_type = analysis.get('analysis_type', 'unknown')
+                analysis_types[analysis_type] = analysis_types.get(analysis_type, 0) + 1
+            print(f"   Analysis types: {analysis_types}")
+        
+        # Test filtering by analysis type
+        success2, response2 = self.run_test(
+            "Get Customer LTV Analytics",
+            "GET",
+            "api/analytics/advanced?analysis_type=customer_ltv",
+            200
+        )
+        
+        return success and success2
+
+    def test_generate_analytics_report(self):
+        """Test generating advanced analytics reports"""
+        # Test different analysis types
+        analysis_types = ["customer_ltv", "churn_prediction", "operational_efficiency"]
+        
+        for analysis_type in analysis_types:
+            request_data = {
+                "analysis_type": analysis_type,
+                "time_period": "monthly"
+            }
+            
+            success, response = self.run_test(
+                f"Generate {analysis_type.replace('_', ' ').title()} Report",
+                "POST",
+                "api/analytics/generate",
+                200,
+                data=request_data
+            )
+            
+            if success and 'analysis' in response:
+                analysis = response['analysis']
+                print(f"   Generated {analysis_type} report with confidence: {analysis.get('confidence_score', 0)}%")
+                print(f"   Insights: {len(analysis.get('insights', []))}")
+                print(f"   Recommendations: {len(analysis.get('recommendations', []))}")
+            
+            if not success:
+                return False
+        
+        return True
+
+    def test_cost_optimization(self):
+        """Test cost optimization management"""
+        success, response = self.run_test(
+            "Get Cost Optimization Opportunities",
+            "GET",
+            "api/optimization/cost-savings",
+            200
+        )
+        if success and isinstance(response, list):
+            print(f"   Found {len(response)} cost optimization opportunities")
+            
+            # Show optimization areas
+            areas = {}
+            for opp in response:
+                area = opp.get('optimization_area', 'unknown')
+                areas[area] = areas.get(area, 0) + 1
+            print(f"   Optimization areas: {areas}")
+        
+        # Test filtering by area
+        success2, response2 = self.run_test(
+            "Get Staffing Optimization",
+            "GET",
+            "api/optimization/cost-savings?area=staffing",
+            200
+        )
+        
+        # Test filtering by status
+        success3, response3 = self.run_test(
+            "Get Proposed Optimizations",
+            "GET",
+            "api/optimization/cost-savings?status=proposed",
+            200
+        )
+        
+        return success and success2 and success3
+
+    def test_create_cost_optimization(self):
+        """Test creating a cost optimization opportunity"""
+        optimization_data = {
+            "optimization_area": "energy",
+            "current_cost": 5000.0,
+            "projected_savings": 1200.0,
+            "implementation_cost": 800.0,
+            "roi_percentage": 50.0,
+            "timeline_weeks": 8,
+            "implementation_status": "proposed",
+            "priority_level": "medium",
+            "responsible_department": "Maintenance",
+            "success_metrics": ["Energy consumption reduction", "Cost savings achieved"],
+            "risks": ["Initial disruption", "Staff training required"],
+            "mitigation_strategies": ["Phased implementation", "Comprehensive training program"]
+        }
+        
+        success, response = self.run_test(
+            "Create Cost Optimization",
+            "POST",
+            "api/optimization/opportunities",
+            200,
+            data=optimization_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created cost optimization with ID: {response['id']}")
+        
+        return success
+
+    def test_predictive_models(self):
+        """Test predictive models management"""
+        success, response = self.run_test(
+            "Get Predictive Models",
+            "GET",
+            "api/predictive/models",
+            200
+        )
+        if success and isinstance(response, list):
+            print(f"   Found {len(response)} predictive models")
+            
+            # Show model types
+            model_types = {}
+            for model in response:
+                model_type = model.get('model_type', 'unknown')
+                model_types[model_type] = model_types.get(model_type, 0) + 1
+            print(f"   Model types: {model_types}")
+        
+        # Test filtering by model type
+        success2, response2 = self.run_test(
+            "Get Churn Prediction Models",
+            "GET",
+            "api/predictive/models?model_type=churn_prediction",
+            200
+        )
+        
+        # Test filtering by production status
+        success3, response3 = self.run_test(
+            "Get Production Models",
+            "GET",
+            "api/predictive/models?is_production=true",
+            200
+        )
+        
+        return success and success2 and success3
+
+    def test_create_predictive_model(self):
+        """Test creating a predictive model"""
+        model_data = {
+            "model_name": "Test Churn Prediction Model",
+            "model_type": "churn_prediction",
+            "description": "Test model created during API testing",
+            "input_features": ["visit_frequency", "avg_spend", "last_visit_days", "tier"],
+            "target_variable": "will_churn",
+            "algorithm_used": "Random Forest",
+            "training_data_size": 1000,
+            "accuracy_score": 0.85,
+            "precision_score": 0.82,
+            "recall_score": 0.88,
+            "model_version": "1.0",
+            "is_production": False,
+            "predictions_made": 0,
+            "success_rate": 0.0
+        }
+        
+        success, response = self.run_test(
+            "Create Predictive Model",
+            "POST",
+            "api/predictive/models",
+            200,
+            data=model_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created predictive model with ID: {response['id']}")
+        
+        return success
+
 def main():
     print("🎰 Bally's Casino Admin Dashboard API Testing - Phase 2")
     print("=" * 60)
