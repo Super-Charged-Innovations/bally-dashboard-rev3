@@ -8,7 +8,9 @@ import {
   ChartBarIcon,
   Cog6ToothIcon,
   QuestionMarkCircleIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  MegaphoneIcon,
+  CalendarDaysIcon
 } from '@heroicons/react/24/outline';
 
 const Sidebar = ({ isOpen, onToggle, user }) => {
