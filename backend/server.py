@@ -626,6 +626,326 @@ async def create_gaming_package(package: GamingPackage, token_payload: dict = De
     
     return {"id": package.id, "message": "Gaming package created successfully"}
 
+# Phase 2 Routes - Marketing Intelligence & Travel Management
+
+# Marketing Intelligence Routes
+@app.get("/api/marketing/dashboard")
+async def get_marketing_dashboard(token_payload: dict = Depends(verify_token)):
+    """Get marketing intelligence dashboard data"""
+    
+    # Birthday members this month
+    current_month = datetime.utcnow().month
+    birthday_members = list(birthday_calendar_col.find({
+        "birth_month": current_month,
+        "notification_sent": False
+    }).limit(10))
+    
+    # Inactive members (no visit in 30 days)
+    thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    inactive_members = list(members_col.find({
+        "last_visit": {"$lt": thirty_days_ago},
+        "is_active": True
+    }).limit(20))
+    
+    # Walk-in guests today
+    today = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+    walk_in_today = list(walk_in_guests_col.find({
+        "visit_date": {"$gte": today}
+    }))
+    
+    # Marketing campaigns
+    active_campaigns = list(marketing_campaigns_col.find({
+        "status": "active"
+    }))
+    
+    # Customer segments analysis
+    segments = {}
+    for tier in ["Ruby", "Sapphire", "Diamond", "VIP"]:
+        count = members_col.count_documents({"tier": tier, "is_active": True})
+        segments[tier] = count
+    
+    return {
+        "birthday_members": [{"id": member["id"], "member_id": member["member_id"], 
+                             "member_name": member["member_name"], "tier": member["tier"],
+                             "birthday_date": member["birthday_date"]} for member in birthday_members],
+        "inactive_members": [{"id": member["id"], "first_name": member["first_name"],
+                             "last_name": member["last_name"], "tier": member["tier"],
+                             "last_visit": member.get("last_visit")} for member in inactive_members],
+        "walk_in_today": len(walk_in_today),
+        "walk_in_conversion_rate": len([g for g in walk_in_today if g.get("converted_to_member")]) / len(walk_in_today) * 100 if walk_in_today else 0,
+        "active_campaigns": len(active_campaigns),
+        "customer_segments": segments
+    }
+
+@app.get("/api/marketing/birthday-calendar")
+async def get_birthday_calendar(
+    month: Optional[int] = None,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get birthday calendar for marketing campaigns"""
+    query = {}
+    if month:
+        query["birth_month"] = month
+    
+    birthdays = list(birthday_calendar_col.find(query).skip(skip).limit(limit))
+    total = birthday_calendar_col.count_documents(query)
+    
+    for birthday in birthdays:
+        birthday.pop("_id", None)
+    
+    return {
+        "birthdays": birthdays,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.get("/api/marketing/inactive-customers")
+async def get_inactive_customers(
+    days: int = 30,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get inactive customers for re-engagement campaigns"""
+    cutoff_date = datetime.utcnow() - timedelta(days=days)
+    
+    query = {
+        "last_visit": {"$lt": cutoff_date},
+        "is_active": True
+    }
+    
+    inactive_members = list(members_col.find(query).skip(skip).limit(limit))
+    total = members_col.count_documents(query)
+    
+    # Add analytics data
+    for member in inactive_members:
+        member.pop("_id", None)
+        analytics = customer_analytics_col.find_one({"member_id": member["id"]})
+        if analytics:
+            member["risk_score"] = analytics.get("risk_score", 0.5)
+            member["avg_spend"] = analytics.get("avg_spend_per_visit", 0)
+            member["favorite_games"] = analytics.get("favorite_games", [])
+    
+    return {
+        "inactive_members": inactive_members,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.get("/api/marketing/walk-in-guests")
+async def get_walk_in_guests(
+    date: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get walk-in guests data"""
+    query = {}
+    if date:
+        target_date = datetime.fromisoformat(date.replace('Z', '+00:00')).replace(tzinfo=None)
+        query["visit_date"] = {
+            "$gte": target_date.replace(hour=0, minute=0, second=0, microsecond=0),
+            "$lt": target_date.replace(hour=23, minute=59, second=59, microsecond=999999)
+        }
+    
+    guests = list(walk_in_guests_col.find(query).skip(skip).limit(limit))
+    total = walk_in_guests_col.count_documents(query)
+    
+    for guest in guests:
+        guest.pop("_id", None)
+        guest["id_document"] = "***ENCRYPTED***"  # Hide sensitive data
+    
+    return {
+        "guests": guests,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.post("/api/marketing/campaigns")
+async def create_marketing_campaign(campaign: MarketingCampaign, token_payload: dict = Depends(verify_token)):
+    """Create a new marketing campaign"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    campaign.created_by = token_payload["user_id"]
+    campaign_dict = campaign.dict()
+    result = marketing_campaigns_col.insert_one(campaign_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "marketing_campaign", campaign.id,
+        details={"campaign_name": campaign.name, "campaign_type": campaign.campaign_type}
+    )
+    
+    return {"id": campaign.id, "message": "Marketing campaign created successfully"}
+
+@app.get("/api/marketing/campaigns")
+async def get_marketing_campaigns(
+    status: Optional[str] = None,
+    campaign_type: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get marketing campaigns"""
+    query = {}
+    if status:
+        query["status"] = status
+    if campaign_type:
+        query["campaign_type"] = campaign_type
+    
+    campaigns = list(marketing_campaigns_col.find(query).skip(skip).limit(limit))
+    total = marketing_campaigns_col.count_documents(query)
+    
+    for campaign in campaigns:
+        campaign.pop("_id", None)
+    
+    return {
+        "campaigns": campaigns,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+# Travel Itinerary & VIP Management Routes
+@app.get("/api/travel/vip-dashboard")
+async def get_vip_travel_dashboard(token_payload: dict = Depends(verify_token)):
+    """Get VIP travel management dashboard"""
+    
+    # Upcoming VIP arrivals (next 7 days)
+    next_week = datetime.utcnow() + timedelta(days=7)
+    upcoming_vip = list(vip_experiences_col.find({
+        "scheduled_date": {"$gte": datetime.utcnow(), "$lte": next_week},
+        "status": {"$in": ["planned", "confirmed"]}
+    }))
+    
+    # Active group bookings
+    active_groups = list(group_bookings_col.find({
+        "status": {"$in": ["confirmed", "in_progress"]}
+    }))
+    
+    # VIP satisfaction scores
+    completed_experiences = list(vip_experiences_col.find({
+        "status": "completed",
+        "satisfaction_score": {"$exists": True}
+    }))
+    
+    avg_satisfaction = sum(exp.get("satisfaction_score", 0) for exp in completed_experiences) / len(completed_experiences) if completed_experiences else 0
+    
+    return {
+        "upcoming_vip_experiences": len(upcoming_vip),
+        "active_group_bookings": len(active_groups),
+        "avg_vip_satisfaction": round(avg_satisfaction, 2),
+        "vip_revenue_this_month": sum(exp.get("cost", 0) for exp in completed_experiences),
+        "upcoming_arrivals": [
+            {
+                "member_id": exp["member_id"],
+                "experience_type": exp["experience_type"],
+                "scheduled_date": exp["scheduled_date"],
+                "services_included": exp["services_included"]
+            } for exp in upcoming_vip[:10]
+        ]
+    }
+
+@app.get("/api/travel/vip-experiences")
+async def get_vip_experiences(
+    status: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get VIP experiences"""
+    query = {}
+    if status:
+        query["status"] = status
+    
+    experiences = list(vip_experiences_col.find(query).sort("scheduled_date", -1).skip(skip).limit(limit))
+    total = vip_experiences_col.count_documents(query)
+    
+    # Add member details
+    for experience in experiences:
+        experience.pop("_id", None)
+        member = members_col.find_one({"id": experience["member_id"]})
+        if member:
+            experience["member_name"] = f"{member['first_name']} {member['last_name']}"
+            experience["member_tier"] = member["tier"]
+    
+    return {
+        "experiences": experiences,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.post("/api/travel/vip-experiences")
+async def create_vip_experience(experience: VIPExperience, token_payload: dict = Depends(verify_token)):
+    """Create a new VIP experience"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    # Verify member exists and is VIP
+    member = members_col.find_one({"id": experience.member_id})
+    if not member:
+        raise HTTPException(status_code=404, detail="Member not found")
+    
+    experience_dict = experience.dict()
+    result = vip_experiences_col.insert_one(experience_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "vip_experience", experience.id,
+        details={"member_id": experience.member_id, "experience_type": experience.experience_type}
+    )
+    
+    return {"id": experience.id, "message": "VIP experience created successfully"}
+
+@app.get("/api/travel/group-bookings")
+async def get_group_bookings(
+    status: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get group bookings"""
+    query = {}
+    if status:
+        query["status"] = status
+    
+    bookings = list(group_bookings_col.find(query).sort("booking_date", -1).skip(skip).limit(limit))
+    total = group_bookings_col.count_documents(query)
+    
+    for booking in bookings:
+        booking.pop("_id", None)
+    
+    return {
+        "bookings": bookings,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.post("/api/travel/group-bookings")
+async def create_group_booking(booking: GroupBooking, token_payload: dict = Depends(verify_token)):
+    """Create a new group booking"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    booking_dict = booking.dict()
+    result = group_bookings_col.insert_one(booking_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "group_booking", booking.id,
+        details={"group_name": booking.group_name, "group_size": booking.group_size}
+    )
+    
+    return {"id": booking.id, "message": "Group booking created successfully"}
+
 # System Initialization Route
 @app.post("/api/init/sample-data")
 async def initialize_sample_data():
