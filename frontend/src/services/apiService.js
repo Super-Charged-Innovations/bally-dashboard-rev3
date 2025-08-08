@@ -102,7 +102,7 @@ class ApiService {
   }
 
   async updateGamingPackage(packageId, packageData) {
-    return this.request(`/gaming/packages/${packageId}`, {
+    return this.request(`/api/gaming/packages/${packageId}`, {
       method: 'PUT',
       body: packageData,
     });
@@ -110,25 +110,25 @@ class ApiService {
 
   // Rewards management endpoints
   async getRewards() {
-    return this.request('/rewards');
+    return this.request('/api/rewards');
   }
 
   async createReward(rewardData) {
-    return this.request('/rewards', {
+    return this.request('/api/rewards', {
       method: 'POST',
       body: rewardData,
     });
   }
 
   async updateReward(rewardId, rewardData) {
-    return this.request(`/rewards/${rewardId}`, {
+    return this.request(`/api/rewards/${rewardId}`, {
       method: 'PUT',
       body: rewardData,
     });
   }
 
   async deleteReward(rewardId) {
-    return this.request(`/rewards/${rewardId}`, {
+    return this.request(`/api/rewards/${rewardId}`, {
       method: 'DELETE',
     });
   }
@@ -143,33 +143,33 @@ class ApiService {
     });
     
     const query = searchParams.toString();
-    return this.request(`/analytics/${type}${query ? `?${query}` : ''}`);
+    return this.request(`/api/analytics/${type}${query ? `?${query}` : ''}`);
   }
 
   // Initialize sample data (for testing)
   async initializeSampleData() {
-    return this.request('/init/sample-data', {
+    return this.request('/api/init/sample-data', {
       method: 'POST',
     });
   }
 
   // Phase 2: Marketing Intelligence APIs
   async getMarketingDashboard() {
-    return this.request('/marketing/dashboard');
+    return this.request('/api/marketing/dashboard');
   }
 
   async getBirthdayCalendar(month = null) {
     const params = month ? `?month=${month}` : '';
-    return this.request(`/marketing/birthday-calendar${params}`);
+    return this.request(`/api/marketing/birthday-calendar${params}`);
   }
 
   async getInactiveCustomers(days = 30) {
-    return this.request(`/marketing/inactive-customers?days=${days}`);
+    return this.request(`/api/marketing/inactive-customers?days=${days}`);
   }
 
   async getWalkInGuests(date = null) {
     const params = date ? `?date=${date}` : '';
-    return this.request(`/marketing/walk-in-guests${params}`);
+    return this.request(`/api/marketing/walk-in-guests${params}`);
   }
 
   async getMarketingCampaigns(status = null, campaignType = null) {
@@ -177,11 +177,11 @@ class ApiService {
     if (status) params.append('status', status);
     if (campaignType) params.append('campaign_type', campaignType);
     const query = params.toString();
-    return this.request(`/marketing/campaigns${query ? `?${query}` : ''}`);
+    return this.request(`/api/marketing/campaigns${query ? `?${query}` : ''}`);
   }
 
   async createMarketingCampaign(campaignData) {
-    return this.request('/marketing/campaigns', {
+    return this.request('/api/marketing/campaigns', {
       method: 'POST',
       body: campaignData,
     });
@@ -189,12 +189,12 @@ class ApiService {
 
   // Phase 2: Travel & VIP Management APIs
   async getVIPTravelDashboard() {
-    return this.request('/travel/vip-dashboard');
+    return this.request('/api/travel/vip-dashboard');
   }
 
   async getVIPExperiences(status = null) {
     const params = status ? `?status=${status}` : '';
-    return this.request(`/travel/vip-experiences${params}`);
+    return this.request(`/api/travel/vip-experiences${params}`);
   }
 
   async createVIPExperience(experienceData) {
