@@ -3,7 +3,7 @@ const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001
 class ApiService {
   async request(endpoint, options = {}) {
     const token = localStorage.getItem('access_token');
-    const url = `${API_BASE_URL}/api${endpoint}`;
+    const url = `${API_BASE_URL}${endpoint}`;
     
     const config = {
       headers: {
