@@ -76,6 +76,14 @@ walk_in_guests_col = db.walk_in_guests
 vip_experiences_col = db.vip_experiences
 group_bookings_col = db.group_bookings
 birthday_calendar_col = db.birthday_calendar
+# Phase 3 Collections
+staff_members_col = db.staff_members
+training_courses_col = db.training_courses
+training_records_col = db.training_records
+performance_reviews_col = db.performance_reviews
+advanced_analytics_col = db.advanced_analytics
+cost_optimization_col = db.cost_optimization
+predictive_models_col = db.predictive_models
 
 # Pydantic Models
 class AdminUser(BaseModel):
