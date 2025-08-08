@@ -231,17 +231,17 @@ class CustomerAnalytics(BaseModel):
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
     member_id: str
     last_activity_date: datetime
-    visit_frequency: float  # visits per month
-    avg_session_duration: float  # minutes
-    avg_spend_per_visit: float
-    favorite_games: List[str]
-    preferred_visit_times: List[str]  # morning, afternoon, evening, late_night
-    social_interactions: int  # likes, comments, posts
+    visit_frequency: float = 0.0
+    avg_session_duration: int = 0
+    avg_spend_per_visit: float = 0.0
+    favorite_games: List[str] = []
+    preferred_visit_times: List[str] = []
+    social_interactions: int = 0
     birthday_month: int
-    preferred_drinks: List[str]
-    dietary_preferences: List[str]
-    risk_score: float  # churn prediction score
-    marketing_segments: List[str]
+    preferred_drinks: List[str] = []
+    dietary_preferences: List[str] = []
+    risk_score: float = 0.0
+    marketing_segments: List[str] = []
     last_updated: datetime = Field(default_factory=datetime.utcnow)
 
 class WalkInGuest(BaseModel):
