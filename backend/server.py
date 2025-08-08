@@ -1291,13 +1291,15 @@ async def get_advanced_analytics(
 
 @app.post("/api/analytics/generate")
 async def generate_analytics_report(
-    analysis_type: str,
-    time_period: str = "monthly",
+    request: dict,
     token_payload: dict = Depends(verify_token)
 ):
     """Generate advanced analytics report"""
     if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin"]:
         raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    analysis_type = request.get("analysis_type")
+    time_period = request.get("time_period", "monthly")
     
     # Generate mock analytics based on type
     insights = []
