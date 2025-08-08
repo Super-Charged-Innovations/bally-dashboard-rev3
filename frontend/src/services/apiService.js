@@ -312,29 +312,29 @@ class ApiService {
       }
     });
     const query = searchParams.toString();
-    return this.request(`/notifications${query ? `?${query}` : ''}`);
+    return this.request(`/api/notifications${query ? `?${query}` : ''}`);
   }
 
   async createNotification(data) {
-    return this.request('/notifications', {
+    return this.request('/api/notifications', {
       method: 'POST',
       body: data,
     });
   }
 
   async markNotificationRead(id) {
-    return this.request(`/notifications/${id}/read`, {
+    return this.request(`/api/notifications/${id}/read`, {
       method: 'PATCH',
     });
   }
 
   async getNotificationTemplates(category = null) {
     const params = category ? `?category=${category}` : '';
-    return this.request(`/notifications/templates${params}`);
+    return this.request(`/api/notifications/templates${params}`);
   }
 
   async createNotificationTemplate(data) {
-    return this.request('/notifications/templates', {
+    return this.request('/api/notifications/templates', {
       method: 'POST',
       body: data,
     });
@@ -349,11 +349,11 @@ class ApiService {
       }
     });
     const query = searchParams.toString();
-    return this.request(`/compliance/reports${query ? `?${query}` : ''}`);
+    return this.request(`/api/compliance/reports${query ? `?${query}` : ''}`);
   }
 
   async generateComplianceReport(data) {
-    return this.request('/compliance/reports/generate', {
+    return this.request('/api/compliance/reports/generate', {
       method: 'POST',
       body: data,
     });
@@ -367,7 +367,7 @@ class ApiService {
       }
     });
     const query = searchParams.toString();
-    return this.request(`/audit/enhanced${query ? `?${query}` : ''}`);
+    return this.request(`/api/audit/enhanced${query ? `?${query}` : ''}`);
   }
 
   // System Integrations
@@ -379,18 +379,18 @@ class ApiService {
       }
     });
     const query = searchParams.toString();
-    return this.request(`/integrations${query ? `?${query}` : ''}`);
+    return this.request(`/api/integrations${query ? `?${query}` : ''}`);
   }
 
   async createSystemIntegration(data) {
-    return this.request('/integrations', {
+    return this.request('/api/integrations', {
       method: 'POST',
       body: data,
     });
   }
 
   async syncIntegration(id) {
-    return this.request(`/integrations/${id}/sync`, {
+    return this.request(`/api/integrations/${id}/sync`, {
       method: 'PATCH',
     });
   }
@@ -404,7 +404,7 @@ class ApiService {
       }
     });
     const query = searchParams.toString();
-    return this.request(`/analytics/user-activity${query ? `?${query}` : ''}`);
+    return this.request(`/api/analytics/user-activity${query ? `?${query}` : ''}`);
   }
 
   async getRealTimeEvents(params = {}) {
@@ -415,11 +415,11 @@ class ApiService {
       }
     });
     const query = searchParams.toString();
-    return this.request(`/analytics/real-time-events${query ? `?${query}` : ''}`);
+    return this.request(`/api/analytics/real-time-events${query ? `?${query}` : ''}`);
   }
 
   async createRealTimeEvent(data) {
-    return this.request('/analytics/real-time-events', {
+    return this.request('/api/analytics/real-time-events', {
       method: 'POST',
       body: data,
     });
@@ -434,11 +434,11 @@ class ApiService {
       }
     });
     const query = searchParams.toString();
-    return this.request(`/data-retention/policies${query ? `?${query}` : ''}`);
+    return this.request(`/api/data-retention/policies${query ? `?${query}` : ''}`);
   }
 
   async createDataRetentionPolicy(data) {
-    return this.request('/data-retention/policies', {
+    return this.request('/api/data-retention/policies', {
       method: 'POST',
       body: data,
     });
@@ -467,7 +467,7 @@ class ApiService {
 
   // Health check
   async healthCheck() {
-    return this.request('/health');
+    return this.request('/api/health');
   }
 }
 
