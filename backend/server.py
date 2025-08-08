@@ -1088,6 +1088,378 @@ async def create_group_booking(booking: GroupBooking, token_payload: dict = Depe
     
     return {"id": booking.id, "message": "Group booking created successfully"}
 
+# Phase 3 Routes - Staff Management & Advanced Analytics
+
+# Staff Management Routes
+@app.get("/api/staff/dashboard")
+async def get_staff_dashboard(token_payload: dict = Depends(verify_token)):
+    """Get staff management dashboard data"""
+    
+    # Total active staff
+    total_staff = staff_members_col.count_documents({"employment_status": "active"})
+    
+    # Staff by department
+    departments = ["Gaming", "F&B", "Security", "Management", "Maintenance"]
+    staff_by_dept = {}
+    for dept in departments:
+        count = staff_members_col.count_documents({"department": dept, "employment_status": "active"})
+        staff_by_dept[dept] = count
+    
+    # Training completion rates
+    total_training_records = training_records_col.count_documents({})
+    completed_training = training_records_col.count_documents({"status": "completed"})
+    overall_completion_rate = (completed_training / total_training_records * 100) if total_training_records > 0 else 0
+    
+    # Performance metrics
+    staff_with_reviews = list(staff_members_col.find({"performance_score": {"$gt": 0}}))
+    avg_performance = sum(staff["performance_score"] for staff in staff_with_reviews) / len(staff_with_reviews) if staff_with_reviews else 0
+    
+    # Upcoming reviews
+    next_month = datetime.utcnow() + timedelta(days=30)
+    upcoming_reviews = staff_members_col.count_documents({
+        "next_review_due": {"$lte": next_month},
+        "employment_status": "active"
+    })
+    
+    # Recent training activity
+    recent_training = list(training_records_col.find({
+        "enrollment_date": {"$gte": datetime.utcnow() - timedelta(days=7)}
+    }).limit(10))
+    
+    return {
+        "total_staff": total_staff,
+        "staff_by_department": staff_by_dept,
+        "training_completion_rate": round(overall_completion_rate, 1),
+        "average_performance_score": round(avg_performance, 1),
+        "upcoming_reviews": upcoming_reviews,
+        "recent_training_enrollments": len(recent_training),
+        "training_stats": {
+            "total_courses": training_courses_col.count_documents({"is_active": True}),
+            "total_enrollments": total_training_records,
+            "completed_this_month": training_records_col.count_documents({
+                "completion_date": {"$gte": datetime.utcnow().replace(day=1)},
+                "status": "completed"
+            })
+        }
+    }
+
+@app.get("/api/staff/members")
+async def get_staff_members(
+    skip: int = 0,
+    limit: int = 50,
+    department: Optional[str] = None,
+    search: Optional[str] = None,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get staff members with filtering"""
+    query = {"employment_status": "active"}
+    
+    if department:
+        query["department"] = department
+    
+    if search:
+        query["$or"] = [
+            {"first_name": {"$regex": search, "$options": "i"}},
+            {"last_name": {"$regex": search, "$options": "i"}},
+            {"employee_id": {"$regex": search, "$options": "i"}},
+            {"position": {"$regex": search, "$options": "i"}}
+        ]
+    
+    staff_members = list(staff_members_col.find(query).skip(skip).limit(limit))
+    total = staff_members_col.count_documents(query)
+    
+    for staff in staff_members:
+        staff.pop("_id", None)
+        staff.pop("salary", None)  # Remove sensitive salary data
+    
+    return {
+        "staff_members": staff_members,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.get("/api/staff/training/courses")
+async def get_training_courses(
+    category: Optional[str] = None,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get training courses"""
+    query = {"is_active": True}
+    if category:
+        query["category"] = category
+    
+    courses = list(training_courses_col.find(query))
+    for course in courses:
+        course.pop("_id", None)
+    
+    return courses
+
+@app.post("/api/staff/training/courses")
+async def create_training_course(course: TrainingCourse, token_payload: dict = Depends(verify_token)):
+    """Create new training course"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    course.created_by = token_payload["user_id"]
+    course_dict = course.dict()
+    result = training_courses_col.insert_one(course_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "training_course", course.id,
+        details={"course_name": course.course_name, "category": course.category}
+    )
+    
+    return {"id": course.id, "message": "Training course created successfully"}
+
+@app.get("/api/staff/training/records")
+async def get_training_records(
+    staff_id: Optional[str] = None,
+    course_id: Optional[str] = None,
+    status: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get training records"""
+    query = {}
+    if staff_id:
+        query["staff_id"] = staff_id
+    if course_id:
+        query["course_id"] = course_id
+    if status:
+        query["status"] = status
+    
+    records = list(training_records_col.find(query).skip(skip).limit(limit))
+    total = training_records_col.count_documents(query)
+    
+    # Add staff and course names for display
+    for record in records:
+        record.pop("_id", None)
+        staff = staff_members_col.find_one({"id": record["staff_id"]})
+        course = training_courses_col.find_one({"id": record["course_id"]})
+        if staff:
+            record["staff_name"] = f"{staff['first_name']} {staff['last_name']}"
+        if course:
+            record["course_name"] = course["course_name"]
+    
+    return {
+        "training_records": records,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.post("/api/staff/performance/reviews")
+async def create_performance_review(review: PerformanceReview, token_payload: dict = Depends(verify_token)):
+    """Create performance review"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    review.reviewer_id = token_payload["user_id"]
+    review_dict = review.dict()
+    result = performance_reviews_col.insert_one(review_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "performance_review", review.id,
+        details={"staff_id": review.staff_id, "overall_rating": review.overall_rating}
+    )
+    
+    return {"id": review.id, "message": "Performance review created successfully"}
+
+# Advanced Analytics Routes
+@app.get("/api/analytics/advanced")
+async def get_advanced_analytics(
+    analysis_type: Optional[str] = None,
+    time_period: Optional[str] = None,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get advanced analytics data"""
+    query = {"is_active": True}
+    if analysis_type:
+        query["analysis_type"] = analysis_type
+    if time_period:
+        query["time_period"] = time_period
+    
+    analytics = list(advanced_analytics_col.find(query).sort("analysis_date", -1))
+    for analysis in analytics:
+        analysis.pop("_id", None)
+    
+    return analytics
+
+@app.post("/api/analytics/generate")
+async def generate_analytics_report(
+    analysis_type: str,
+    time_period: str = "monthly",
+    token_payload: dict = Depends(verify_token)
+):
+    """Generate advanced analytics report"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    # Generate mock analytics based on type
+    insights = []
+    recommendations = []
+    data_points = {}
+    confidence = 85.0
+    
+    if analysis_type == "customer_ltv":
+        insights = [
+            "VIP customers have 5x higher lifetime value than Ruby tier",
+            "Gaming revenue comprises 70% of customer lifetime value",
+            "Birthday campaign participants show 25% higher retention"
+        ]
+        recommendations = [
+            "Focus VIP acquisition programs",
+            "Enhance gaming experience for mid-tier customers",
+            "Expand birthday celebration offerings"
+        ]
+        data_points = {
+            "avg_ltv_vip": 15000,
+            "avg_ltv_diamond": 8000,
+            "avg_ltv_sapphire": 4500,
+            "avg_ltv_ruby": 2200,
+            "retention_rate": 0.75
+        }
+    
+    elif analysis_type == "churn_prediction":
+        insights = [
+            "Members inactive for 45+ days have 80% churn probability",
+            "Declining gaming frequency is strongest churn predictor",
+            "Social engagement reduces churn risk by 40%"
+        ]
+        recommendations = [
+            "Implement 30-day re-engagement campaign",
+            "Create gaming frequency alerts for managers",
+            "Boost social features and community events"
+        ]
+        data_points = {
+            "high_risk_members": 45,
+            "medium_risk_members": 120,
+            "predicted_monthly_churn": 25,
+            "intervention_success_rate": 0.65
+        }
+    
+    elif analysis_type == "operational_efficiency":
+        insights = [
+            "Peak hours show 40% staff utilization gap",
+            "F&B service times exceed target by 15 minutes",
+            "Gaming floor capacity utilization at 85%"
+        ]
+        recommendations = [
+            "Optimize shift scheduling for peak periods",
+            "Implement kitchen workflow automation",
+            "Add 2 gaming tables during weekend evenings"
+        ]
+        data_points = {
+            "avg_service_time": 25,
+            "target_service_time": 15,
+            "staff_utilization": 0.75,
+            "customer_satisfaction": 4.2
+        }
+    
+    # Create analytics record
+    analytics_record = AdvancedAnalytics(
+        analysis_type=analysis_type,
+        time_period=time_period,
+        data_points=data_points,
+        insights=insights,
+        recommendations=recommendations,
+        confidence_score=confidence,
+        created_by=token_payload["user_id"]
+    )
+    
+    advanced_analytics_col.insert_one(analytics_record.dict())
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "advanced_analytics", analytics_record.id,
+        details={"analysis_type": analysis_type, "confidence": confidence}
+    )
+    
+    return {
+        "id": analytics_record.id,
+        "analysis": analytics_record.dict(),
+        "message": f"Advanced analytics report generated for {analysis_type}"
+    }
+
+# Cost Optimization Routes
+@app.get("/api/optimization/cost-savings")
+async def get_cost_optimization_opportunities(
+    area: Optional[str] = None,
+    status: Optional[str] = None,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get cost optimization opportunities"""
+    query = {}
+    if area:
+        query["optimization_area"] = area
+    if status:
+        query["implementation_status"] = status
+    
+    opportunities = list(cost_optimization_col.find(query).sort("roi_percentage", -1))
+    for opp in opportunities:
+        opp.pop("_id", None)
+    
+    return opportunities
+
+@app.post("/api/optimization/opportunities")
+async def create_cost_optimization(optimization: CostOptimization, token_payload: dict = Depends(verify_token)):
+    """Create cost optimization opportunity"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    optimization_dict = optimization.dict()
+    result = cost_optimization_col.insert_one(optimization_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "cost_optimization", optimization.id,
+        details={"area": optimization.optimization_area, "projected_savings": optimization.projected_savings}
+    )
+    
+    return {"id": optimization.id, "message": "Cost optimization opportunity created successfully"}
+
+# Predictive Models Routes
+@app.get("/api/predictive/models")
+async def get_predictive_models(
+    model_type: Optional[str] = None,
+    is_production: Optional[bool] = None,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get predictive models"""
+    query = {}
+    if model_type:
+        query["model_type"] = model_type
+    if is_production is not None:
+        query["is_production"] = is_production
+    
+    models = list(predictive_models_col.find(query))
+    for model in models:
+        model.pop("_id", None)
+    
+    return models
+
+@app.post("/api/predictive/models")
+async def create_predictive_model(model: PredictiveModel, token_payload: dict = Depends(verify_token)):
+    """Create predictive model"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    model.created_by = token_payload["user_id"]
+    model_dict = model.dict()
+    result = predictive_models_col.insert_one(model_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "predictive_model", model.id,
+        details={"model_name": model.model_name, "model_type": model.model_type, "accuracy": model.accuracy_score}
+    )
+    
+    return {"id": model.id, "message": "Predictive model created successfully"}
+
 # System Initialization Route
 @app.post("/api/init/sample-data")
 async def initialize_sample_data():
