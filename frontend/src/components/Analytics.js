@@ -32,7 +32,7 @@ const Analytics = ({ user }) => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <div className="bg-blue-50 rounded-lg p-6">
-              <TrendingUpIcon className="h-8 w-8 text-blue-600 mx-auto mb-3" />
+              <ArrowTrendingUpIcon className="h-8 w-8 text-blue-600 mx-auto mb-3" />
               <h3 className="font-semibold text-blue-900 mb-2">Revenue Analytics</h3>
               <p className="text-sm text-blue-700">Track revenue trends, identify peak periods, and optimize pricing strategies.</p>
             </div>
