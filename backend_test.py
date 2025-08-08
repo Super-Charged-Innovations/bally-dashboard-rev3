@@ -985,6 +985,528 @@ class BallyCasinoAPITester:
         
         return success
 
+    # Phase 4 Tests - Enterprise Features
+    
+    def test_notifications_system(self):
+        """Test notification system endpoints"""
+        # Get all notifications
+        success, response = self.run_test(
+            "Get All Notifications",
+            "GET",
+            "api/notifications?limit=10",
+            200
+        )
+        if success and 'notifications' in response:
+            print(f"   Found {response['total']} total notifications")
+            print(f"   Retrieved {len(response['notifications'])} notifications")
+            
+            # Show notification categories
+            categories = {}
+            for notification in response['notifications']:
+                category = notification.get('category', 'unknown')
+                categories[category] = categories.get(category, 0) + 1
+            print(f"   Notification categories: {categories}")
+        
+        # Test filtering by category
+        for category in ["security", "compliance", "marketing", "system"]:
+            success2, response2 = self.run_test(
+                f"Get {category.title()} Notifications",
+                "GET",
+                f"api/notifications?category={category}&limit=5",
+                200
+            )
+            if not success2:
+                return False
+        
+        # Test filtering by priority
+        for priority in ["low", "normal", "high", "critical"]:
+            success3, response3 = self.run_test(
+                f"Get {priority.title()} Priority Notifications",
+                "GET",
+                f"api/notifications?priority={priority}&limit=5",
+                200
+            )
+            if not success3:
+                return False
+        
+        return success
+
+    def test_create_notification(self):
+        """Test creating a new notification"""
+        notification_data = {
+            "recipient_type": "admin",
+            "recipient_id": self.user_info.get('id') if self.user_info else None,
+            "recipient_email": "admin@ballys.lk",
+            "title": "Test Notification - API Testing",
+            "content": "This is a test notification created during API testing",
+            "category": "system",
+            "priority": "normal",
+            "channels": ["in_app", "email"],
+            "status": "pending"
+        }
+        
+        success, response = self.run_test(
+            "Create Notification",
+            "POST",
+            "api/notifications",
+            200,
+            data=notification_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created notification with ID: {response['id']}")
+            
+            # Test marking notification as read
+            success2, response2 = self.run_test(
+                "Mark Notification as Read",
+                "PATCH",
+                f"api/notifications/{response['id']}/read",
+                200
+            )
+            return success and success2
+        
+        return success
+
+    def test_notification_templates(self):
+        """Test notification templates management"""
+        # Get all templates
+        success, response = self.run_test(
+            "Get Notification Templates",
+            "GET",
+            "api/notifications/templates",
+            200
+        )
+        if success and isinstance(response, list):
+            print(f"   Found {len(response)} notification templates")
+            
+            # Show template categories
+            categories = {}
+            for template in response:
+                category = template.get('category', 'unknown')
+                categories[category] = categories.get(category, 0) + 1
+            print(f"   Template categories: {categories}")
+        
+        # Test filtering by category
+        success2, response2 = self.run_test(
+            "Get Security Templates",
+            "GET",
+            "api/notifications/templates?category=security",
+            200
+        )
+        
+        return success and success2
+
+    def test_create_notification_template(self):
+        """Test creating a notification template"""
+        template_data = {
+            "name": "Test Alert Template",
+            "category": "system",
+            "title": "System Alert: {alert_type}",
+            "content": "A system alert has been triggered: {description}. Please review immediately.",
+            "variables": ["alert_type", "description"],
+            "channels": ["in_app", "email"],
+            "priority": "high",
+            "is_active": True
+        }
+        
+        success, response = self.run_test(
+            "Create Notification Template",
+            "POST",
+            "api/notifications/templates",
+            200,
+            data=template_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created notification template with ID: {response['id']}")
+        
+        return success
+
+    def test_compliance_reports(self):
+        """Test compliance reporting system"""
+        # Get all compliance reports
+        success, response = self.run_test(
+            "Get Compliance Reports",
+            "GET",
+            "api/compliance/reports?limit=10",
+            200
+        )
+        if success and 'reports' in response:
+            print(f"   Found {response['total']} total compliance reports")
+            print(f"   Retrieved {len(response['reports'])} reports")
+            
+            # Show report types
+            report_types = {}
+            for report in response['reports']:
+                report_type = report.get('report_type', 'unknown')
+                report_types[report_type] = report_types.get(report_type, 0) + 1
+            print(f"   Report types: {report_types}")
+        
+        # Test filtering by report type
+        for report_type in ["audit_trail", "kyc_compliance", "data_retention"]:
+            success2, response2 = self.run_test(
+                f"Get {report_type.replace('_', ' ').title()} Reports",
+                "GET",
+                f"api/compliance/reports?report_type={report_type}&limit=5",
+                200
+            )
+            if not success2:
+                return False
+        
+        return success
+
+    def test_generate_compliance_report(self):
+        """Test generating compliance reports"""
+        # Test different report types
+        report_types = ["audit_trail", "kyc_compliance", "data_retention"]
+        
+        for report_type in report_types:
+            request_data = {
+                "report_type": report_type,
+                "start_date": "2024-01-01T00:00:00Z",
+                "end_date": "2024-12-31T23:59:59Z"
+            }
+            
+            success, response = self.run_test(
+                f"Generate {report_type.replace('_', ' ').title()} Report",
+                "POST",
+                "api/compliance/reports/generate",
+                200,
+                data=request_data
+            )
+            
+            if success and 'report' in response:
+                report = response['report']
+                print(f"   Generated {report_type} report with compliance score: {report.get('compliance_score', 0)}%")
+                print(f"   Violations found: {len(report.get('violations', []))}")
+                print(f"   Recommendations: {len(report.get('recommendations', []))}")
+            
+            if not success:
+                return False
+        
+        return True
+
+    def test_enhanced_audit_logs(self):
+        """Test enhanced audit logs with risk scoring"""
+        success, response = self.run_test(
+            "Get Enhanced Audit Logs",
+            "GET",
+            "api/audit/enhanced?limit=20",
+            200
+        )
+        if success and 'audit_logs' in response:
+            print(f"   Found {response['total']} total audit logs")
+            print(f"   Retrieved {len(response['audit_logs'])} logs")
+            
+            # Check risk scoring
+            risk_levels = {}
+            for log in response['audit_logs']:
+                risk_level = log.get('risk_level', 'unknown')
+                risk_levels[risk_level] = risk_levels.get(risk_level, 0) + 1
+            print(f"   Risk levels: {risk_levels}")
+            
+            # Check summary data
+            if 'summary' in response:
+                summary = response['summary']
+                print(f"   High risk activities: {summary.get('high_risk_activities', 0)}")
+                print(f"   Actions breakdown: {summary.get('actions_breakdown', {})}")
+        
+        # Test filtering by action
+        success2, response2 = self.run_test(
+            "Get Create Action Audit Logs",
+            "GET",
+            "api/audit/enhanced?action=create&limit=10",
+            200
+        )
+        
+        # Test filtering by resource
+        success3, response3 = self.run_test(
+            "Get Member Resource Audit Logs",
+            "GET",
+            "api/audit/enhanced?resource=member&limit=10",
+            200
+        )
+        
+        return success and success2 and success3
+
+    def test_system_integrations(self):
+        """Test system integrations management"""
+        # Get all integrations
+        success, response = self.run_test(
+            "Get System Integrations",
+            "GET",
+            "api/integrations",
+            200
+        )
+        if success and isinstance(response, list):
+            print(f"   Found {len(response)} system integrations")
+            
+            # Show integration types and statuses
+            integration_types = {}
+            statuses = {}
+            for integration in response:
+                int_type = integration.get('integration_type', 'unknown')
+                status = integration.get('status', 'unknown')
+                integration_types[int_type] = integration_types.get(int_type, 0) + 1
+                statuses[status] = statuses.get(status, 0) + 1
+            print(f"   Integration types: {integration_types}")
+            print(f"   Integration statuses: {statuses}")
+        
+        # Test filtering by integration type
+        for int_type in ["payment_gateway", "email_service", "analytics_service"]:
+            success2, response2 = self.run_test(
+                f"Get {int_type.replace('_', ' ').title()} Integrations",
+                "GET",
+                f"api/integrations?integration_type={int_type}",
+                200
+            )
+            if not success2:
+                return False
+        
+        # Test filtering by status
+        success3, response3 = self.run_test(
+            "Get Active Integrations",
+            "GET",
+            "api/integrations?status=active",
+            200
+        )
+        
+        return success and success3
+
+    def test_create_system_integration(self):
+        """Test creating a system integration"""
+        integration_data = {
+            "name": "Test API Integration",
+            "integration_type": "analytics_service",
+            "provider": "test_provider",
+            "endpoint_url": "https://api.test-provider.com",
+            "configuration": {
+                "api_version": "v1",
+                "timeout": 30,
+                "retry_count": 3
+            },
+            "status": "testing",
+            "sync_frequency": "hourly"
+        }
+        
+        success, response = self.run_test(
+            "Create System Integration",
+            "POST",
+            "api/integrations",
+            200,
+            data=integration_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created system integration with ID: {response['id']}")
+            
+            # Test sync integration
+            success2, response2 = self.run_test(
+                "Sync Integration",
+                "PATCH",
+                f"api/integrations/{response['id']}/sync",
+                200
+            )
+            
+            if success2:
+                print(f"   Integration sync result: {response2.get('success', False)}")
+            
+            return success and success2
+        
+        return success
+
+    def test_user_activity_analytics(self):
+        """Test user activity analytics"""
+        success, response = self.run_test(
+            "Get User Activity Analytics",
+            "GET",
+            "api/analytics/user-activity?limit=100",
+            200
+        )
+        if success:
+            required_fields = ['total_activities', 'unique_users', 'activity_by_type', 
+                             'activity_by_hour', 'device_breakdown', 'user_engagement']
+            for field in required_fields:
+                if field not in response:
+                    print(f"   Warning: Missing field '{field}' in user activity analytics")
+                else:
+                    if field == 'total_activities':
+                        print(f"   Total activities tracked: {response[field]}")
+                    elif field == 'unique_users':
+                        print(f"   Unique users: {response[field]}")
+                    elif field == 'user_engagement':
+                        engagement = response[field]
+                        print(f"   Average session duration: {engagement.get('avg_session_duration_minutes', 0)} minutes")
+                        print(f"   Average pages per session: {engagement.get('avg_pages_per_session', 0)}")
+        
+        # Test filtering by user type
+        success2, response2 = self.run_test(
+            "Get Member Activity Analytics",
+            "GET",
+            "api/analytics/user-activity?user_type=member",
+            200
+        )
+        
+        # Test filtering by activity type
+        success3, response3 = self.run_test(
+            "Get Page View Analytics",
+            "GET",
+            "api/analytics/user-activity?activity_type=page_view",
+            200
+        )
+        
+        return success and success2 and success3
+
+    def test_real_time_events(self):
+        """Test real-time events system"""
+        # Get all events
+        success, response = self.run_test(
+            "Get Real-Time Events",
+            "GET",
+            "api/analytics/real-time-events?limit=20",
+            200
+        )
+        if success and 'events' in response:
+            print(f"   Found {response['total']} total real-time events")
+            print(f"   Retrieved {len(response['events'])} events")
+            
+            # Show event types and severities
+            event_types = {}
+            severities = {}
+            for event in response['events']:
+                event_type = event.get('event_type', 'unknown')
+                severity = event.get('severity', 'unknown')
+                event_types[event_type] = event_types.get(event_type, 0) + 1
+                severities[severity] = severities.get(severity, 0) + 1
+            print(f"   Event types: {event_types}")
+            print(f"   Severities: {severities}")
+        
+        # Test filtering by event type
+        for event_type in ["user_action", "system_alert", "security_incident"]:
+            success2, response2 = self.run_test(
+                f"Get {event_type.replace('_', ' ').title()} Events",
+                "GET",
+                f"api/analytics/real-time-events?event_type={event_type}&limit=5",
+                200
+            )
+            if not success2:
+                return False
+        
+        # Test filtering by severity
+        for severity in ["info", "warning", "error", "critical"]:
+            success3, response3 = self.run_test(
+                f"Get {severity.title()} Severity Events",
+                "GET",
+                f"api/analytics/real-time-events?severity={severity}&limit=5",
+                200
+            )
+            if not success3:
+                return False
+        
+        return success
+
+    def test_create_real_time_event(self):
+        """Test creating a real-time event"""
+        event_data = {
+            "event_type": "system_alert",
+            "severity": "warning",
+            "source": "api_testing",
+            "title": "Test System Alert",
+            "description": "This is a test system alert created during API testing",
+            "data": {"test": True, "created_by": "api_test"},
+            "requires_action": False,
+            "resolved": False
+        }
+        
+        success, response = self.run_test(
+            "Create Real-Time Event",
+            "POST",
+            "api/analytics/real-time-events",
+            200,
+            data=event_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created real-time event with ID: {response['id']}")
+        
+        return success
+
+    def test_data_retention_policies(self):
+        """Test data retention policies management"""
+        # Get all policies
+        success, response = self.run_test(
+            "Get Data Retention Policies",
+            "GET",
+            "api/data-retention/policies",
+            200
+        )
+        if success and isinstance(response, list):
+            print(f"   Found {len(response)} data retention policies")
+            
+            # Show data categories and statuses
+            categories = {}
+            statuses = {}
+            for policy in response:
+                category = policy.get('data_category', 'unknown')
+                status = policy.get('status', 'unknown')
+                categories[category] = categories.get(category, 0) + 1
+                statuses[status] = statuses.get(status, 0) + 1
+            print(f"   Data categories: {categories}")
+            print(f"   Policy statuses: {statuses}")
+            
+            # Show retention periods
+            for policy in response[:3]:  # Show first 3 policies
+                print(f"   - {policy.get('policy_name', 'Unknown')}: {policy.get('retention_period_days', 0)} days")
+        
+        # Test filtering by data category
+        for category in ["member_data", "gaming_logs", "audit_logs"]:
+            success2, response2 = self.run_test(
+                f"Get {category.replace('_', ' ').title()} Policies",
+                "GET",
+                f"api/data-retention/policies?data_category={category}",
+                200
+            )
+            if not success2:
+                return False
+        
+        # Test filtering by status
+        success3, response3 = self.run_test(
+            "Get Active Retention Policies",
+            "GET",
+            "api/data-retention/policies?status=active",
+            200
+        )
+        
+        return success and success3
+
+    def test_create_data_retention_policy(self):
+        """Test creating a data retention policy"""
+        policy_data = {
+            "policy_name": "Test Data Retention Policy",
+            "data_category": "test_data",
+            "retention_period_days": 365,
+            "archive_after_days": 180,
+            "auto_delete": True,
+            "encryption_required": True,
+            "backup_required": True,
+            "legal_basis": "Test policy for API testing purposes",
+            "status": "active",
+            "next_review_date": "2025-12-31T23:59:59Z"
+        }
+        
+        success, response = self.run_test(
+            "Create Data Retention Policy",
+            "POST",
+            "api/data-retention/policies",
+            200,
+            data=policy_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created data retention policy with ID: {response['id']}")
+        
+        return success
+
 def main():
     print("🎰 Bally's Casino Admin Dashboard API Testing - ALL 3 PHASES")
     print("=" * 70)
