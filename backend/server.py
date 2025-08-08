@@ -2453,8 +2453,96 @@ async def initialize_sample_data():
             )
             analytics_data.append(analytics.dict())
         
+        # Enhanced Marketing Intelligence Data
+        
+        # Create comprehensive marketing campaigns
+        campaign_types = ["birthday_celebration", "inactive_reactivation", "vip_retention", "new_member_welcome", 
+                         "seasonal_promotion", "high_roller_exclusive", "weekend_special", "loyalty_reward"]
+        
+        marketing_campaigns_data = []
+        for i in range(25):  # 25 marketing campaigns
+            campaign_type = campaign_types[i % len(campaign_types)]
+            
+            campaign_names = {
+                "birthday_celebration": f"Birthday Bliss Campaign {i+1}",
+                "inactive_reactivation": f"Come Back & Win Campaign {i+1}",
+                "vip_retention": f"Diamond Elite Experience {i+1}",
+                "new_member_welcome": f"Welcome Bonus Extravaganza {i+1}",
+                "seasonal_promotion": f"Festive Season Special {i+1}",
+                "high_roller_exclusive": f"High Stakes Exclusive {i+1}",
+                "weekend_special": f"Weekend Warriors Campaign {i+1}",
+                "loyalty_reward": f"Loyalty Points Multiplier {i+1}"
+            }
+            
+            campaign_descriptions = {
+                "birthday_celebration": "Celebrate your special day with exclusive gaming credits and complimentary dining",
+                "inactive_reactivation": "Return to the action with bonus credits and surprise rewards",
+                "vip_retention": "Exclusive VIP perks including private gaming sessions and luxury amenities",
+                "new_member_welcome": "Start your casino journey with welcome bonuses and free play credits",
+                "seasonal_promotion": "Limited-time seasonal offers with enhanced rewards and special events",
+                "high_roller_exclusive": "Premium experiences for our highest-value players",
+                "weekend_special": "Weekend gaming bonuses with extended play opportunities",
+                "loyalty_reward": "Double points and exclusive rewards for loyal members"
+            }
+            
+            target_tiers = {
+                "birthday_celebration": ["Ruby", "Sapphire", "Diamond", "VIP"],
+                "inactive_reactivation": ["Ruby", "Sapphire"],
+                "vip_retention": ["Diamond", "VIP"],
+                "new_member_welcome": ["Ruby"],
+                "seasonal_promotion": ["Ruby", "Sapphire", "Diamond"],
+                "high_roller_exclusive": ["VIP"],
+                "weekend_special": ["Sapphire", "Diamond"],
+                "loyalty_reward": ["Diamond", "VIP"]
+            }
+            
+            campaign = MarketingCampaign(
+                name=campaign_names[campaign_type],
+                description=campaign_descriptions[campaign_type],
+                campaign_type=campaign_type,
+                target_audience=target_tiers[campaign_type],
+                start_date=datetime.utcnow() - timedelta(days=30 - i),
+                end_date=datetime.utcnow() + timedelta(days=30 + i),
+                budget=float(5000 + (i * 2000) + (len(target_tiers[campaign_type]) * 1000)),
+                estimated_reach=100 + (i * 25) + (len(target_tiers[campaign_type]) * 50),
+                actual_reach=80 + (i * 20) + (len(target_tiers[campaign_type]) * 40),
+                conversion_rate=round(5.5 + (i % 10) * 1.2, 2),
+                status=["draft", "active", "completed", "paused"][i % 4],
+                created_by=admin_users[i % 2]["id"]
+            )
+            marketing_campaigns_data.append(campaign.dict())
+        
+        marketing_campaigns_col.delete_many({})
+        marketing_campaigns_col.insert_many(marketing_campaigns_data)
+        
+        # Enhanced customer analytics with preferences and behaviors
+        enhanced_analytics_data = []
+        game_preferences = ["Blackjack", "Roulette", "Poker", "Baccarat", "Slots", "Dragon Tiger", "Sic Bo"]
+        drink_preferences = ["Whiskey", "Wine", "Champagne", "Cocktails", "Beer", "Juice", "Water", "Coffee"]
+        food_preferences = ["Asian", "Western", "Vegetarian", "Seafood", "Desserts", "Light Snacks"]
+        visit_times = ["morning", "afternoon", "evening", "late_night"]
+        
+        for i, member in enumerate(sample_members):
+            analytics = CustomerAnalytics(
+                member_id=member["id"],
+                last_activity_date=datetime.utcnow() - timedelta(days=i % 90),
+                visit_frequency=round(0.5 + (i % 8) * 0.7, 2),  # 0.5 to 6.1 visits per month
+                avg_session_duration=60 + (i % 300),  # 1-6 hours
+                avg_spend_per_visit=100 + (i % 2000) + ({"Ruby": 0, "Sapphire": 200, "Diamond": 800, "VIP": 2000}[member["tier"]]),
+                favorite_games=game_preferences[i % len(game_preferences):i % len(game_preferences) + (i % 3) + 1],
+                preferred_visit_times=visit_times[i % len(visit_times):i % len(visit_times) + (i % 2) + 1],
+                social_interactions=i % 50,
+                birthday_month=member["date_of_birth"].month,
+                preferred_drinks=drink_preferences[i % len(drink_preferences):i % len(drink_preferences) + (i % 3) + 1],
+                dietary_preferences=food_preferences[i % len(food_preferences):i % len(food_preferences) + (i % 2) + 1],
+                risk_score=round((i % 100) / 100.0, 2),
+                marketing_segments=["High-Value", "Regular", "Casual", "VIP", "At-Risk", "New-Member"][i % 6:i % 6 + (i % 2) + 1],
+                last_updated=datetime.utcnow() - timedelta(days=i % 30)
+            )
+            enhanced_analytics_data.append(analytics.dict())
+        
         customer_analytics_col.delete_many({})
-        customer_analytics_col.insert_many(analytics_data)
+        customer_analytics_col.insert_many(enhanced_analytics_data)
         
         # Generate birthday calendar
         birthday_data = []
