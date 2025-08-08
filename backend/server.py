@@ -49,7 +49,10 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60")
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
 
 # Initialize encryption
-cipher_suite = Fernet(Fernet.generate_key() if not ENCRYPTION_KEY else ENCRYPTION_KEY.encode()[:32].ljust(32, b'0'))
+if ENCRYPTION_KEY:
+    cipher_suite = Fernet(ENCRYPTION_KEY.encode())
+else:
+    cipher_suite = Fernet(Fernet.generate_key())
 
 # Database connection
 client = MongoClient(MONGO_URL)
