@@ -198,7 +198,7 @@ class ApiService {
   }
 
   async createVIPExperience(experienceData) {
-    return this.request('/travel/vip-experiences', {
+    return this.request('/api/travel/vip-experiences', {
       method: 'POST',
       body: experienceData,
     });
@@ -206,11 +206,11 @@ class ApiService {
 
   async getGroupBookings(status = null) {
     const params = status ? `?status=${status}` : '';
-    return this.request(`/travel/group-bookings${params}`);
+    return this.request(`/api/travel/group-bookings${params}`);
   }
 
   async createGroupBooking(bookingData) {
-    return this.request('/travel/group-bookings', {
+    return this.request('/api/travel/group-bookings', {
       method: 'POST',
       body: bookingData,
     });
@@ -218,7 +218,7 @@ class ApiService {
 
   // Phase 3: Staff Management & Advanced Analytics APIs
   async getStaffDashboard() {
-    return this.request('/staff/dashboard');
+    return this.request('/api/staff/dashboard');
   }
 
   async getStaffMembers(department = null, search = null) {
@@ -226,16 +226,16 @@ class ApiService {
     if (department) params.append('department', department);
     if (search) params.append('search', search);
     const query = params.toString();
-    return this.request(`/staff/members${query ? `?${query}` : ''}`);
+    return this.request(`/api/staff/members${query ? `?${query}` : ''}`);
   }
 
   async getTrainingCourses(category = null) {
     const params = category ? `?category=${category}` : '';
-    return this.request(`/staff/training/courses${params}`);
+    return this.request(`/api/staff/training/courses${params}`);
   }
 
   async createTrainingCourse(courseData) {
-    return this.request('/staff/training/courses', {
+    return this.request('/api/staff/training/courses', {
       method: 'POST',
       body: courseData,
     });
@@ -247,11 +247,11 @@ class ApiService {
     if (courseId) params.append('course_id', courseId);
     if (status) params.append('status', status);
     const query = params.toString();
-    return this.request(`/staff/training/records${query ? `?${query}` : ''}`);
+    return this.request(`/api/staff/training/records${query ? `?${query}` : ''}`);
   }
 
   async createPerformanceReview(reviewData) {
-    return this.request('/staff/performance/reviews', {
+    return this.request('/api/staff/performance/reviews', {
       method: 'POST',
       body: reviewData,
     });
@@ -262,11 +262,11 @@ class ApiService {
     if (analysisType) params.append('analysis_type', analysisType);
     if (timePeriod) params.append('time_period', timePeriod);
     const query = params.toString();
-    return this.request(`/analytics/advanced${query ? `?${query}` : ''}`);
+    return this.request(`/api/analytics/advanced${query ? `?${query}` : ''}`);
   }
 
   async generateAnalyticsReport(analysisType, timePeriod = 'monthly') {
-    return this.request('/analytics/generate', {
+    return this.request('/api/analytics/generate', {
       method: 'POST',
       body: { analysis_type: analysisType, time_period: timePeriod },
     });
@@ -277,11 +277,11 @@ class ApiService {
     if (area) params.append('area', area);
     if (status) params.append('status', status);
     const query = params.toString();
-    return this.request(`/optimization/cost-savings${query ? `?${query}` : ''}`);
+    return this.request(`/api/optimization/cost-savings${query ? `?${query}` : ''}`);
   }
 
   async createCostOptimization(optimizationData) {
-    return this.request('/optimization/opportunities', {
+    return this.request('/api/optimization/opportunities', {
       method: 'POST',
       body: optimizationData,
     });
@@ -292,11 +292,11 @@ class ApiService {
     if (modelType) params.append('model_type', modelType);
     if (isProduction !== null) params.append('is_production', isProduction);
     const query = params.toString();
-    return this.request(`/predictive/models${query ? `?${query}` : ''}`);
+    return this.request(`/api/predictive/models${query ? `?${query}` : ''}`);
   }
 
   async createPredictiveModel(modelData) {
-    return this.request('/predictive/models', {
+    return this.request('/api/predictive/models', {
       method: 'POST',
       body: modelData,
     });
