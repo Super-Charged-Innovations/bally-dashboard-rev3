@@ -2249,25 +2249,49 @@ async def initialize_sample_data():
         admin_users_col.delete_many({})
         admin_users_col.insert_many(admin_users)
         
-        # Create sample members
+        # Create realistic sample members with diverse profiles
+        first_names = ["Chaminda", "Priyanka", "Kasun", "Nimali", "Rajesh", "Sanduni", "Thilina", "Madhavi", "Dinesh", "Isuri",
+                      "Saman", "Kavitha", "Ruwan", "Dilani", "Chathura", "Samanthi", "Buddhika", "Nadeeka", "Janaka", "Shirani",
+                      "Michael", "Sarah", "David", "Emma", "James", "Sophia", "Robert", "Olivia", "William", "Charlotte"]
+        
+        last_names = ["Fernando", "Silva", "Perera", "Jayawardena", "Gunasekera", "Wickramasinghe", "Rajapakse", "Mendis",
+                     "Wijeratne", "Gunaratne", "De Silva", "Abeysekera", "Dissanayake", "Bandara", "Karunaratne",
+                     "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"]
+        
+        countries = ["Sri Lanka", "India", "Maldives", "Singapore", "UAE", "Australia", "UK", "Canada", "USA", "Germany"]
+        
         sample_members = []
-        for i in range(100):
+        for i in range(250):  # Increased to 250 members for more realistic demo
+            tier_weights = [0.5, 0.3, 0.15, 0.05]  # More realistic tier distribution
+            tier_choice = ["Ruby", "Sapphire", "Diamond", "VIP"][
+                0 if i < 125 else 1 if i < 200 else 2 if i < 237 else 3
+            ]
+            
+            # More realistic points and spend based on tier
+            tier_multipliers = {"Ruby": 1, "Sapphire": 3, "Diamond": 8, "VIP": 20}
+            multiplier = tier_multipliers[tier_choice]
+            
             member = Member(
                 member_number=f"MB{10001 + i}",
-                first_name=f"Member{i}",
-                last_name=f"LastName{i}",
-                email=f"member{i}@example.com",
-                phone=f"07712345{i:03d}",
-                date_of_birth=datetime(1980 + (i % 40), (i % 12) + 1, (i % 28) + 1),
-                nationality="Sri Lankan",
-                nic_passport=encrypt_sensitive_data(f"199{i:07d}V"),
-                tier=["Ruby", "Sapphire", "Diamond", "VIP"][i % 4],
-                points_balance=float(i * 100),
-                total_points_earned=float(i * 150),
-                lifetime_spend=float(i * 500),
-                kyc_verified=True,
-                marketing_consent=i % 2 == 0,
-                preferences={"favorite_game": ["Blackjack", "Roulette", "Poker", "Slots"][i % 4]}
+                first_name=first_names[i % len(first_names)],
+                last_name=last_names[i % len(last_names)],
+                email=f"{first_names[i % len(first_names)].lower()}.{last_names[i % len(last_names)].lower()}@{'gmail.com' if i % 3 == 0 else 'hotmail.com' if i % 3 == 1 else 'yahoo.com'}",
+                phone=f"077{'1234567890'[i % 10]}{i:06d}"[:10],
+                date_of_birth=datetime(1960 + (i % 45), (i % 12) + 1, (i % 28) + 1),
+                nationality=countries[i % len(countries)],
+                nic_passport=encrypt_sensitive_data(f"{'19' if i % 2 == 0 else '20'}{(60 + i % 40):02d}{i:07d}V"),
+                tier=tier_choice,
+                points_balance=float((50 + i * 25) * multiplier + (i * 10)),
+                total_points_earned=float((100 + i * 50) * multiplier + (i * 20)),
+                lifetime_spend=float((200 + i * 150) * multiplier + (i * 75)),
+                last_visit=datetime.utcnow() - timedelta(days=i % 90),  # Visits within last 3 months
+                kyc_verified=i % 7 != 0,  # Most are verified
+                marketing_consent=i % 3 != 0,  # Most consent to marketing
+                preferences={
+                    "favorite_game": ["Blackjack", "Roulette", "Poker", "Baccarat", "Slots", "Dragon Tiger"][i % 6],
+                    "preferred_language": ["English", "Sinhala", "Tamil"][i % 3],
+                    "communication_preference": ["email", "sms", "phone"][i % 3]
+                }
             )
             sample_members.append(member.dict())
         
