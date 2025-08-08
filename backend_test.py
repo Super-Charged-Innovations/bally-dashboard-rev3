@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 class BallyCasinoAPITester:
-    def __init__(self, base_url="https://e93576f4-4d99-414e-b275-4b10a1e17e8c.preview.emergentagent.com"):
+    def __init__(self, base_url="https://f57e797d-eaf4-4f7c-9eef-bcb910f777ef.preview.emergentagent.com"):
         self.base_url = base_url
         self.token = None
         self.tests_run = 0
@@ -1512,7 +1512,7 @@ def main():
     print("=" * 70)
     
     # Setup - Use the public endpoint from frontend .env
-    tester = BallyCasinoAPITester("https://e93576f4-4d99-414e-b275-4b10a1e17e8c.preview.emergentagent.com")
+    tester = BallyCasinoAPITester("https://f57e797d-eaf4-4f7c-9eef-bcb910f777ef.preview.emergentagent.com")
     
     # Test 1: Health Check
     print("\n📋 BASIC CONNECTIVITY TESTS")
