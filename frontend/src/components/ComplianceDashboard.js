@@ -7,7 +7,7 @@ import {
   ClockIcon,
   EyeIcon,
   PlusIcon,
-  DownloadIcon
+  ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
 import apiService from '../services/apiService';
 import { toast } from 'react-hot-toast';
