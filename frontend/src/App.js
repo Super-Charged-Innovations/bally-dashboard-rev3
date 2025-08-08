@@ -15,6 +15,9 @@ import TravelManagement from './components/TravelManagement';
 import StaffManagement from './components/StaffManagement';
 import AdvancedAnalytics from './components/AdvancedAnalytics';
 import Analytics from './components/Analytics';
+import EnterpriseDashboard from './components/EnterpriseDashboard';
+import NotificationsManagement from './components/NotificationsManagement';
+import ComplianceDashboard from './components/ComplianceDashboard';
 
 // Services
 import authService from './services/authService';
