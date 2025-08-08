@@ -10,7 +10,9 @@ import {
   QuestionMarkCircleIcon,
   MagnifyingGlassIcon,
   MegaphoneIcon,
-  CalendarDaysIcon
+  CalendarDaysIcon,
+  AcademicCapIcon,
+  ChartPieIcon
 } from '@heroicons/react/24/outline';
 
 const Sidebar = ({ isOpen, onToggle, user }) => {
