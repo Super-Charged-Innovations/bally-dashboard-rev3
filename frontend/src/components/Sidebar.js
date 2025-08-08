@@ -40,6 +40,18 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
       current: false,
     },
     {
+      name: 'Marketing',
+      icon: MegaphoneIcon,
+      href: '/marketing',
+      current: false,
+    },
+    {
+      name: 'Travel & VIP',
+      icon: CalendarDaysIcon,
+      href: '/travel',
+      current: false,
+    },
+    {
       name: 'Analytics',
       icon: ChartBarIcon,
       href: '/analytics',
