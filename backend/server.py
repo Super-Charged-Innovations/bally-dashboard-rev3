@@ -85,6 +85,15 @@ advanced_analytics_col = db.advanced_analytics
 cost_optimization_col = db.cost_optimization
 predictive_models_col = db.predictive_models
 
+# Phase 4 Collections - Enterprise Features
+notifications_col = db.notifications
+notification_templates_col = db.notification_templates
+compliance_reports_col = db.compliance_reports
+system_integrations_col = db.system_integrations
+user_activity_tracking_col = db.user_activity_tracking
+real_time_events_col = db.real_time_events
+data_retention_policies_col = db.data_retention_policies
+
 # Pydantic Models
 class AdminUser(BaseModel):
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
