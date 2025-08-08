@@ -252,6 +252,339 @@ class BallyCasinoAPITester:
         self.token = old_token
         return success
 
+    # Phase 2 Tests - Marketing Intelligence & Travel Management
+    
+    def test_marketing_dashboard(self):
+        """Test marketing intelligence dashboard"""
+        success, response = self.run_test(
+            "Marketing Dashboard",
+            "GET",
+            "api/marketing/dashboard",
+            200
+        )
+        if success:
+            required_fields = ['birthday_members', 'inactive_members', 'walk_in_today', 
+                             'walk_in_conversion_rate', 'active_campaigns', 'customer_segments']
+            for field in required_fields:
+                if field not in response:
+                    print(f"   Warning: Missing field '{field}' in marketing dashboard")
+                else:
+                    if field == 'birthday_members':
+                        print(f"   Birthday members this month: {len(response[field])}")
+                    elif field == 'inactive_members':
+                        print(f"   Inactive members: {len(response[field])}")
+                    elif field == 'walk_in_today':
+                        print(f"   Walk-in guests today: {response[field]}")
+                    elif field == 'active_campaigns':
+                        print(f"   Active campaigns: {response[field]}")
+        return success
+
+    def test_birthday_calendar(self):
+        """Test birthday calendar endpoint"""
+        success, response = self.run_test(
+            "Birthday Calendar - All",
+            "GET",
+            "api/marketing/birthday-calendar?limit=10",
+            200
+        )
+        if success and 'birthdays' in response:
+            print(f"   Found {response['total']} total birthday entries")
+            print(f"   Retrieved {len(response['birthdays'])} entries")
+        
+        # Test filtering by month
+        current_month = datetime.now().month
+        success2, response2 = self.run_test(
+            f"Birthday Calendar - Month {current_month}",
+            "GET",
+            f"api/marketing/birthday-calendar?month={current_month}&limit=5",
+            200
+        )
+        
+        return success and success2
+
+    def test_inactive_customers(self):
+        """Test inactive customers analysis"""
+        success, response = self.run_test(
+            "Inactive Customers - 30 days",
+            "GET",
+            "api/marketing/inactive-customers?days=30&limit=10",
+            200
+        )
+        if success and 'inactive_members' in response:
+            print(f"   Found {response['total']} inactive members (30+ days)")
+            print(f"   Retrieved {len(response['inactive_members'])} members")
+            
+            # Check if risk scores are included
+            for member in response['inactive_members'][:3]:
+                if 'risk_score' in member:
+                    print(f"   - {member.get('first_name', 'Unknown')} {member.get('last_name', '')}: Risk Score {member['risk_score']}")
+        
+        # Test different day ranges
+        success2, response2 = self.run_test(
+            "Inactive Customers - 60 days",
+            "GET",
+            "api/marketing/inactive-customers?days=60&limit=5",
+            200
+        )
+        
+        return success and success2
+
+    def test_walk_in_guests(self):
+        """Test walk-in guests tracking"""
+        success, response = self.run_test(
+            "Walk-in Guests - All",
+            "GET",
+            "api/marketing/walk-in-guests?limit=10",
+            200
+        )
+        if success and 'guests' in response:
+            print(f"   Found {response['total']} total walk-in guests")
+            print(f"   Retrieved {len(response['guests'])} guests")
+            
+            # Check conversion tracking
+            converted_count = sum(1 for guest in response['guests'] if guest.get('converted_to_member'))
+            print(f"   Converted to members: {converted_count}/{len(response['guests'])}")
+        
+        # Test filtering by date
+        today = datetime.now().strftime('%Y-%m-%d')
+        success2, response2 = self.run_test(
+            f"Walk-in Guests - Today ({today})",
+            "GET",
+            f"api/marketing/walk-in-guests?date={today}T00:00:00Z&limit=5",
+            200
+        )
+        
+        return success and success2
+
+    def test_marketing_campaigns(self):
+        """Test marketing campaigns management"""
+        # Get existing campaigns
+        success, response = self.run_test(
+            "Get Marketing Campaigns",
+            "GET",
+            "api/marketing/campaigns?limit=10",
+            200
+        )
+        if success and 'campaigns' in response:
+            print(f"   Found {response['total']} total campaigns")
+            print(f"   Retrieved {len(response['campaigns'])} campaigns")
+            
+            # Show campaign types
+            campaign_types = {}
+            for campaign in response['campaigns']:
+                campaign_type = campaign.get('campaign_type', 'unknown')
+                campaign_types[campaign_type] = campaign_types.get(campaign_type, 0) + 1
+            print(f"   Campaign types: {campaign_types}")
+        
+        # Test filtering by status
+        success2, response2 = self.run_test(
+            "Get Active Campaigns",
+            "GET",
+            "api/marketing/campaigns?status=active&limit=5",
+            200
+        )
+        
+        # Test filtering by campaign type
+        success3, response3 = self.run_test(
+            "Get Birthday Campaigns",
+            "GET",
+            "api/marketing/campaigns?campaign_type=birthday&limit=5",
+            200
+        )
+        
+        return success and success2 and success3
+
+    def test_create_marketing_campaign(self):
+        """Test creating a new marketing campaign"""
+        campaign_data = {
+            "name": "Test Campaign - API Test",
+            "description": "Test campaign created during API testing",
+            "campaign_type": "general",
+            "target_audience": ["Ruby", "Sapphire"],
+            "start_date": "2024-01-01T00:00:00Z",
+            "end_date": "2024-01-31T23:59:59Z",
+            "budget": 1000.0,
+            "estimated_reach": 50,
+            "status": "draft"
+        }
+        
+        success, response = self.run_test(
+            "Create Marketing Campaign",
+            "POST",
+            "api/marketing/campaigns",
+            200,
+            data=campaign_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created campaign with ID: {response['id']}")
+        
+        return success
+
+    def test_vip_travel_dashboard(self):
+        """Test VIP travel management dashboard"""
+        success, response = self.run_test(
+            "VIP Travel Dashboard",
+            "GET",
+            "api/travel/vip-dashboard",
+            200
+        )
+        if success:
+            required_fields = ['upcoming_vip_experiences', 'active_group_bookings', 
+                             'avg_vip_satisfaction', 'vip_revenue_this_month', 'upcoming_arrivals']
+            for field in required_fields:
+                if field not in response:
+                    print(f"   Warning: Missing field '{field}' in VIP dashboard")
+                else:
+                    if field == 'upcoming_vip_experiences':
+                        print(f"   Upcoming VIP experiences: {response[field]}")
+                    elif field == 'active_group_bookings':
+                        print(f"   Active group bookings: {response[field]}")
+                    elif field == 'avg_vip_satisfaction':
+                        print(f"   Average VIP satisfaction: {response[field]}/10")
+                    elif field == 'vip_revenue_this_month':
+                        print(f"   VIP revenue this month: ${response[field]}")
+        return success
+
+    def test_vip_experiences(self):
+        """Test VIP experiences management"""
+        success, response = self.run_test(
+            "Get VIP Experiences",
+            "GET",
+            "api/travel/vip-experiences?limit=10",
+            200
+        )
+        if success and 'experiences' in response:
+            print(f"   Found {response['total']} total VIP experiences")
+            print(f"   Retrieved {len(response['experiences'])} experiences")
+            
+            # Show experience types
+            experience_types = {}
+            for exp in response['experiences']:
+                exp_type = exp.get('experience_type', 'unknown')
+                experience_types[exp_type] = experience_types.get(exp_type, 0) + 1
+            print(f"   Experience types: {experience_types}")
+        
+        # Test filtering by status
+        for status in ["planned", "completed", "in_progress"]:
+            success2, response2 = self.run_test(
+                f"Get {status.title()} VIP Experiences",
+                "GET",
+                f"api/travel/vip-experiences?status={status}&limit=5",
+                200
+            )
+            if not success2:
+                return False
+        
+        return success
+
+    def test_create_vip_experience(self):
+        """Test creating a new VIP experience"""
+        # First get a VIP member ID
+        success, response = self.run_test(
+            "Get VIP Members for Experience Test",
+            "GET",
+            "api/members?tier=VIP&limit=1",
+            200
+        )
+        
+        if success and response.get('members'):
+            member_id = response['members'][0]['id']
+            
+            experience_data = {
+                "member_id": member_id,
+                "experience_type": "dining",
+                "scheduled_date": "2024-02-01T19:00:00Z",
+                "services_included": ["Personal Host", "Premium Dining"],
+                "special_requests": ["Window table", "Champagne service"],
+                "cost": 500.0,
+                "status": "planned"
+            }
+            
+            success2, response2 = self.run_test(
+                "Create VIP Experience",
+                "POST",
+                "api/travel/vip-experiences",
+                200,
+                data=experience_data
+            )
+            
+            if success2 and 'id' in response2:
+                print(f"   Created VIP experience with ID: {response2['id']}")
+            
+            return success2
+        else:
+            print("   Skipping VIP experience creation - no VIP members found")
+            return True
+
+    def test_group_bookings(self):
+        """Test group bookings management"""
+        success, response = self.run_test(
+            "Get Group Bookings",
+            "GET",
+            "api/travel/group-bookings?limit=10",
+            200
+        )
+        if success and 'bookings' in response:
+            print(f"   Found {response['total']} total group bookings")
+            print(f"   Retrieved {len(response['bookings'])} bookings")
+            
+            # Show booking types and statuses
+            booking_types = {}
+            booking_statuses = {}
+            for booking in response['bookings']:
+                booking_type = booking.get('group_type', 'unknown')
+                booking_status = booking.get('status', 'unknown')
+                booking_types[booking_type] = booking_types.get(booking_type, 0) + 1
+                booking_statuses[booking_status] = booking_statuses.get(booking_status, 0) + 1
+            print(f"   Booking types: {booking_types}")
+            print(f"   Booking statuses: {booking_statuses}")
+        
+        # Test filtering by status
+        for status in ["inquiry", "confirmed", "completed"]:
+            success2, response2 = self.run_test(
+                f"Get {status.title()} Group Bookings",
+                "GET",
+                f"api/travel/group-bookings?status={status}&limit=5",
+                200
+            )
+            if not success2:
+                return False
+        
+        return success
+
+    def test_create_group_booking(self):
+        """Test creating a new group booking"""
+        booking_data = {
+            "group_name": "Test Corporate Event - API Test",
+            "contact_person": "John Test Manager",
+            "contact_email": "john.test@example.com",
+            "contact_phone": "0771234567",
+            "group_size": 25,
+            "group_type": "corporate",
+            "booking_date": "2024-01-15T10:00:00Z",
+            "arrival_date": "2024-02-15T14:00:00Z",
+            "departure_date": "2024-02-17T12:00:00Z",
+            "special_requirements": ["AV Equipment", "Private dining area"],
+            "budget_range": "high",
+            "services_requested": ["Dining", "Gaming", "Entertainment"],
+            "total_estimated_value": 15000.0,
+            "status": "inquiry"
+        }
+        
+        success, response = self.run_test(
+            "Create Group Booking",
+            "POST",
+            "api/travel/group-bookings",
+            200,
+            data=booking_data
+        )
+        
+        if success and 'id' in response:
+            print(f"   Created group booking with ID: {response['id']}")
+        
+        return success
+
 def main():
     print("🎰 Bally's Casino Admin Dashboard API Testing")
     print("=" * 50)
