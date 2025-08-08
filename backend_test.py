@@ -586,10 +586,10 @@ class BallyCasinoAPITester:
         return success
 
 def main():
-    print("🎰 Bally's Casino Admin Dashboard API Testing")
-    print("=" * 50)
+    print("🎰 Bally's Casino Admin Dashboard API Testing - Phase 2")
+    print("=" * 60)
     
-    # Setup
+    # Setup - Use the public endpoint from frontend .env
     tester = BallyCasinoAPITester("http://localhost:8001")
     
     # Test 1: Health Check
@@ -635,11 +635,28 @@ def main():
     tester.test_gaming_sessions_by_status()
     tester.test_gaming_packages()
     
-    # Test 7: Security Tests
+    # Test 7: Phase 2 - Marketing Intelligence Tests
+    print("\n📋 PHASE 2 - MARKETING INTELLIGENCE TESTS")
+    tester.test_marketing_dashboard()
+    tester.test_birthday_calendar()
+    tester.test_inactive_customers()
+    tester.test_walk_in_guests()
+    tester.test_marketing_campaigns()
+    tester.test_create_marketing_campaign()
+    
+    # Test 8: Phase 2 - Travel & VIP Management Tests
+    print("\n📋 PHASE 2 - TRAVEL & VIP MANAGEMENT TESTS")
+    tester.test_vip_travel_dashboard()
+    tester.test_vip_experiences()
+    tester.test_create_vip_experience()
+    tester.test_group_bookings()
+    tester.test_create_group_booking()
+    
+    # Test 9: Security Tests
     print("\n📋 SECURITY TESTS")
     tester.test_unauthorized_access()
     
-    # Test 8: Manager Role Test
+    # Test 10: Manager Role Test
     print("\n📋 ROLE-BASED ACCESS TESTS")
     if not tester.test_login("manager", "manager123"):
         print("❌ Manager login failed")
@@ -647,20 +664,28 @@ def main():
         # Test manager can access basic endpoints
         tester.test_dashboard_metrics()
         tester.test_get_members()
+        # Test manager can access Phase 2 features
+        tester.test_marketing_dashboard()
+        tester.test_vip_travel_dashboard()
     
     # Print final results
-    print("\n" + "=" * 50)
-    print(f"📊 FINAL RESULTS")
+    print("\n" + "=" * 60)
+    print(f"📊 FINAL RESULTS - PHASE 2 TESTING")
     print(f"Tests Run: {tester.tests_run}")
     print(f"Tests Passed: {tester.tests_passed}")
     print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
     
     if tester.tests_passed == tester.tests_run:
-        print("🎉 All tests passed! Backend is working correctly.")
+        print("🎉 All Phase 2 tests passed! Backend is working correctly.")
         return 0
     else:
         failed = tester.tests_run - tester.tests_passed
         print(f"⚠️  {failed} test(s) failed. Please check the issues above.")
+        
+        # If more than 50% failed, recommend fixing backend first
+        if failed > (tester.tests_run * 0.5):
+            print("🚨 More than 50% of tests failed. Recommend fixing backend issues first.")
+        
         return 1
 
 if __name__ == "__main__":
