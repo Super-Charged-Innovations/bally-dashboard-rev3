@@ -216,6 +216,92 @@ class ApiService {
     });
   }
 
+  // Phase 3: Staff Management & Advanced Analytics APIs
+  async getStaffDashboard() {
+    return this.request('/staff/dashboard');
+  }
+
+  async getStaffMembers(department = null, search = null) {
+    const params = new URLSearchParams();
+    if (department) params.append('department', department);
+    if (search) params.append('search', search);
+    const query = params.toString();
+    return this.request(`/staff/members${query ? `?${query}` : ''}`);
+  }
+
+  async getTrainingCourses(category = null) {
+    const params = category ? `?category=${category}` : '';
+    return this.request(`/staff/training/courses${params}`);
+  }
+
+  async createTrainingCourse(courseData) {
+    return this.request('/staff/training/courses', {
+      method: 'POST',
+      body: courseData,
+    });
+  }
+
+  async getTrainingRecords(staffId = null, courseId = null, status = null) {
+    const params = new URLSearchParams();
+    if (staffId) params.append('staff_id', staffId);
+    if (courseId) params.append('course_id', courseId);
+    if (status) params.append('status', status);
+    const query = params.toString();
+    return this.request(`/staff/training/records${query ? `?${query}` : ''}`);
+  }
+
+  async createPerformanceReview(reviewData) {
+    return this.request('/staff/performance/reviews', {
+      method: 'POST',
+      body: reviewData,
+    });
+  }
+
+  async getAdvancedAnalytics(analysisType = null, timePeriod = null) {
+    const params = new URLSearchParams();
+    if (analysisType) params.append('analysis_type', analysisType);
+    if (timePeriod) params.append('time_period', timePeriod);
+    const query = params.toString();
+    return this.request(`/analytics/advanced${query ? `?${query}` : ''}`);
+  }
+
+  async generateAnalyticsReport(analysisType, timePeriod = 'monthly') {
+    return this.request('/analytics/generate', {
+      method: 'POST',
+      body: { analysis_type: analysisType, time_period: timePeriod },
+    });
+  }
+
+  async getCostOptimization(area = null, status = null) {
+    const params = new URLSearchParams();
+    if (area) params.append('area', area);
+    if (status) params.append('status', status);
+    const query = params.toString();
+    return this.request(`/optimization/cost-savings${query ? `?${query}` : ''}`);
+  }
+
+  async createCostOptimization(optimizationData) {
+    return this.request('/optimization/opportunities', {
+      method: 'POST',
+      body: optimizationData,
+    });
+  }
+
+  async getPredictiveModels(modelType = null, isProduction = null) {
+    const params = new URLSearchParams();
+    if (modelType) params.append('model_type', modelType);
+    if (isProduction !== null) params.append('is_production', isProduction);
+    const query = params.toString();
+    return this.request(`/predictive/models${query ? `?${query}` : ''}`);
+  }
+
+  async createPredictiveModel(modelData) {
+    return this.request('/predictive/models', {
+      method: 'POST',
+      body: modelData,
+    });
+  }
+
   // Health check
   async healthCheck() {
     return this.request('/health');
