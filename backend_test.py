@@ -1508,7 +1508,7 @@ class BallyCasinoAPITester:
         return success
 
 def main():
-    print("🎰 Bally's Casino Admin Dashboard API Testing - ALL 3 PHASES")
+    print("🎰 Bally's Casino Admin Dashboard API Testing - ALL 4 PHASES")
     print("=" * 70)
     
     # Setup - Use the public endpoint from frontend .env
