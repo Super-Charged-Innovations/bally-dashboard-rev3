@@ -1590,11 +1590,36 @@ def main():
     tester.test_predictive_models()
     tester.test_create_predictive_model()
     
-    # Test 11: Security Tests
+    # Test 11: Phase 4 - Enterprise Features Tests
+    print("\n📋 PHASE 4 - NOTIFICATION SYSTEM TESTS")
+    tester.test_notifications_system()
+    tester.test_create_notification()
+    tester.test_notification_templates()
+    tester.test_create_notification_template()
+    
+    print("\n📋 PHASE 4 - COMPLIANCE & AUDIT TESTS")
+    tester.test_compliance_reports()
+    tester.test_generate_compliance_report()
+    tester.test_enhanced_audit_logs()
+    
+    print("\n📋 PHASE 4 - SYSTEM INTEGRATIONS TESTS")
+    tester.test_system_integrations()
+    tester.test_create_system_integration()
+    
+    print("\n📋 PHASE 4 - ENHANCED ANALYTICS TESTS")
+    tester.test_user_activity_analytics()
+    tester.test_real_time_events()
+    tester.test_create_real_time_event()
+    
+    print("\n📋 PHASE 4 - DATA RETENTION TESTS")
+    tester.test_data_retention_policies()
+    tester.test_create_data_retention_policy()
+    
+    # Test 12: Security Tests
     print("\n📋 SECURITY TESTS")
     tester.test_unauthorized_access()
     
-    # Test 12: Manager Role Test
+    # Test 13: Manager Role Test
     print("\n📋 ROLE-BASED ACCESS TESTS")
     if not tester.test_login("manager", "manager123"):
         print("❌ Manager login failed")
@@ -1608,16 +1633,20 @@ def main():
         # Test manager can access Phase 3 features
         tester.test_staff_dashboard()
         tester.test_advanced_analytics()
+        # Test manager can access Phase 4 features
+        tester.test_notifications_system()
+        tester.test_compliance_reports()
+        tester.test_user_activity_analytics()
     
     # Print final results
     print("\n" + "=" * 70)
-    print(f"📊 FINAL RESULTS - ALL 3 PHASES TESTING")
+    print(f"📊 FINAL RESULTS - ALL 4 PHASES TESTING")
     print(f"Tests Run: {tester.tests_run}")
     print(f"Tests Passed: {tester.tests_passed}")
     print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
     
     if tester.tests_passed == tester.tests_run:
-        print("🎉 All tests passed! Backend is working correctly across all 3 phases.")
+        print("🎉 All tests passed! Backend is working correctly across all 4 phases.")
         return 0
     else:
         failed = tester.tests_run - tester.tests_passed
