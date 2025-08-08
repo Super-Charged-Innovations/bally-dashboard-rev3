@@ -3042,24 +3042,49 @@ async def initialize_sample_data():
         system_integrations_col.delete_many({})
         system_integrations_col.insert_many([integration.dict() for integration in integrations_data])
         
-        # Create user activity tracking data
+        # Create comprehensive user activity tracking data
         activity_tracking_data = []
-        for i in range(200):  # 200 activity records
-            user_id = sample_members[i % len(sample_members)]["id"]
+        browsers = ["Chrome", "Firefox", "Safari", "Edge", "Opera"]
+        devices = ["desktop", "mobile", "tablet"]
+        pages = ["/dashboard", "/members", "/gaming", "/rewards", "/marketing", "/travel", "/staff", 
+                "/enterprise", "/notifications", "/compliance", "/analytics", "/advanced-analytics"]
+        actions = ["login", "logout", "view_member", "create_report", "update_profile", "generate_analytics",
+                  "send_notification", "approve_transaction", "export_data", "search_members"]
+        
+        for i in range(1000):  # Comprehensive activity data
+            user_idx = i % len(sample_members)
+            user_id = sample_members[user_idx]["id"]
+            
+            # Create realistic session patterns
+            session_id = f"session_{user_id}_{i // 20}"
+            activity_type = ["page_view", "action", "transaction", "login", "logout"][i % 5]
+            
+            # Time patterns - more activity during business hours
+            base_time = datetime.utcnow() - timedelta(days=i // 100, hours=9 + (i % 12), minutes=i % 60)
+            
             activity = UserActivityTracking(
-                user_type="member",
-                user_id=user_id,
-                session_id=f"session_{user_id}_{i // 10}",
-                activity_type=["page_view", "action", "transaction", "login", "logout"][i % 5],
-                page_url=f"/dashboard" if i % 5 == 0 else f"/gaming" if i % 5 == 1 else f"/rewards" if i % 5 == 2 else None,
-                action_name=f"view_profile" if i % 5 == 1 else f"redeem_reward" if i % 5 == 2 else None,
-                duration_seconds=30 + (i % 300) if i % 5 == 0 else None,
-                device_type=["desktop", "mobile", "tablet"][i % 3],
-                browser=["Chrome", "Firefox", "Safari", "Edge"][i % 4],
-                ip_address=f"192.168.1.{(i % 254) + 1}",
-                location={"city": "Colombo", "country": "Sri Lanka"},
-                referrer="https://ballys.lk" if i % 4 == 0 else None,
-                timestamp=datetime.utcnow() - timedelta(hours=i // 10, minutes=i % 60)
+                user_type="member" if i % 10 != 0 else "admin",
+                user_id=user_id if i % 10 != 0 else admin_users[i % 2]["id"],
+                session_id=session_id,
+                activity_type=activity_type,
+                page_url=pages[i % len(pages)] if activity_type == "page_view" else None,
+                action_name=actions[i % len(actions)] if activity_type == "action" else None,
+                duration_seconds=30 + (i % 300) if activity_type == "page_view" else None,
+                device_type=devices[i % 3],
+                browser=browsers[i % len(browsers)],
+                ip_address=f"192.168.{(i % 254) + 1}.{((i * 7) % 254) + 1}",
+                location={
+                    "city": ["Colombo", "Kandy", "Galle", "Jaffna", "Negombo", "Singapore", "Mumbai", "Dubai"][i % 8],
+                    "country": ["Sri Lanka", "Singapore", "India", "UAE"][i % 4],
+                    "coordinates": {"lat": 6.9271 + (i % 100) * 0.01, "lng": 79.8612 + (i % 100) * 0.01}
+                },
+                referrer="https://ballys.lk" if i % 3 == 0 else f"https://{'google.com' if i % 3 == 1 else 'facebook.com'}",
+                metadata={
+                    "screen_resolution": ["1920x1080", "1366x768", "1440x900", "1280x720"][i % 4],
+                    "language": ["en-US", "si-LK", "ta-LK"][i % 3],
+                    "timezone": "Asia/Colombo"
+                },
+                timestamp=base_time
             )
             activity_tracking_data.append(activity.dict())
         
