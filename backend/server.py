@@ -318,7 +318,131 @@ class BirthdayCalendar(BaseModel):
     celebration_booked: bool = False
     last_birthday_spend: Optional[float] = None
 
-# Phase 3 Models - Staff Management & Advanced Analytics
+# Phase 4 Models - Enterprise Features
+
+class NotificationTemplate(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    category: str  # security, compliance, marketing, system, user_activity
+    title: str
+    content: str
+    variables: List[str] = []  # Placeholder variables like {user_name}, {amount}
+    channels: List[str] = []  # email, sms, push, in_app
+    priority: str = "normal"  # low, normal, high, critical
+    is_active: bool = True
+    created_by: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class Notification(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    template_id: Optional[str] = None
+    recipient_type: str  # user, admin, system
+    recipient_id: Optional[str] = None  # User ID or Admin ID
+    recipient_email: Optional[str] = None
+    recipient_phone: Optional[str] = None
+    title: str
+    content: str
+    category: str
+    priority: str = "normal"
+    channels: List[str] = ["in_app"]
+    status: str = "pending"  # pending, sent, delivered, failed, read
+    scheduled_at: Optional[datetime] = None
+    sent_at: Optional[datetime] = None
+    delivered_at: Optional[datetime] = None
+    read_at: Optional[datetime] = None
+    metadata: Dict[str, Any] = {}
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ComplianceReport(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    report_type: str  # audit_trail, data_retention, kyc_compliance, aml_report, gambling_activity
+    report_period_start: datetime
+    report_period_end: datetime
+    generated_by: str
+    status: str = "draft"  # draft, completed, submitted, approved
+    summary: Dict[str, Any] = {}
+    violations: List[Dict[str, Any]] = []
+    recommendations: List[str] = []
+    file_path: Optional[str] = None  # Path to generated report file
+    submitted_to: Optional[str] = None  # Regulatory body
+    submission_date: Optional[datetime] = None
+    compliance_score: Optional[float] = None  # 0-100
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class SystemIntegration(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    integration_type: str  # payment_gateway, analytics_service, regulatory_api, email_service
+    provider: str  # stripe, sendgrid, google_analytics, etc
+    endpoint_url: Optional[str] = None
+    api_key_encrypted: Optional[str] = None  # Encrypted API keys
+    webhook_url: Optional[str] = None
+    configuration: Dict[str, Any] = {}
+    status: str = "active"  # active, inactive, error, testing
+    last_sync: Optional[datetime] = None
+    sync_frequency: str = "hourly"  # realtime, hourly, daily, weekly
+    error_count: int = 0
+    last_error: Optional[str] = None
+    created_by: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class UserActivityTracking(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_type: str  # member, admin, guest
+    user_id: str
+    session_id: str
+    activity_type: str  # page_view, action, transaction, login, logout
+    page_url: Optional[str] = None
+    action_name: Optional[str] = None
+    duration_seconds: Optional[int] = None
+    device_type: str  # desktop, mobile, tablet
+    browser: Optional[str] = None
+    ip_address: str
+    location: Optional[Dict[str, Any]] = None  # city, country, coordinates
+    referrer: Optional[str] = None
+    metadata: Dict[str, Any] = {}
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+class RealTimeEvent(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    event_type: str  # user_action, system_alert, security_incident, compliance_violation
+    severity: str = "info"  # info, warning, error, critical
+    source: str  # system component that generated the event
+    user_id: Optional[str] = None
+    admin_id: Optional[str] = None
+    title: str
+    description: str
+    data: Dict[str, Any] = {}
+    requires_action: bool = False
+    action_taken: bool = False
+    action_by: Optional[str] = None
+    action_notes: Optional[str] = None
+    resolved: bool = False
+    resolved_by: Optional[str] = None
+    resolved_at: Optional[datetime] = None
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+class DataRetentionPolicy(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    policy_name: str
+    data_category: str  # member_data, gaming_logs, audit_logs, marketing_data
+    retention_period_days: int
+    archive_after_days: Optional[int] = None
+    auto_delete: bool = False
+    encryption_required: bool = True
+    backup_required: bool = True
+    legal_basis: str  # PDPA compliance reason
+    exceptions: List[str] = []
+    status: str = "active"  # active, inactive, pending_approval
+    created_by: str
+    approved_by: Optional[str] = None
+    approval_date: Optional[datetime] = None
+    next_review_date: datetime
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class StaffMember(BaseModel):
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
