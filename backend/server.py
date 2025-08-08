@@ -70,6 +70,12 @@ marketing_campaigns_col = db.marketing_campaigns
 travel_itineraries_col = db.travel_itineraries
 staff_col = db.staff
 compliance_logs_col = db.compliance_logs
+# Phase 2 Collections
+customer_analytics_col = db.customer_analytics
+walk_in_guests_col = db.walk_in_guests
+vip_experiences_col = db.vip_experiences
+group_bookings_col = db.group_bookings
+birthday_calendar_col = db.birthday_calendar
 
 # Pydantic Models
 class AdminUser(BaseModel):
