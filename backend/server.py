@@ -1106,6 +1106,168 @@ async def initialize_sample_data():
         rewards_col.delete_many({})
         rewards_col.insert_many([reward.dict() for reward in rewards_data])
         
+        # Phase 2 Sample Data - Marketing Intelligence & Travel Management
+        
+        # Generate customer analytics for all members
+        analytics_data = []
+        for i, member in enumerate(sample_members):
+            analytics = CustomerAnalytics(
+                member_id=member["id"],
+                last_activity_date=datetime.utcnow() - timedelta(days=i % 60),
+                visit_frequency=round(4.0 - (i % 8) * 0.5, 2),  # 0.5 to 4 visits per month
+                avg_session_duration=120 + (i % 240),  # 2-6 hours
+                avg_spend_per_visit=200 + (i % 800),  # $200-$1000
+                favorite_games=["Blackjack", "Roulette", "Poker", "Baccarat", "Slots"][i % 5:i % 5 + 2],
+                preferred_visit_times=["evening", "late_night"][i % 2:i % 2 + 1],
+                social_interactions=i % 20,
+                birthday_month=member["date_of_birth"].month,
+                preferred_drinks=["Whiskey", "Wine", "Champagne", "Cocktails", "Beer"][i % 5:i % 5 + 2],
+                dietary_preferences=["None", "Vegetarian", "Halal", "Gluten-Free"][i % 4:i % 4 + 1],
+                risk_score=round((i % 100) / 100.0, 2),  # 0-1 churn risk
+                marketing_segments=["High-Value", "Regular", "Casual", "VIP"][i % 4:i % 4 + 1]
+            )
+            analytics_data.append(analytics.dict())
+        
+        customer_analytics_col.delete_many({})
+        customer_analytics_col.insert_many(analytics_data)
+        
+        # Generate birthday calendar
+        birthday_data = []
+        for member in sample_members:
+            birthday = BirthdayCalendar(
+                member_id=member["id"],
+                member_name=f"{member['first_name']} {member['last_name']}",
+                email=member["email"],
+                phone=member["phone"],
+                tier=member["tier"],
+                birthday_date=member["date_of_birth"],
+                birth_month=member["date_of_birth"].month,
+                birth_day=member["date_of_birth"].day,
+                preferred_celebration_type=["dining", "gaming", "entertainment"][hash(member["id"]) % 3],
+                gift_preferences=["Dining Voucher", "Gaming Credits", "Merchandise", "Spa Treatment"][hash(member["id"]) % 4:hash(member["id"]) % 4 + 2],
+                notification_sent=hash(member["id"]) % 4 == 0,
+                last_birthday_spend=float((hash(member["id"]) % 500) + 100)
+            )
+            birthday_data.append(birthday.dict())
+        
+        birthday_calendar_col.delete_many({})
+        birthday_calendar_col.insert_many(birthday_data)
+        
+        # Generate walk-in guests data
+        walk_in_data = []
+        for i in range(30):  # 30 walk-in guests
+            guest = WalkInGuest(
+                first_name=f"WalkIn{i}",
+                last_name=f"Guest{i}",
+                phone=f"077123{i:04d}",
+                nationality="Sri Lankan",
+                id_document=encrypt_sensitive_data(f"200{i:07d}V"),
+                visit_date=datetime.utcnow() - timedelta(days=i % 7),
+                entry_time=datetime.utcnow() - timedelta(days=i % 7, hours=i % 12),
+                exit_time=datetime.utcnow() - timedelta(days=i % 7, hours=(i % 12) - 3) if i % 4 == 0 else None,
+                spend_amount=50 + (i * 25) if i % 3 == 0 else None,
+                games_played=["Slots", "Blackjack", "Roulette"][i % 3:i % 3 + 1],
+                converted_to_member=i % 5 == 0,
+                follow_up_required=i % 4 == 0,
+                marketing_consent=i % 3 == 0
+            )
+            walk_in_data.append(guest.dict())
+        
+        walk_in_guests_col.delete_many({})
+        walk_in_guests_col.insert_many(walk_in_data)
+        
+        # Generate VIP experiences
+        vip_experiences_data = []
+        vip_members = [m for m in sample_members if m["tier"] == "VIP"][:10]
+        for i, member in enumerate(vip_members):
+            experience = VIPExperience(
+                member_id=member["id"],
+                experience_type=["arrival", "gaming", "dining", "entertainment"][i % 4],
+                scheduled_date=datetime.utcnow() + timedelta(days=i % 30),
+                services_included=["Personal Host", "VIP Lounge", "Premium Dining", "Luxury Transport"][i % 4:i % 4 + 2],
+                special_requests=[f"Special request {i}"],
+                cost=500.0 + (i * 100),
+                satisfaction_score=8 + (i % 3) if i % 2 == 0 else None,
+                status=["planned", "completed", "in_progress"][i % 3]
+            )
+            vip_experiences_data.append(experience.dict())
+        
+        vip_experiences_col.delete_many({})
+        vip_experiences_col.insert_many(vip_experiences_data)
+        
+        # Generate group bookings
+        group_bookings_data = []
+        for i in range(15):  # 15 group bookings
+            booking = GroupBooking(
+                group_name=f"Group Event {i + 1}",
+                contact_person=f"Contact Person {i}",
+                contact_email=f"contact{i}@example.com",
+                contact_phone=f"077123{i:04d}",
+                group_size=10 + (i * 5),
+                group_type=["corporate", "celebration", "tournament", "leisure"][i % 4],
+                booking_date=datetime.utcnow() - timedelta(days=i),
+                arrival_date=datetime.utcnow() + timedelta(days=i % 60),
+                departure_date=datetime.utcnow() + timedelta(days=(i % 60) + 2),
+                special_requirements=[f"Special requirement {i}"],
+                budget_range=["low", "medium", "high", "premium"][i % 4],
+                services_requested=["Dining", "Gaming", "Entertainment", "Transport"][i % 4:i % 4 + 2],
+                total_estimated_value=1000.0 + (i * 500),
+                status=["inquiry", "confirmed", "completed"][i % 3]
+            )
+            group_bookings_data.append(booking.dict())
+        
+        group_bookings_col.delete_many({})
+        group_bookings_col.insert_many(group_bookings_data)
+        
+        # Generate marketing campaigns
+        campaigns_data = [
+            MarketingCampaign(
+                name="Birthday Celebration Campaign",
+                description="Monthly birthday promotions for all tiers",
+                campaign_type="birthday",
+                target_audience=["Ruby", "Sapphire", "Diamond", "VIP"],
+                start_date=datetime.utcnow(),
+                end_date=datetime.utcnow() + timedelta(days=30),
+                budget=5000.0,
+                estimated_reach=100,
+                actual_reach=75,
+                conversion_rate=15.5,
+                status="active",
+                created_by=admin_users[0]["id"]
+            ),
+            MarketingCampaign(
+                name="Inactive Member Re-engagement",
+                description="Bring back members who haven't visited in 60+ days",
+                campaign_type="inactive",
+                target_audience=["Sapphire", "Diamond", "VIP"],
+                start_date=datetime.utcnow() - timedelta(days=15),
+                end_date=datetime.utcnow() + timedelta(days=15),
+                budget=3000.0,
+                estimated_reach=50,
+                actual_reach=35,
+                conversion_rate=8.2,
+                status="active",
+                created_by=admin_users[1]["id"]
+            ),
+            MarketingCampaign(
+                name="VIP Exclusive Experience",
+                description="Special VIP-only events and experiences",
+                campaign_type="vip",
+                target_audience=["VIP"],
+                start_date=datetime.utcnow() + timedelta(days=7),
+                end_date=datetime.utcnow() + timedelta(days=37),
+                budget=10000.0,
+                estimated_reach=25,
+                actual_reach=0,
+                conversion_rate=0.0,
+                status="draft",
+                created_by=admin_users[0]["id"]
+            )
+        ]
+        
+        marketing_campaigns_col.delete_many({})
+        marketing_campaigns_col.insert_many([campaign.dict() for campaign in campaigns_data])
+        
         return {"message": "Sample data initialized successfully"}
         
     except Exception as e:
