@@ -2275,7 +2275,7 @@ async def initialize_sample_data():
                 member_number=f"MB{10001 + i}",
                 first_name=first_names[i % len(first_names)],
                 last_name=last_names[i % len(last_names)],
-                email=f"{first_names[i % len(first_names)].lower()}.{last_names[i % len(last_names)].lower()}@{'gmail.com' if i % 3 == 0 else 'hotmail.com' if i % 3 == 1 else 'yahoo.com'}",
+                email=f"{first_names[i % len(first_names)].lower().replace(' ', '')}.{last_names[i % len(last_names)].lower().replace(' ', '')}@{'gmail.com' if i % 3 == 0 else 'hotmail.com' if i % 3 == 1 else 'yahoo.com'}",
                 phone=f"077{'1234567890'[i % 10]}{i:06d}"[:10],
                 date_of_birth=datetime(1960 + (i % 45), (i % 12) + 1, (i % 28) + 1),
                 nationality=countries[i % len(countries)],
