@@ -1,5 +1,10 @@
 import React from 'react';
-import { ChartBarIcon, TrendingUpIcon, UsersIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { 
+  ChartBarIcon, 
+  ArrowTrendingUpIcon, 
+  UsersIcon, 
+  CurrencyDollarIcon 
+} from '@heroicons/react/24/outline';
 
 const Analytics = ({ user }) => {
   return (
