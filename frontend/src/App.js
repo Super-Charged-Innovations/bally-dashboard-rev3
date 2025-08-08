@@ -165,6 +165,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard user={user} />} />
+              <Route path="/enterprise" element={<EnterpriseDashboard user={user} />} />
               <Route path="/members" element={<MemberManagement user={user} />} />
               <Route path="/gaming" element={<GamingManagement user={user} />} />
               <Route path="/rewards" element={<RewardsManagement user={user} />} />
@@ -173,6 +174,8 @@ function App() {
               <Route path="/staff" element={<StaffManagement user={user} />} />
               <Route path="/advanced-analytics" element={<AdvancedAnalytics user={user} />} />
               <Route path="/analytics" element={<Analytics user={user} />} />
+              <Route path="/notifications" element={<NotificationsManagement user={user} />} />
+              <Route path="/compliance" element={<ComplianceDashboard user={user} />} />
             </Routes>
           </main>
         </div>
