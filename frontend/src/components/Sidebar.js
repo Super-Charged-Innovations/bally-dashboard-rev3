@@ -12,7 +12,10 @@ import {
   MegaphoneIcon,
   CalendarDaysIcon,
   AcademicCapIcon,
-  ChartPieIcon
+  ChartPieIcon,
+  BuildingOfficeIcon,
+  BellIcon,
+  ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 
 const Sidebar = ({ isOpen, onToggle, user }) => {
