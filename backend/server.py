@@ -835,7 +835,7 @@ async def get_vip_travel_dashboard(token_payload: dict = Depends(verify_token)):
         "satisfaction_score": {"$exists": True}
     }))
     
-    avg_satisfaction = sum(exp.get("satisfaction_score", 0) for exp in completed_experiences) / len(completed_experiences) if completed_experiences else 0
+    avg_satisfaction = sum(exp.get("satisfaction_score") or 0 for exp in completed_experiences) / len(completed_experiences) if completed_experiences else 0
     
     return {
         "upcoming_vip_experiences": len(upcoming_vip),
