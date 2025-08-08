@@ -302,6 +302,148 @@ class ApiService {
     });
   }
 
+  // Phase 4 - Enterprise Features APIs
+  // Notifications
+  async getNotifications(params = {}) {
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      if (params[key] !== undefined && params[key] !== null) {
+        searchParams.append(key, params[key]);
+      }
+    });
+    const query = searchParams.toString();
+    return this.request(`/notifications${query ? `?${query}` : ''}`);
+  }
+
+  async createNotification(data) {
+    return this.request('/notifications', {
+      method: 'POST',
+      body: data,
+    });
+  }
+
+  async markNotificationRead(id) {
+    return this.request(`/notifications/${id}/read`, {
+      method: 'PATCH',
+    });
+  }
+
+  async getNotificationTemplates(category = null) {
+    const params = category ? `?category=${category}` : '';
+    return this.request(`/notifications/templates${params}`);
+  }
+
+  async createNotificationTemplate(data) {
+    return this.request('/notifications/templates', {
+      method: 'POST',
+      body: data,
+    });
+  }
+
+  // Compliance & Audit
+  async getComplianceReports(params = {}) {
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      if (params[key] !== undefined && params[key] !== null) {
+        searchParams.append(key, params[key]);
+      }
+    });
+    const query = searchParams.toString();
+    return this.request(`/compliance/reports${query ? `?${query}` : ''}`);
+  }
+
+  async generateComplianceReport(data) {
+    return this.request('/compliance/reports/generate', {
+      method: 'POST',
+      body: data,
+    });
+  }
+
+  async getEnhancedAuditLogs(params = {}) {
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      if (params[key] !== undefined && params[key] !== null) {
+        searchParams.append(key, params[key]);
+      }
+    });
+    const query = searchParams.toString();
+    return this.request(`/audit/enhanced${query ? `?${query}` : ''}`);
+  }
+
+  // System Integrations
+  async getSystemIntegrations(params = {}) {
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      if (params[key] !== undefined && params[key] !== null) {
+        searchParams.append(key, params[key]);
+      }
+    });
+    const query = searchParams.toString();
+    return this.request(`/integrations${query ? `?${query}` : ''}`);
+  }
+
+  async createSystemIntegration(data) {
+    return this.request('/integrations', {
+      method: 'POST',
+      body: data,
+    });
+  }
+
+  async syncIntegration(id) {
+    return this.request(`/integrations/${id}/sync`, {
+      method: 'PATCH',
+    });
+  }
+
+  // Enhanced User Analytics
+  async getUserActivityAnalytics(params = {}) {
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      if (params[key] !== undefined && params[key] !== null) {
+        searchParams.append(key, params[key]);
+      }
+    });
+    const query = searchParams.toString();
+    return this.request(`/analytics/user-activity${query ? `?${query}` : ''}`);
+  }
+
+  async getRealTimeEvents(params = {}) {
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      if (params[key] !== undefined && params[key] !== null) {
+        searchParams.append(key, params[key]);
+      }
+    });
+    const query = searchParams.toString();
+    return this.request(`/analytics/real-time-events${query ? `?${query}` : ''}`);
+  }
+
+  async createRealTimeEvent(data) {
+    return this.request('/analytics/real-time-events', {
+      method: 'POST',
+      body: data,
+    });
+  }
+
+  // Data Retention
+  async getDataRetentionPolicies(params = {}) {
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      if (params[key] !== undefined && params[key] !== null) {
+        searchParams.append(key, params[key]);
+      }
+    });
+    const query = searchParams.toString();
+    return this.request(`/data-retention/policies${query ? `?${query}` : ''}`);
+  }
+
+  async createDataRetentionPolicy(data) {
+    return this.request('/data-retention/policies', {
+      method: 'POST',
+      body: data,
+    });
+  }
+
   // Health check
   async healthCheck() {
     return this.request('/health');
