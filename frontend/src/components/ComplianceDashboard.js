@@ -295,7 +295,7 @@ const ComplianceDashboard = ({ user }) => {
                             <EyeIcon className="h-4 w-4" />
                           </button>
                           <button className="text-gray-600 hover:text-gray-900">
-                            <DownloadIcon className="h-4 w-4" />
+                            <ArrowDownTrayIcon className="h-4 w-4" />
                           </button>
                         </td>
                       </tr>
