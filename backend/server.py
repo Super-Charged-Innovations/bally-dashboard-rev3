@@ -2605,8 +2605,96 @@ async def initialize_sample_data():
             )
             vip_experiences_data.append(experience.dict())
         
+        # Enhanced Travel & VIP Management Data
+        
+        # Create comprehensive VIP experiences
+        experience_types = ["arrival_vip", "private_gaming", "luxury_dining", "spa_wellness", "entertainment_show", 
+                           "helicopter_tour", "yacht_charter", "shopping_concierge", "cultural_experience"]
+        
+        vip_experiences_enhanced = []
+        vip_members = [m for m in sample_members if m["tier"] in ["Diamond", "VIP"]][:50]  # More VIP members
+        
+        for i, member in enumerate(vip_members):
+            for exp_idx in range(i % 4 + 1):  # 1-4 experiences per VIP member
+                exp_type = experience_types[(i + exp_idx) % len(experience_types)]
+                
+                services_mapping = {
+                    "arrival_vip": ["Limousine Transfer", "VIP Check-in", "Welcome Champagne", "Personal Host Assignment"],
+                    "private_gaming": ["Private Table", "Dedicated Dealer", "Premium Refreshments", "High Limits"],
+                    "luxury_dining": ["Chef's Table", "Wine Pairing", "Private Dining Room", "Custom Menu"],
+                    "spa_wellness": ["Full Body Massage", "Facial Treatment", "Sauna Access", "Relaxation Suite"],
+                    "entertainment_show": ["Front Row Seats", "Meet & Greet", "Backstage Access", "VIP Bar"],
+                    "helicopter_tour": ["Scenic Flight", "Aerial Photography", "Champagne Service", "Landing Experience"],
+                    "yacht_charter": ["Private Yacht", "Captain & Crew", "Gourmet Catering", "Water Sports"],
+                    "shopping_concierge": ["Personal Shopper", "Luxury Brands", "Private Fitting", "Gift Wrapping"],
+                    "cultural_experience": ["Private Guide", "Exclusive Access", "Cultural Performances", "Artisan Workshops"]
+                }
+                
+                experience = VIPExperience(
+                    member_id=member["id"],
+                    experience_type=exp_type,
+                    scheduled_date=datetime.utcnow() + timedelta(days=(i + exp_idx) % 60),
+                    actual_date=datetime.utcnow() - timedelta(days=(i + exp_idx) % 30) if (i + exp_idx) % 3 == 0 else None,
+                    duration_minutes=120 + ((i + exp_idx) % 300),
+                    services_included=services_mapping[exp_type],
+                    special_requests=[f"Custom request {i+1}_{exp_idx+1}", f"Special dietary requirement {exp_type}"],
+                    assigned_staff=[f"Staff_{(i+exp_idx) % 20 + 1}", f"Supervisor_{(i+exp_idx) % 5 + 1}"],
+                    cost=500.0 + (i + exp_idx) * 200 + ({"Diamond": 1000, "VIP": 3000}[member["tier"]]),
+                    satisfaction_score=7 + ((i + exp_idx) % 4) if (i + exp_idx) % 3 != 0 else None,
+                    feedback=f"Exceptional {exp_type} experience. Highly recommend!" if (i + exp_idx) % 4 == 0 else None,
+                    status=["planned", "in_progress", "completed", "cancelled"][(i + exp_idx) % 4]
+                )
+                vip_experiences_enhanced.append(experience.dict())
+        
         vip_experiences_col.delete_many({})
-        vip_experiences_col.insert_many(vip_experiences_data)
+        vip_experiences_col.insert_many(vip_experiences_enhanced)
+        
+        # Create diverse group bookings
+        group_types = ["corporate_event", "wedding_celebration", "birthday_party", "anniversary", 
+                      "bachelor_party", "reunion", "conference", "product_launch", "charity_gala"]
+        company_names = ["Tech Solutions Ltd", "Global Finance Corp", "Creative Agency", "Manufacturing Inc", 
+                        "Consulting Group", "Media Holdings", "Construction Co", "Retail Chain", "Healthcare Ltd"]
+        
+        group_bookings_enhanced = []
+        for i in range(35):  # 35 group bookings
+            group_type = group_types[i % len(group_types)]
+            company = company_names[i % len(company_names)] if group_type in ["corporate_event", "conference", "product_launch"] else None
+            
+            group_names = {
+                "corporate_event": f"{company} Annual Gala",
+                "wedding_celebration": f"Silva-Fernando Wedding Reception",
+                "birthday_party": f"50th Birthday Celebration",
+                "anniversary": f"25th Anniversary Party",
+                "bachelor_party": f"Bachelor Party Weekend",
+                "reunion": f"University Class Reunion",
+                "conference": f"{company} Conference 2025",
+                "product_launch": f"{company} Product Launch Event",
+                "charity_gala": f"Children's Charity Gala Night"
+            }
+            
+            booking = GroupBooking(
+                group_name=group_names.get(group_type, f"Group Event {i+1}"),
+                contact_person=f"{first_names[i % len(first_names)]} {last_names[i % len(last_names)]}",
+                contact_email=f"contact{i}@{company.lower().replace(' ', '').replace('ltd', '').replace('inc', '').replace('corp', '')}.com" if company else f"contact{i}@example.com",
+                contact_phone=f"077{i+1000000:07d}",
+                group_size=10 + (i % 100),  # 10-110 people
+                group_type=group_type,
+                booking_date=datetime.utcnow() - timedelta(days=i % 30),
+                arrival_date=datetime.utcnow() + timedelta(days=30 + (i % 60)),
+                departure_date=datetime.utcnow() + timedelta(days=32 + (i % 60)),
+                special_requirements=[f"Dietary restrictions", f"Audio/Visual equipment", f"Special decorations"][i % 3:i % 3 + (i % 2) + 1],
+                budget_range=["medium", "high", "premium", "luxury"][i % 4],
+                services_requested=["Gaming Tables", "Private Dining", "Entertainment", "Photography", "Decorations"][i % 5:i % 5 + (i % 3) + 1],
+                assigned_coordinator=f"Coordinator_{i % 10 + 1}",
+                total_estimated_value=float(5000 + (i * 500) + ((10 + i % 100) * 150)),
+                actual_value=float(4500 + (i * 450) + ((10 + i % 100) * 140)) if i % 4 == 0 else None,
+                status=["inquiry", "confirmed", "in_progress", "completed", "cancelled"][i % 5],
+                notes=f"Special {group_type} requirements discussed. VIP treatment requested."
+            )
+            group_bookings_enhanced.append(booking.dict())
+        
+        group_bookings_col.delete_many({})
+        group_bookings_col.insert_many(group_bookings_enhanced)
         
         # Generate group bookings
         group_bookings_data = []
