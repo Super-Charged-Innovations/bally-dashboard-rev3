@@ -153,6 +153,69 @@ class ApiService {
     });
   }
 
+  // Phase 2: Marketing Intelligence APIs
+  async getMarketingDashboard() {
+    return this.request('/marketing/dashboard');
+  }
+
+  async getBirthdayCalendar(month = null) {
+    const params = month ? `?month=${month}` : '';
+    return this.request(`/marketing/birthday-calendar${params}`);
+  }
+
+  async getInactiveCustomers(days = 30) {
+    return this.request(`/marketing/inactive-customers?days=${days}`);
+  }
+
+  async getWalkInGuests(date = null) {
+    const params = date ? `?date=${date}` : '';
+    return this.request(`/marketing/walk-in-guests${params}`);
+  }
+
+  async getMarketingCampaigns(status = null, campaignType = null) {
+    const params = new URLSearchParams();
+    if (status) params.append('status', status);
+    if (campaignType) params.append('campaign_type', campaignType);
+    const query = params.toString();
+    return this.request(`/marketing/campaigns${query ? `?${query}` : ''}`);
+  }
+
+  async createMarketingCampaign(campaignData) {
+    return this.request('/marketing/campaigns', {
+      method: 'POST',
+      body: campaignData,
+    });
+  }
+
+  // Phase 2: Travel & VIP Management APIs
+  async getVIPTravelDashboard() {
+    return this.request('/travel/vip-dashboard');
+  }
+
+  async getVIPExperiences(status = null) {
+    const params = status ? `?status=${status}` : '';
+    return this.request(`/travel/vip-experiences${params}`);
+  }
+
+  async createVIPExperience(experienceData) {
+    return this.request('/travel/vip-experiences', {
+      method: 'POST',
+      body: experienceData,
+    });
+  }
+
+  async getGroupBookings(status = null) {
+    const params = status ? `?status=${status}` : '';
+    return this.request(`/travel/group-bookings${params}`);
+  }
+
+  async createGroupBooking(bookingData) {
+    return this.request('/travel/group-bookings', {
+      method: 'POST',
+      body: bookingData,
+    });
+  }
+
   // Health check
   async healthCheck() {
     return this.request('/health');
