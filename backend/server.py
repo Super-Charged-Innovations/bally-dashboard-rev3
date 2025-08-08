@@ -2337,20 +2337,55 @@ async def initialize_sample_data():
         gaming_packages_col.delete_many({})
         gaming_packages_col.insert_many([pkg.dict() for pkg in gaming_packages_data])
         
-        # Create sample gaming sessions
+        # Create diverse gaming sessions with realistic patterns
+        game_types = ["Blackjack", "Roulette", "Poker", "Baccarat", "Slots", "Dragon Tiger", "Sic Bo", "Craps"]
+        session_outcomes = ["win", "loss", "small_win", "big_win", "small_loss", "big_loss"]
+        
         sample_sessions = []
-        for i in range(50):
-            member_id = sample_members[i]["id"]
+        for i in range(500):  # Increased sessions for more realistic data
+            member_idx = i % len(sample_members)
+            member_id = sample_members[member_idx]["id"]
+            game_type = game_types[i % len(game_types)]
+            
+            # Realistic buy-in amounts based on member tier
+            tier = sample_members[member_idx]["tier"]
+            base_buyin = {"Ruby": 50, "Sapphire": 200, "Diamond": 500, "VIP": 2000}[tier]
+            buy_in = base_buyin + (i % 10) * base_buyin * 0.2
+            
+            # Realistic session timing
+            session_start = datetime.utcnow() - timedelta(
+                days=i % 60,  # Last 60 days
+                hours=15 + (i % 12),  # Evening hours mainly
+                minutes=i % 60
+            )
+            
+            # Session outcome logic
+            outcome_type = session_outcomes[i % len(session_outcomes)]
+            if outcome_type == "win":
+                cash_out = buy_in * (1.1 + (i % 20) * 0.05)  # 10-110% gain
+            elif outcome_type == "big_win":
+                cash_out = buy_in * (2.0 + (i % 10) * 0.5)   # 200-650% gain
+            elif outcome_type == "small_win":
+                cash_out = buy_in * (1.02 + (i % 10) * 0.03) # 2-32% gain
+            elif outcome_type == "small_loss":
+                cash_out = buy_in * (0.7 + (i % 20) * 0.01)  # 30% loss to 10% loss
+            elif outcome_type == "big_loss":
+                cash_out = buy_in * (0.1 + (i % 30) * 0.02)  # 90% to 40% loss
+            else:  # regular loss
+                cash_out = buy_in * (0.5 + (i % 30) * 0.01)  # 50% to 20% loss
+            
             session = GamingSession(
                 member_id=member_id,
-                game_type=["Blackjack", "Roulette", "Poker", "Baccarat", "Slots"][i % 5],
-                table_number=f"T{(i % 20) + 1}" if i % 5 != 4 else None,
-                machine_number=f"M{(i % 50) + 1}" if i % 5 == 4 else None,
-                buy_in_amount=100.0 + (i * 10),
-                cash_out_amount=80.0 + (i * 8) if i % 3 == 0 else None,
-                net_result=(80.0 + (i * 8)) - (100.0 + (i * 10)) if i % 3 == 0 else None,
-                points_earned=float(i * 2),
-                status="completed" if i % 3 == 0 else "active"
+                session_start=session_start,
+                session_end=session_start + timedelta(minutes=45 + (i % 180)) if i % 4 != 3 else None,
+                game_type=game_type,
+                table_number=f"T{(i % 25) + 1}" if game_type != "Slots" else None,
+                machine_number=f"S{(i % 50) + 1}" if game_type == "Slots" else None,
+                buy_in_amount=round(buy_in, 2),
+                cash_out_amount=round(cash_out, 2) if i % 4 != 3 else None,
+                net_result=round(cash_out - buy_in, 2) if i % 4 != 3 else None,
+                points_earned=float(max(1, int(buy_in / 10))),  # Points based on buy-in
+                status="completed" if i % 4 != 3 else "active"
             )
             sample_sessions.append(session.dict())
         
