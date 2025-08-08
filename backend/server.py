@@ -2804,8 +2804,170 @@ async def initialize_sample_data():
             )
             staff_data.append(staff.dict())
         
+        # Comprehensive Staff Management Data
+        
+        # Create diverse staff members across all departments
+        staff_first_names = ["Nuwan", "Sachini", "Kasun", "Dilani", "Roshan", "Samanthi", "Tharaka", "Madhavi", 
+                           "Chathura", "Nadeeka", "Janaka", "Shirani", "Buddhika", "Kavitha", "Saman"]
+        staff_last_names = ["Perera", "Silva", "Fernando", "Jayawardena", "Gunasekera", "Wijeratne", "Mendis"]
+        
+        departments = ["Gaming", "Food & Beverage", "Security", "Management", "Maintenance", "Customer Service", 
+                      "Finance", "Marketing", "IT", "HR", "Compliance"]
+        positions_by_dept = {
+            "Gaming": ["Dealer", "Pit Boss", "Gaming Supervisor", "Cashier", "Gaming Manager"],
+            "Food & Beverage": ["Server", "Bartender", "Chef", "Kitchen Staff", "F&B Supervisor", "Restaurant Manager"],
+            "Security": ["Security Officer", "Security Supervisor", "Head of Security", "CCTV Operator"],
+            "Management": ["Operations Manager", "General Manager", "Assistant Manager", "Department Head"],
+            "Maintenance": ["Technician", "Maintenance Staff", "Facilities Manager", "Cleaning Staff"],
+            "Customer Service": ["Host", "Customer Service Rep", "VIP Host", "Guest Relations Manager"],
+            "Finance": ["Accountant", "Finance Clerk", "Finance Manager", "Audit Specialist"],
+            "Marketing": ["Marketing Coordinator", "Marketing Manager", "Event Coordinator", "PR Specialist"],
+            "IT": ["IT Support", "System Administrator", "IT Manager", "Database Administrator"],
+            "HR": ["HR Coordinator", "HR Manager", "Recruiter", "Training Coordinator"],
+            "Compliance": ["Compliance Officer", "Risk Manager", "Compliance Manager", "Audit Manager"]
+        }
+        
+        enhanced_staff_data = []
+        for i in range(150):  # 150 staff members
+            dept = departments[i % len(departments)]
+            positions = positions_by_dept[dept]
+            position = positions[i % len(positions)]
+            
+            # Salary based on position and department
+            base_salaries = {
+                "Manager": 150000, "Head": 140000, "Supervisor": 100000, "Pit Boss": 95000,
+                "Chef": 80000, "Dealer": 60000, "Officer": 55000, "Specialist": 75000,
+                "Coordinator": 50000, "Representative": 45000, "Staff": 40000, "Clerk": 38000
+            }
+            
+            salary_multiplier = 1.0
+            for title, base in base_salaries.items():
+                if title.lower() in position.lower():
+                    salary_multiplier = base / 50000
+                    break
+            
+            staff_member = StaffMember(
+                employee_id=f"EMP{1000 + i}",
+                first_name=staff_first_names[i % len(staff_first_names)],
+                last_name=staff_last_names[i % len(staff_last_names)],
+                email=f"{staff_first_names[i % len(staff_first_names)].lower()}.{staff_last_names[i % len(staff_last_names)].lower()}@ballys.lk",
+                phone=f"071{i+2000000:07d}",
+                position=position,
+                department=dept,
+                hire_date=datetime.utcnow() - timedelta(days=30 + (i * 10)),
+                salary=round(35000 * salary_multiplier + (i % 20000), 2),
+                manager_id=f"EMP{1000 + (i // 10)}" if i % 10 != 0 else None,
+                employment_status="active" if i % 20 != 19 else "inactive",
+                skills=["Communication", "Customer Service", "Problem Solving", "Teamwork", "Leadership"][i % 5:i % 5 + (i % 3) + 1],
+                certifications=["Gaming License", "Food Safety", "First Aid", "Security Training", "Compliance Training"][i % 5:i % 5 + (i % 2) + 1],
+                performance_score=60 + (i % 40),  # 60-100 performance
+                commitment_score=70 + (i % 30),   # 70-100 commitment
+                training_completion_rate=float(50 + (i % 50)),  # 50-100% completion
+                last_performance_review=datetime.utcnow() - timedelta(days=i % 365),
+                next_review_due=datetime.utcnow() + timedelta(days=365 - (i % 180)),
+                emergency_contact={
+                    "name": f"Emergency Contact {i+1}",
+                    "relationship": ["Spouse", "Parent", "Sibling", "Friend"][i % 4],
+                    "phone": f"077{i+3000000:07d}"
+                }
+            )
+            enhanced_staff_data.append(staff_member.dict())
+        
         staff_members_col.delete_many({})
-        staff_members_col.insert_many(staff_data)
+        staff_members_col.insert_many(enhanced_staff_data)
+        
+        # Create comprehensive training courses
+        training_categories = ["safety", "technical", "customer_service", "compliance", "leadership", "gaming_skills"]
+        course_details = {
+            "safety": [
+                ("Fire Safety Training", "Emergency procedures and fire prevention"),
+                ("First Aid Certification", "Basic first aid and CPR training"),
+                ("Workplace Safety", "General workplace safety protocols"),
+                ("Security Procedures", "Security protocols and incident response")
+            ],
+            "technical": [
+                ("Gaming Systems", "Operation of gaming equipment and systems"),
+                ("POS Systems", "Point of sale and payment processing"),
+                ("CCTV Operations", "Security camera monitoring and operations"),
+                ("IT Systems", "Basic computer and network systems")
+            ],
+            "customer_service": [
+                ("Customer Excellence", "Delivering exceptional customer service"),
+                ("Conflict Resolution", "Handling customer complaints and disputes"),
+                ("VIP Service Standards", "Premium service for VIP guests"),
+                ("Cultural Sensitivity", "Serving diverse international clientele")
+            ],
+            "compliance": [
+                ("Anti-Money Laundering", "AML compliance and reporting procedures"),
+                ("Responsible Gaming", "Identifying and assisting problem gamblers"),
+                ("Data Protection", "PDPA compliance and privacy protection"),
+                ("Regulatory Requirements", "Gaming authority regulations and compliance")
+            ],
+            "leadership": [
+                ("Team Leadership", "Leading and motivating teams"),
+                ("Performance Management", "Managing employee performance"),
+                ("Decision Making", "Strategic thinking and decision making"),
+                ("Communication Skills", "Effective workplace communication")
+            ],
+            "gaming_skills": [
+                ("Card Dealing Techniques", "Professional card dealing methods"),
+                ("Table Games Rules", "Rules and procedures for table games"),
+                ("Customer Psychology", "Understanding player behavior"),
+                ("Gaming Mathematics", "Odds, probabilities, and game mathematics")
+            ]
+        }
+        
+        enhanced_training_courses = []
+        course_id_counter = 0
+        for category, courses in course_details.items():
+            for course_name, description in courses:
+                course_id_counter += 1
+                course = TrainingCourse(
+                    course_name=course_name,
+                    description=description,
+                    category=category,
+                    difficulty_level=["beginner", "intermediate", "advanced"][course_id_counter % 3],
+                    duration_hours=4 + (course_id_counter % 20),  # 4-24 hours
+                    required_for_positions=positions_by_dept[departments[course_id_counter % len(departments)]],
+                    prerequisites=[f"Basic {category} knowledge"] if course_id_counter % 3 == 0 else [],
+                    content_modules=[f"Module {i+1}" for i in range((course_id_counter % 5) + 3)],
+                    assessment_questions=[{"question": f"Sample question {i+1}", "correct_answer": f"Answer {i+1}"} for i in range(10)],
+                    passing_score=70 + (course_id_counter % 20),
+                    validity_months=12 + (course_id_counter % 24) if category == "compliance" else None,
+                    is_mandatory=category in ["safety", "compliance"],
+                    created_by=admin_users[course_id_counter % 2]["id"]
+                )
+                enhanced_training_courses.append(course.dict())
+        
+        training_courses_col.delete_many({})
+        training_courses_col.insert_many(enhanced_training_courses)
+        
+        # Create training records for staff
+        enhanced_training_records = []
+        for i, staff in enumerate(enhanced_staff_data[:100]):  # Training records for 100 staff
+            for course_idx in range((i % 5) + 1):  # 1-5 courses per staff
+                course = enhanced_training_courses[course_idx % len(enhanced_training_courses)]
+                
+                record = TrainingRecord(
+                    staff_id=staff["id"],
+                    course_id=course["id"],
+                    enrollment_date=datetime.utcnow() - timedelta(days=i % 60),
+                    start_date=datetime.utcnow() - timedelta(days=i % 60 - 5) if i % 3 != 0 else None,
+                    completion_date=datetime.utcnow() - timedelta(days=i % 60 - 10) if i % 4 != 3 else None,
+                    score=70 + (i % 30) if i % 4 != 3 else None,
+                    status=["enrolled", "in_progress", "completed", "failed"][i % 4],
+                    attempt_number=1 + (i % 3),
+                    time_spent_minutes=(i % 300) + 60,
+                    modules_completed=[f"Module {j+1}" for j in range((i % 5) + 1)],
+                    certificate_issued=i % 4 == 2,
+                    certificate_expiry=datetime.utcnow() + timedelta(days=365) if i % 4 == 2 and course.get("validity_months") else None,
+                    feedback=f"Great course content, very informative!" if i % 5 == 0 else None,
+                    instructor_notes=f"Employee shows good understanding of {course['category']} concepts" if i % 6 == 0 else None
+                )
+                enhanced_training_records.append(record.dict())
+        
+        training_records_col.delete_many({})
+        training_records_col.insert_many(enhanced_training_records)
         
         # Generate training courses
         courses_data = [
