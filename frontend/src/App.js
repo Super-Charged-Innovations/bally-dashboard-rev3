@@ -10,6 +10,8 @@ import Login from './components/Login';
 import MemberManagement from './components/MemberManagement';
 import GamingManagement from './components/GamingManagement';
 import RewardsManagement from './components/RewardsManagement';
+import MarketingIntelligence from './components/MarketingIntelligence';
+import TravelManagement from './components/TravelManagement';
 import Analytics from './components/Analytics';
 
 // Services
