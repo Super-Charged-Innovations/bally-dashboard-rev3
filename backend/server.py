@@ -2786,6 +2786,258 @@ async def initialize_sample_data():
         predictive_models_col.delete_many({})
         predictive_models_col.insert_many([model.dict() for model in models_data])
         
+        # Phase 4 Sample Data - Enterprise Features
+        
+        # Create notification templates
+        notification_templates_data = [
+            NotificationTemplate(
+                name="Security Alert",
+                category="security",
+                title="Security Alert: {alert_type}",
+                content="A security alert has been triggered: {description}. Please review immediately.",
+                variables=["alert_type", "description"],
+                channels=["email", "in_app"],
+                priority="high",
+                created_by=admin_users[0]["id"]
+            ),
+            NotificationTemplate(
+                name="Compliance Reminder",
+                category="compliance",
+                title="Compliance Review Due",
+                content="Dear {user_name}, your compliance review is due on {due_date}. Please complete the required actions.",
+                variables=["user_name", "due_date"],
+                channels=["email", "in_app"],
+                priority="normal",
+                created_by=admin_users[0]["id"]
+            ),
+            NotificationTemplate(
+                name="Birthday Celebration",
+                category="marketing",
+                title="Happy Birthday {member_name}!",
+                content="Wishing you a wonderful birthday! Enjoy a special offer of {offer_amount} gaming credits.",
+                variables=["member_name", "offer_amount"],
+                channels=["email", "sms"],
+                priority="normal",
+                created_by=admin_users[1]["id"]
+            ),
+            NotificationTemplate(
+                name="System Maintenance",
+                category="system",
+                title="Scheduled System Maintenance",
+                content="System maintenance is scheduled for {maintenance_date} from {start_time} to {end_time}. Please plan accordingly.",
+                variables=["maintenance_date", "start_time", "end_time"],
+                channels=["email", "in_app"],
+                priority="normal",
+                created_by=admin_users[0]["id"]
+            )
+        ]
+        
+        notification_templates_col.delete_many({})
+        notification_templates_col.insert_many([template.dict() for template in notification_templates_data])
+        
+        # Create sample notifications
+        notifications_data = []
+        for i in range(20):
+            notification = Notification(
+                recipient_type="admin" if i % 3 == 0 else "user",
+                recipient_id=admin_users[i % 2]["id"] if i % 3 == 0 else sample_members[i]["id"],
+                recipient_email=admin_users[i % 2]["email"] if i % 3 == 0 else sample_members[i]["email"],
+                title=f"Sample Notification {i + 1}",
+                content=f"This is a sample notification content for testing purposes. Notification #{i + 1}",
+                category=["security", "compliance", "marketing", "system", "user_activity"][i % 5],
+                priority=["low", "normal", "high", "critical"][i % 4],
+                channels=["in_app", "email"],
+                status=["pending", "sent", "delivered", "read"][i % 4],
+                sent_at=datetime.utcnow() - timedelta(hours=i) if i % 4 != 0 else None,
+                read_at=datetime.utcnow() - timedelta(hours=i // 2) if i % 4 == 3 else None
+            )
+            notifications_data.append(notification.dict())
+        
+        notifications_col.delete_many({})
+        notifications_col.insert_many(notifications_data)
+        
+        # Create system integrations
+        integrations_data = [
+            SystemIntegration(
+                name="Stripe Payment Gateway",
+                integration_type="payment_gateway",
+                provider="stripe",
+                endpoint_url="https://api.stripe.com",
+                configuration={
+                    "webhook_secret": "whsec_test_123",
+                    "currency": "USD",
+                    "auto_capture": True
+                },
+                status="active",
+                last_sync=datetime.utcnow() - timedelta(hours=1),
+                sync_frequency="realtime",
+                created_by=admin_users[0]["id"]
+            ),
+            SystemIntegration(
+                name="SendGrid Email Service",
+                integration_type="email_service",
+                provider="sendgrid",
+                endpoint_url="https://api.sendgrid.com",
+                configuration={
+                    "from_email": "noreply@ballys.lk",
+                    "template_engine": "handlebars",
+                    "tracking_enabled": True
+                },
+                status="active",
+                last_sync=datetime.utcnow() - timedelta(minutes=30),
+                sync_frequency="hourly",
+                created_by=admin_users[0]["id"]
+            ),
+            SystemIntegration(
+                name="Google Analytics",
+                integration_type="analytics_service",
+                provider="google_analytics",
+                endpoint_url="https://analytics.googleapis.com",
+                configuration={
+                    "property_id": "GA_MEASUREMENT_ID",
+                    "events_tracking": True,
+                    "custom_dimensions": ["user_tier", "gaming_preference"]
+                },
+                status="active",
+                last_sync=datetime.utcnow() - timedelta(hours=6),
+                sync_frequency="daily",
+                created_by=admin_users[0]["id"]
+            ),
+            SystemIntegration(
+                name="Central Bank Regulatory API",
+                integration_type="regulatory_api",
+                provider="central_bank_sri_lanka",
+                endpoint_url="https://api.cbsl.gov.lk",
+                configuration={
+                    "report_frequency": "monthly",
+                    "auto_submit": True,
+                    "compliance_check": True
+                },
+                status="testing",
+                last_sync=datetime.utcnow() - timedelta(days=1),
+                sync_frequency="daily",
+                error_count=1,
+                last_error="API rate limit exceeded",
+                created_by=admin_users[0]["id"]
+            )
+        ]
+        
+        system_integrations_col.delete_many({})
+        system_integrations_col.insert_many([integration.dict() for integration in integrations_data])
+        
+        # Create user activity tracking data
+        activity_tracking_data = []
+        for i in range(200):  # 200 activity records
+            user_id = sample_members[i % len(sample_members)]["id"]
+            activity = UserActivityTracking(
+                user_type="member",
+                user_id=user_id,
+                session_id=f"session_{user_id}_{i // 10}",
+                activity_type=["page_view", "action", "transaction", "login", "logout"][i % 5],
+                page_url=f"/dashboard" if i % 5 == 0 else f"/gaming" if i % 5 == 1 else f"/rewards" if i % 5 == 2 else None,
+                action_name=f"view_profile" if i % 5 == 1 else f"redeem_reward" if i % 5 == 2 else None,
+                duration_seconds=30 + (i % 300) if i % 5 == 0 else None,
+                device_type=["desktop", "mobile", "tablet"][i % 3],
+                browser=["Chrome", "Firefox", "Safari", "Edge"][i % 4],
+                ip_address=f"192.168.1.{(i % 254) + 1}",
+                location={"city": "Colombo", "country": "Sri Lanka"},
+                referrer="https://ballys.lk" if i % 4 == 0 else None,
+                timestamp=datetime.utcnow() - timedelta(hours=i // 10, minutes=i % 60)
+            )
+            activity_tracking_data.append(activity.dict())
+        
+        user_activity_tracking_col.delete_many({})
+        user_activity_tracking_col.insert_many(activity_tracking_data)
+        
+        # Create real-time events
+        real_time_events_data = []
+        for i in range(50):
+            event = RealTimeEvent(
+                event_type=["user_action", "system_alert", "security_incident", "compliance_violation"][i % 4],
+                severity=["info", "warning", "error", "critical"][i % 4],
+                source="casino_system" if i % 3 == 0 else "user_portal" if i % 3 == 1 else "payment_gateway",
+                user_id=sample_members[i % len(sample_members)]["id"] if i % 2 == 0 else None,
+                admin_id=admin_users[i % len(admin_users)]["id"] if i % 3 == 0 else None,
+                title=f"Event {i + 1}: " + ["User Login", "System Warning", "Failed Payment", "Security Alert"][i % 4],
+                description=f"Sample event description for event #{i + 1}. This is a {['routine', 'important', 'critical', 'urgent'][i % 4]} event.",
+                data={"event_id": i + 1, "timestamp": datetime.utcnow().isoformat()},
+                requires_action=i % 4 >= 2,
+                action_taken=i % 6 == 0 and i % 4 >= 2,
+                resolved=i % 8 == 0,
+                timestamp=datetime.utcnow() - timedelta(hours=i // 5, minutes=i % 60)
+            )
+            real_time_events_data.append(event.dict())
+        
+        real_time_events_col.delete_many({})
+        real_time_events_col.insert_many(real_time_events_data)
+        
+        # Create data retention policies
+        retention_policies_data = [
+            DataRetentionPolicy(
+                policy_name="Member Data Retention",
+                data_category="member_data",
+                retention_period_days=2555,  # 7 years for financial records
+                archive_after_days=1095,  # 3 years
+                auto_delete=False,
+                encryption_required=True,
+                backup_required=True,
+                legal_basis="PDPA 2022 - Customer data retention for legal compliance",
+                status="active",
+                created_by=admin_users[0]["id"],
+                approved_by=admin_users[0]["id"],
+                approval_date=datetime.utcnow(),
+                next_review_date=datetime.utcnow() + timedelta(days=365)
+            ),
+            DataRetentionPolicy(
+                policy_name="Gaming Activity Logs",
+                data_category="gaming_logs",
+                retention_period_days=1825,  # 5 years
+                archive_after_days=730,  # 2 years
+                auto_delete=True,
+                encryption_required=True,
+                backup_required=True,
+                legal_basis="Gambling Regulatory Authority Act 2025 - Activity monitoring",
+                status="active",
+                created_by=admin_users[0]["id"],
+                approved_by=admin_users[0]["id"],
+                approval_date=datetime.utcnow(),
+                next_review_date=datetime.utcnow() + timedelta(days=365)
+            ),
+            DataRetentionPolicy(
+                policy_name="Audit Trail Retention",
+                data_category="audit_logs",
+                retention_period_days=3650,  # 10 years
+                archive_after_days=1095,  # 3 years
+                auto_delete=False,
+                encryption_required=True,
+                backup_required=True,
+                legal_basis="AML/CFT regulations - Audit trail preservation",
+                status="active",
+                created_by=admin_users[0]["id"],
+                approved_by=admin_users[0]["id"],
+                approval_date=datetime.utcnow(),
+                next_review_date=datetime.utcnow() + timedelta(days=365)
+            ),
+            DataRetentionPolicy(
+                policy_name="Marketing Communications",
+                data_category="marketing_data",
+                retention_period_days=1095,  # 3 years
+                archive_after_days=730,  # 2 years
+                auto_delete=True,
+                encryption_required=False,
+                backup_required=True,
+                legal_basis="PDPA 2022 - Marketing consent management",
+                status="active",
+                created_by=admin_users[0]["id"],
+                approved_by=admin_users[0]["id"],
+                approval_date=datetime.utcnow(),
+                next_review_date=datetime.utcnow() + timedelta(days=365)
+            )
+        ]
+        
+        data_retention_policies_col.delete_many({})
+        data_retention_policies_col.insert_many([policy.dict() for policy in retention_policies_data])
+        
         return {"message": "Sample data initialized successfully"}
         
     except Exception as e:
