@@ -215,15 +215,15 @@ class MarketingCampaign(BaseModel):
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     description: str
-    campaign_type: str  # birthday, inactive, vip, general
-    target_audience: List[str]  # tier restrictions or criteria
+    campaign_type: str
+    target_audience: List[str] = []
     start_date: datetime
     end_date: datetime
     budget: float
     estimated_reach: int
-    actual_reach: Optional[int] = 0
-    conversion_rate: Optional[float] = 0.0
-    status: str = "draft"  # draft, active, completed, paused
+    actual_reach: int = 0
+    conversion_rate: float = 0.0
+    status: str = "draft"
     created_by: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
