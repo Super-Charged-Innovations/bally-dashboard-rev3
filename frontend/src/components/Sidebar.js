@@ -54,7 +54,19 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
       current: false,
     },
     {
-      name: 'Analytics',
+      name: 'Staff',
+      icon: AcademicCapIcon,
+      href: '/staff',
+      current: false,
+    },
+    {
+      name: 'Advanced Analytics',
+      icon: ChartPieIcon,
+      href: '/advanced-analytics',
+      current: false,
+    },
+    {
+      name: 'Reports',
       icon: ChartBarIcon,
       href: '/analytics',
       current: false,
