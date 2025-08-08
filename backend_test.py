@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 class BallyCasinoAPITester:
-    def __init__(self, base_url="http://localhost:8001"):
+    def __init__(self, base_url="https://77b2f52c-0653-4a79-bddb-98a5cd48a43c.preview.emergentagent.com"):
         self.base_url = base_url
         self.token = None
         self.tests_run = 0
