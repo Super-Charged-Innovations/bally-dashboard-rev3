@@ -192,6 +192,115 @@ class DashboardMetrics(BaseModel):
     top_games: List[Dict[str, Any]]
     recent_registrations: int
 
+# Phase 2 Models - Marketing Intelligence & Travel Management
+
+class MarketingCampaign(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    campaign_type: str  # birthday, inactive, vip, general
+    target_audience: List[str]  # tier restrictions or criteria
+    start_date: datetime
+    end_date: datetime
+    budget: float
+    estimated_reach: int
+    actual_reach: Optional[int] = 0
+    conversion_rate: Optional[float] = 0.0
+    status: str = "draft"  # draft, active, completed, paused
+    created_by: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class CustomerAnalytics(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    member_id: str
+    last_activity_date: datetime
+    visit_frequency: float  # visits per month
+    avg_session_duration: float  # minutes
+    avg_spend_per_visit: float
+    favorite_games: List[str]
+    preferred_visit_times: List[str]  # morning, afternoon, evening, late_night
+    social_interactions: int  # likes, comments, posts
+    birthday_month: int
+    preferred_drinks: List[str]
+    dietary_preferences: List[str]
+    risk_score: float  # churn prediction score
+    marketing_segments: List[str]
+    last_updated: datetime = Field(default_factory=datetime.utcnow)
+
+class WalkInGuest(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    first_name: str
+    last_name: str
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    nationality: str
+    id_document: str  # encrypted
+    visit_date: datetime = Field(default_factory=datetime.utcnow)
+    entry_time: datetime = Field(default_factory=datetime.utcnow)
+    exit_time: Optional[datetime] = None
+    spend_amount: Optional[float] = None
+    games_played: List[str] = []
+    services_used: List[str] = []
+    converted_to_member: bool = False
+    follow_up_required: bool = False
+    notes: Optional[str] = None
+    marketing_consent: bool = False
+
+class VIPExperience(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    member_id: str
+    experience_type: str  # arrival, gaming, dining, entertainment, departure
+    scheduled_date: datetime
+    actual_date: Optional[datetime] = None
+    duration_minutes: Optional[int] = None
+    services_included: List[str]
+    special_requests: List[str] = []
+    assigned_staff: List[str] = []
+    cost: float = 0.0
+    satisfaction_score: Optional[int] = None  # 1-10 scale
+    feedback: Optional[str] = None
+    status: str = "planned"  # planned, in_progress, completed, cancelled
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class GroupBooking(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    group_name: str
+    contact_person: str
+    contact_email: str
+    contact_phone: str
+    group_size: int
+    group_type: str  # corporate, celebration, tournament, leisure
+    booking_date: datetime
+    arrival_date: datetime
+    departure_date: datetime
+    special_requirements: List[str] = []
+    budget_range: str  # low, medium, high, premium
+    services_requested: List[str] = []
+    assigned_coordinator: Optional[str] = None
+    total_estimated_value: float = 0.0
+    actual_value: Optional[float] = None
+    status: str = "inquiry"  # inquiry, confirmed, in_progress, completed, cancelled
+    notes: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class BirthdayCalendar(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    member_id: str
+    member_name: str
+    email: str
+    phone: str
+    tier: str
+    birthday_date: datetime
+    birth_month: int
+    birth_day: int
+    preferred_celebration_type: Optional[str] = None  # dining, gaming, entertainment
+    gift_preferences: List[str] = []
+    notification_sent: bool = False
+    campaign_id: Optional[str] = None
+    response_received: bool = False
+    celebration_booked: bool = False
+    last_birthday_spend: Optional[float] = None
+
 # Utility Functions
 def encrypt_sensitive_data(data: str) -> str:
     """Encrypt sensitive personal data for PDPA compliance"""
