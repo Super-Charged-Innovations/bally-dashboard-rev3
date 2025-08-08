@@ -43,7 +43,7 @@ class ApiService {
 
   // Dashboard endpoints
   async getDashboardMetrics() {
-    return this.request('/dashboard/metrics');
+    return this.request('/api/dashboard/metrics');
   }
 
   // Member management endpoints
@@ -56,22 +56,22 @@ class ApiService {
     });
     
     const query = searchParams.toString();
-    return this.request(`/members${query ? `?${query}` : ''}`);
+    return this.request(`/api/members${query ? `?${query}` : ''}`);
   }
 
   async getMember(memberId) {
-    return this.request(`/members/${memberId}`);
+    return this.request(`/api/members/${memberId}`);
   }
 
   async updateMember(memberId, memberData) {
-    return this.request(`/members/${memberId}`, {
+    return this.request(`/api/members/${memberId}`, {
       method: 'PUT',
       body: memberData,
     });
   }
 
   async updateMemberTier(memberId, newTier, reason) {
-    return this.request(`/members/${memberId}/tier`, {
+    return this.request(`/api/members/${memberId}/tier`, {
       method: 'PATCH',
       body: { tier: newTier, reason },
     });
@@ -87,15 +87,15 @@ class ApiService {
     });
     
     const query = searchParams.toString();
-    return this.request(`/gaming/sessions${query ? `?${query}` : ''}`);
+    return this.request(`/api/gaming/sessions${query ? `?${query}` : ''}`);
   }
 
   async getGamingPackages() {
-    return this.request('/gaming/packages');
+    return this.request('/api/gaming/packages');
   }
 
   async createGamingPackage(packageData) {
-    return this.request('/gaming/packages', {
+    return this.request('/api/gaming/packages', {
       method: 'POST',
       body: packageData,
     });
