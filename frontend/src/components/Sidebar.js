@@ -27,6 +27,12 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
       current: false,
     },
     {
+      name: 'Enterprise',
+      icon: BuildingOfficeIcon,
+      href: '/enterprise',
+      current: false,
+    },
+    {
       name: 'Members',
       icon: UsersIcon,
       href: '/members',
@@ -72,6 +78,18 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
       name: 'Reports',
       icon: ChartBarIcon,
       href: '/analytics',
+      current: false,
+    },
+    {
+      name: 'Notifications',
+      icon: BellIcon,
+      href: '/notifications',
+      current: false,
+    },
+    {
+      name: 'Compliance',
+      icon: ShieldCheckIcon,
+      href: '/compliance',
       current: false,
     },
   ];
