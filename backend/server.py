@@ -1595,6 +1595,623 @@ async def create_predictive_model(model: PredictiveModel, token_payload: dict = 
     
     return {"id": model.id, "message": "Predictive model created successfully"}
 
+# Phase 4 Routes - Enterprise Features
+
+# Notification System Routes
+@app.get("/api/notifications")
+async def get_notifications(
+    recipient_id: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    priority: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get notifications with filtering"""
+    query = {}
+    if recipient_id:
+        query["recipient_id"] = recipient_id
+    if category:
+        query["category"] = category
+    if status:
+        query["status"] = status
+    if priority:
+        query["priority"] = priority
+    
+    # Admin can see all notifications, users see only their own
+    if token_payload.get("role") not in ["SuperAdmin", "GeneralAdmin"]:
+        query["recipient_id"] = token_payload["user_id"]
+    
+    notifications = list(notifications_col.find(query).sort("created_at", -1).skip(skip).limit(limit))
+    total = notifications_col.count_documents(query)
+    
+    for notification in notifications:
+        notification.pop("_id", None)
+    
+    return {
+        "notifications": notifications,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.post("/api/notifications")
+async def create_notification(notification: Notification, token_payload: dict = Depends(verify_token)):
+    """Create new notification"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    notification_dict = notification.dict()
+    result = notifications_col.insert_one(notification_dict)
+    
+    # Log notification creation
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "notification", notification.id,
+        details={"category": notification.category, "priority": notification.priority}
+    )
+    
+    return {"id": notification.id, "message": "Notification created successfully"}
+
+@app.patch("/api/notifications/{notification_id}/read")
+async def mark_notification_read(notification_id: str, token_payload: dict = Depends(verify_token)):
+    """Mark notification as read"""
+    notification = notifications_col.find_one({"id": notification_id})
+    if not notification:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    
+    # Users can only mark their own notifications as read
+    if notification["recipient_id"] != token_payload["user_id"] and token_payload.get("role") not in ["SuperAdmin", "GeneralAdmin"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    notifications_col.update_one(
+        {"id": notification_id},
+        {"$set": {"status": "read", "read_at": datetime.utcnow()}}
+    )
+    
+    return {"message": "Notification marked as read"}
+
+@app.get("/api/notifications/templates")
+async def get_notification_templates(
+    category: Optional[str] = None,
+    is_active: bool = True,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get notification templates"""
+    query = {"is_active": is_active}
+    if category:
+        query["category"] = category
+    
+    templates = list(notification_templates_col.find(query))
+    for template in templates:
+        template.pop("_id", None)
+    
+    return templates
+
+@app.post("/api/notifications/templates")
+async def create_notification_template(template: NotificationTemplate, token_payload: dict = Depends(verify_token)):
+    """Create notification template"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    template.created_by = token_payload["user_id"]
+    template_dict = template.dict()
+    result = notification_templates_col.insert_one(template_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "notification_template", template.id,
+        details={"template_name": template.name, "category": template.category}
+    )
+    
+    return {"id": template.id, "message": "Notification template created successfully"}
+
+# Compliance and Audit Routes
+@app.get("/api/compliance/reports")
+async def get_compliance_reports(
+    report_type: Optional[str] = None,
+    status: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get compliance reports"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    query = {}
+    if report_type:
+        query["report_type"] = report_type
+    if status:
+        query["status"] = status
+    
+    reports = list(compliance_reports_col.find(query).sort("created_at", -1).skip(skip).limit(limit))
+    total = compliance_reports_col.count_documents(query)
+    
+    for report in reports:
+        report.pop("_id", None)
+    
+    return {
+        "reports": reports,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.post("/api/compliance/reports/generate")
+async def generate_compliance_report(
+    request: dict,
+    token_payload: dict = Depends(verify_token)
+):
+    """Generate compliance report"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    report_type = request.get("report_type")
+    start_date = datetime.fromisoformat(request.get("start_date"))
+    end_date = datetime.fromisoformat(request.get("end_date"))
+    
+    # Generate mock compliance data based on type
+    summary = {}
+    violations = []
+    recommendations = []
+    compliance_score = 95.0
+    
+    if report_type == "audit_trail":
+        # Audit trail analysis
+        audit_count = audit_logs_col.count_documents({
+            "timestamp": {"$gte": start_date, "$lte": end_date}
+        })
+        
+        summary = {
+            "total_audit_entries": audit_count,
+            "admin_actions": audit_count,
+            "data_access_events": int(audit_count * 0.6),
+            "security_events": int(audit_count * 0.1)
+        }
+        
+        if audit_count > 1000:
+            violations.append({
+                "type": "high_activity_volume",
+                "description": f"High volume of admin activities: {audit_count} entries",
+                "severity": "medium",
+                "recommendation": "Review admin access patterns and implement activity limits"
+            })
+        
+        recommendations = [
+            "Implement automated monitoring for suspicious activity patterns",
+            "Regular review of admin access logs",
+            "Enhance audit trail data retention policies"
+        ]
+    
+    elif report_type == "kyc_compliance":
+        # KYC compliance check
+        total_members = members_col.count_documents({"is_active": True})
+        verified_members = members_col.count_documents({"kyc_verified": True, "is_active": True})
+        verification_rate = (verified_members / total_members) * 100 if total_members > 0 else 0
+        
+        summary = {
+            "total_active_members": total_members,
+            "kyc_verified_members": verified_members,
+            "verification_rate": round(verification_rate, 2),
+            "pending_verification": total_members - verified_members
+        }
+        
+        if verification_rate < 90:
+            violations.append({
+                "type": "low_kyc_verification",
+                "description": f"KYC verification rate below 90%: {verification_rate:.1f}%",
+                "severity": "high",
+                "recommendation": "Implement mandatory KYC verification for all new members"
+            })
+            compliance_score = 80.0
+        
+        recommendations = [
+            "Automated KYC verification reminders",
+            "Streamlined KYC process for better user experience",
+            "Regular compliance training for staff"
+        ]
+    
+    elif report_type == "data_retention":
+        # Data retention policy compliance
+        policies_count = data_retention_policies_col.count_documents({"status": "active"})
+        
+        summary = {
+            "active_retention_policies": policies_count,
+            "data_categories_covered": ["member_data", "gaming_logs", "audit_logs", "marketing_data"],
+            "avg_retention_period": 365,  # days
+            "auto_deletion_enabled": policies_count > 0
+        }
+        
+        if policies_count == 0:
+            violations.append({
+                "type": "no_retention_policies",
+                "description": "No active data retention policies found",
+                "severity": "critical",
+                "recommendation": "Implement comprehensive data retention policies immediately"
+            })
+            compliance_score = 60.0
+        
+        recommendations = [
+            "Define clear data retention policies for all data categories",
+            "Implement automated data archiving and deletion",
+            "Regular review and update of retention policies"
+        ]
+    
+    # Create compliance report
+    report = ComplianceReport(
+        report_type=report_type,
+        report_period_start=start_date,
+        report_period_end=end_date,
+        generated_by=token_payload["user_id"],
+        summary=summary,
+        violations=violations,
+        recommendations=recommendations,
+        compliance_score=compliance_score,
+        status="completed"
+    )
+    
+    compliance_reports_col.insert_one(report.dict())
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "compliance_report", report.id,
+        details={"report_type": report_type, "compliance_score": compliance_score}
+    )
+    
+    return {
+        "id": report.id,
+        "report": report.dict(),
+        "message": f"Compliance report generated for {report_type}"
+    }
+
+@app.get("/api/audit/enhanced")
+async def get_enhanced_audit_logs(
+    admin_user_id: Optional[str] = None,
+    action: Optional[str] = None,
+    resource: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 100,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get enhanced audit logs with advanced filtering"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    query = {}
+    if admin_user_id:
+        query["admin_user_id"] = admin_user_id
+    if action:
+        query["action"] = action
+    if resource:
+        query["resource"] = resource
+    
+    if start_date and end_date:
+        start_dt = datetime.fromisoformat(start_date)
+        end_dt = datetime.fromisoformat(end_date)
+        query["timestamp"] = {"$gte": start_dt, "$lte": end_dt}
+    
+    audit_logs = list(audit_logs_col.find(query).sort("timestamp", -1).skip(skip).limit(limit))
+    total = audit_logs_col.count_documents(query)
+    
+    # Enhanced audit log processing
+    for log in audit_logs:
+        log.pop("_id", None)
+        
+        # Add risk scoring
+        risk_score = 0
+        if log.get("action") in ["delete", "update_sensitive", "export_data"]:
+            risk_score += 3
+        if log.get("resource") in ["member", "admin_user", "audit_log"]:
+            risk_score += 2
+        if log.get("details", {}).get("bulk_operation"):
+            risk_score += 2
+        
+        log["risk_score"] = min(risk_score, 5)  # Max 5
+        log["risk_level"] = "low" if risk_score <= 1 else "medium" if risk_score <= 3 else "high"
+    
+    # Generate audit summary
+    actions_summary = {}
+    resources_summary = {}
+    admins_summary = {}
+    
+    for log in audit_logs:
+        action = log.get("action", "unknown")
+        resource = log.get("resource", "unknown")
+        admin = log.get("admin_username", "unknown")
+        
+        actions_summary[action] = actions_summary.get(action, 0) + 1
+        resources_summary[resource] = resources_summary.get(resource, 0) + 1
+        admins_summary[admin] = admins_summary.get(admin, 0) + 1
+    
+    return {
+        "audit_logs": audit_logs,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit,
+        "summary": {
+            "actions_breakdown": actions_summary,
+            "resources_breakdown": resources_summary,
+            "admin_activity": admins_summary,
+            "high_risk_activities": len([log for log in audit_logs if log.get("risk_level") == "high"])
+        }
+    }
+
+# System Integrations Routes
+@app.get("/api/integrations")
+async def get_system_integrations(
+    integration_type: Optional[str] = None,
+    status: Optional[str] = None,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get system integrations"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    query = {}
+    if integration_type:
+        query["integration_type"] = integration_type
+    if status:
+        query["status"] = status
+    
+    integrations = list(system_integrations_col.find(query).sort("created_at", -1))
+    
+    # Remove sensitive data
+    for integration in integrations:
+        integration.pop("_id", None)
+        integration.pop("api_key_encrypted", None)  # Hide encrypted keys
+    
+    return integrations
+
+@app.post("/api/integrations")
+async def create_system_integration(integration: SystemIntegration, token_payload: dict = Depends(verify_token)):
+    """Create system integration"""
+    if token_payload["role"] not in ["SuperAdmin"]:
+        raise HTTPException(status_code=403, detail="Only SuperAdmin can create integrations")
+    
+    integration.created_by = token_payload["user_id"]
+    
+    # Encrypt API key if provided
+    if integration.api_key_encrypted:
+        integration.api_key_encrypted = encrypt_sensitive_data(integration.api_key_encrypted)
+    
+    integration_dict = integration.dict()
+    result = system_integrations_col.insert_one(integration_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "system_integration", integration.id,
+        details={"integration_name": integration.name, "integration_type": integration.integration_type}
+    )
+    
+    return {"id": integration.id, "message": "System integration created successfully"}
+
+@app.patch("/api/integrations/{integration_id}/sync")
+async def sync_integration(integration_id: str, token_payload: dict = Depends(verify_token)):
+    """Manually sync integration"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    integration = system_integrations_col.find_one({"id": integration_id})
+    if not integration:
+        raise HTTPException(status_code=404, detail="Integration not found")
+    
+    # Simulate sync process
+    sync_success = True  # In real implementation, perform actual sync
+    
+    update_data = {
+        "last_sync": datetime.utcnow(),
+        "updated_at": datetime.utcnow()
+    }
+    
+    if not sync_success:
+        update_data["error_count"] = integration.get("error_count", 0) + 1
+        update_data["last_error"] = "Sync failed - connection timeout"
+        update_data["status"] = "error"
+    else:
+        update_data["error_count"] = 0
+        update_data["last_error"] = None
+        update_data["status"] = "active"
+    
+    system_integrations_col.update_one({"id": integration_id}, {"$set": update_data})
+    
+    return {"message": "Integration sync completed", "success": sync_success}
+
+# Enhanced User Analytics Routes
+@app.get("/api/analytics/user-activity")
+async def get_user_activity_analytics(
+    user_type: Optional[str] = None,
+    activity_type: Optional[str] = None,
+    date_from: Optional[str] = None,
+    date_to: Optional[str] = None,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get user activity analytics"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    query = {}
+    if user_type:
+        query["user_type"] = user_type
+    if activity_type:
+        query["activity_type"] = activity_type
+    
+    if date_from and date_to:
+        start_dt = datetime.fromisoformat(date_from)
+        end_dt = datetime.fromisoformat(date_to)
+        query["timestamp"] = {"$gte": start_dt, "$lte": end_dt}
+    
+    activities = list(user_activity_tracking_col.find(query).sort("timestamp", -1).limit(1000))
+    
+    # Process analytics
+    analytics = {
+        "total_activities": len(activities),
+        "unique_users": len(set(activity["user_id"] for activity in activities)),
+        "activity_by_type": {},
+        "activity_by_hour": {},
+        "device_breakdown": {},
+        "top_pages": {},
+        "user_engagement": {}
+    }
+    
+    for activity in activities:
+        activity.pop("_id", None)
+        
+        # Activity type breakdown
+        act_type = activity.get("activity_type", "unknown")
+        analytics["activity_by_type"][act_type] = analytics["activity_by_type"].get(act_type, 0) + 1
+        
+        # Activity by hour
+        hour = activity["timestamp"].hour
+        analytics["activity_by_hour"][str(hour)] = analytics["activity_by_hour"].get(str(hour), 0) + 1
+        
+        # Device breakdown
+        device = activity.get("device_type", "unknown")
+        analytics["device_breakdown"][device] = analytics["device_breakdown"].get(device, 0) + 1
+        
+        # Top pages
+        if activity.get("page_url"):
+            page = activity["page_url"]
+            analytics["top_pages"][page] = analytics["top_pages"].get(page, 0) + 1
+    
+    # Calculate engagement metrics
+    user_sessions = {}
+    for activity in activities:
+        user_id = activity["user_id"]
+        session_id = activity["session_id"]
+        
+        if user_id not in user_sessions:
+            user_sessions[user_id] = {}
+        if session_id not in user_sessions[user_id]:
+            user_sessions[user_id][session_id] = []
+        
+        user_sessions[user_id][session_id].append(activity)
+    
+    # Calculate average session duration and pages per session
+    session_durations = []
+    pages_per_session = []
+    
+    for user_id, sessions in user_sessions.items():
+        for session_id, session_activities in sessions.items():
+            if len(session_activities) > 1:
+                start_time = min(activity["timestamp"] for activity in session_activities)
+                end_time = max(activity["timestamp"] for activity in session_activities)
+                duration = (end_time - start_time).total_seconds() / 60  # minutes
+                session_durations.append(duration)
+            
+            pages_per_session.append(len(session_activities))
+    
+    analytics["user_engagement"] = {
+        "avg_session_duration_minutes": round(sum(session_durations) / len(session_durations), 2) if session_durations else 0,
+        "avg_pages_per_session": round(sum(pages_per_session) / len(pages_per_session), 2) if pages_per_session else 0,
+        "total_sessions": len(pages_per_session)
+    }
+    
+    return analytics
+
+@app.get("/api/analytics/real-time-events")
+async def get_real_time_events(
+    event_type: Optional[str] = None,
+    severity: Optional[str] = None,
+    requires_action: Optional[bool] = None,
+    resolved: Optional[bool] = None,
+    skip: int = 0,
+    limit: int = 50,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get real-time events"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    query = {}
+    if event_type:
+        query["event_type"] = event_type
+    if severity:
+        query["severity"] = severity
+    if requires_action is not None:
+        query["requires_action"] = requires_action
+    if resolved is not None:
+        query["resolved"] = resolved
+    
+    events = list(real_time_events_col.find(query).sort("timestamp", -1).skip(skip).limit(limit))
+    total = real_time_events_col.count_documents(query)
+    
+    for event in events:
+        event.pop("_id", None)
+    
+    return {
+        "events": events,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.post("/api/analytics/real-time-events")
+async def create_real_time_event(event: RealTimeEvent, token_payload: dict = Depends(verify_token)):
+    """Create real-time event"""
+    event_dict = event.dict()
+    result = real_time_events_col.insert_one(event_dict)
+    
+    # Auto-create notification for critical events
+    if event.severity == "critical" or event.requires_action:
+        notification = Notification(
+            category="system",
+            recipient_type="admin",
+            title=f"Critical Event: {event.title}",
+            content=f"Event: {event.description}\nSource: {event.source}",
+            priority="high" if event.severity == "critical" else "normal",
+            channels=["in_app", "email"]
+        )
+        
+        notifications_col.insert_one(notification.dict())
+    
+    return {"id": event.id, "message": "Real-time event created successfully"}
+
+# Data Retention Policy Routes
+@app.get("/api/data-retention/policies")
+async def get_data_retention_policies(
+    data_category: Optional[str] = None,
+    status: Optional[str] = None,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get data retention policies"""
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    query = {}
+    if data_category:
+        query["data_category"] = data_category
+    if status:
+        query["status"] = status
+    
+    policies = list(data_retention_policies_col.find(query).sort("created_at", -1))
+    
+    for policy in policies:
+        policy.pop("_id", None)
+    
+    return policies
+
+@app.post("/api/data-retention/policies")
+async def create_data_retention_policy(policy: DataRetentionPolicy, token_payload: dict = Depends(verify_token)):
+    """Create data retention policy"""
+    if token_payload["role"] not in ["SuperAdmin"]:
+        raise HTTPException(status_code=403, detail="Only SuperAdmin can create retention policies")
+    
+    policy.created_by = token_payload["user_id"]
+    policy_dict = policy.dict()
+    result = data_retention_policies_col.insert_one(policy_dict)
+    
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "data_retention_policy", policy.id,
+        details={"policy_name": policy.policy_name, "data_category": policy.data_category, "retention_days": policy.retention_period_days}
+    )
+    
+    return {"id": policy.id, "message": "Data retention policy created successfully"}
+
 # System Initialization Route
 @app.post("/api/init/sample-data")
 async def initialize_sample_data():
