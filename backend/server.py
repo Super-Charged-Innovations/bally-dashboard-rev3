@@ -2894,21 +2894,79 @@ async def initialize_sample_data():
         notification_templates_col.delete_many({})
         notification_templates_col.insert_many([template.dict() for template in notification_templates_data])
         
-        # Create sample notifications
+        # Create comprehensive notification data for visual demo
+        notification_categories = ["security", "compliance", "marketing", "system", "user_activity"]
+        notification_titles = {
+            "security": [
+                "Unusual login pattern detected for admin user",
+                "Multiple failed login attempts blocked",
+                "New device login from unknown location", 
+                "Password change request for VIP member",
+                "Suspicious transaction pattern flagged"
+            ],
+            "compliance": [
+                "Monthly AML report ready for review",
+                "KYC verification pending for 5 members",
+                "Data retention policy review due",
+                "Regulatory audit scheduled for next week",
+                "Compliance training completion deadline approaching"
+            ],
+            "marketing": [
+                "VIP member birthday celebration today",
+                "Inactive member re-engagement campaign results",
+                "New promotional offer approval required",
+                "High-value customer churn risk detected",
+                "Marketing campaign budget threshold reached"
+            ],
+            "system": [
+                "Database backup completed successfully",
+                "System maintenance scheduled for tonight",
+                "Integration sync failed - requires attention",
+                "Server performance threshold exceeded",
+                "New system update available for installation"
+            ],
+            "user_activity": [
+                "Peak hour capacity reached - 95% utilization",
+                "Unusual spending pattern detected",
+                "Member tier upgrade qualification achieved",
+                "Frequent player milestone reached",
+                "Gaming session duration alert triggered"
+            ]
+        }
+        
         notifications_data = []
-        for i in range(20):
+        for i in range(50):  # Increased notifications for demo
+            category = notification_categories[i % len(notification_categories)]
+            titles = notification_titles[category]
+            title = titles[i % len(titles)]
+            
+            # Generate content based on category
+            content_templates = {
+                "security": f"Security alert triggered at {datetime.utcnow().strftime('%H:%M')} - immediate review recommended.",
+                "compliance": f"Compliance action required by {(datetime.utcnow() + timedelta(days=3)).strftime('%Y-%m-%d')}.",
+                "marketing": f"Marketing opportunity identified - estimated impact: ${(i+1)*100} revenue potential.",
+                "system": f"System notification - automatic resolution attempted, manual review may be required.",
+                "user_activity": f"User activity alert - threshold exceeded by {10 + (i % 50)}% from normal patterns."
+            }
+            
             notification = Notification(
-                recipient_type="admin" if i % 3 == 0 else "user",
-                recipient_id=admin_users[i % 2]["id"] if i % 3 == 0 else sample_members[i]["id"],
-                recipient_email=admin_users[i % 2]["email"] if i % 3 == 0 else sample_members[i]["email"],
-                title=f"Sample Notification {i + 1}",
-                content=f"This is a sample notification content for testing purposes. Notification #{i + 1}",
-                category=["security", "compliance", "marketing", "system", "user_activity"][i % 5],
-                priority=["low", "normal", "high", "critical"][i % 4],
-                channels=["in_app", "email"],
+                recipient_type="admin" if i % 4 != 0 else "user",
+                recipient_id=admin_users[i % 2]["id"] if i % 4 != 0 else sample_members[i % 50]["id"],
+                recipient_email=admin_users[i % 2]["email"] if i % 4 != 0 else sample_members[i % 50]["email"],
+                title=title,
+                content=content_templates[category],
+                category=category,
+                priority=["low", "normal", "high", "critical"][min(i % 7, 3)],  # More normals, fewer criticals
+                channels=["in_app", "email"] if i % 3 != 0 else ["in_app", "email", "sms"],
                 status=["pending", "sent", "delivered", "read"][i % 4],
-                sent_at=datetime.utcnow() - timedelta(hours=i) if i % 4 != 0 else None,
-                read_at=datetime.utcnow() - timedelta(hours=i // 2) if i % 4 == 3 else None
+                sent_at=datetime.utcnow() - timedelta(hours=i % 72) if i % 4 != 0 else None,
+                delivered_at=datetime.utcnow() - timedelta(hours=i % 72 - 1) if i % 4 == 2 else None,
+                read_at=datetime.utcnow() - timedelta(hours=i % 72 - 2) if i % 4 == 3 else None,
+                metadata={
+                    "source_system": ["dashboard", "gaming_floor", "payment_system", "member_portal"][i % 4],
+                    "urgency_score": min(i % 10, 9),
+                    "related_member": sample_members[i % 50]["id"] if category == "user_activity" else None
+                }
             )
             notifications_data.append(notification.dict())
         
