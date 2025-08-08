@@ -309,6 +309,140 @@ class BirthdayCalendar(BaseModel):
     celebration_booked: bool = False
     last_birthday_spend: Optional[float] = None
 
+# Phase 3 Models - Staff Management & Advanced Analytics
+
+class StaffMember(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    employee_id: str
+    first_name: str
+    last_name: str
+    email: EmailStr
+    phone: str
+    position: str
+    department: str  # Gaming, F&B, Security, Management, Maintenance
+    hire_date: datetime
+    salary: float  # Encrypted in storage
+    manager_id: Optional[str] = None
+    employment_status: str = "active"  # active, inactive, terminated
+    skills: List[str] = []
+    certifications: List[str] = []
+    performance_score: float = 0.0  # 0-100 scale
+    commitment_score: float = 0.0  # 0-100 scale based on attendance, tasks, etc.
+    training_completion_rate: float = 0.0
+    last_performance_review: Optional[datetime] = None
+    next_review_due: Optional[datetime] = None
+    emergency_contact: Dict[str, str] = {}
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    last_updated: datetime = Field(default_factory=datetime.utcnow)
+
+class TrainingCourse(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    course_name: str
+    description: str
+    category: str  # safety, technical, customer_service, compliance, leadership
+    difficulty_level: str = "beginner"  # beginner, intermediate, advanced
+    duration_hours: int
+    required_for_positions: List[str] = []
+    prerequisites: List[str] = []
+    content_modules: List[str] = []
+    assessment_questions: List[Dict[str, Any]] = []
+    passing_score: int = 70
+    validity_months: Optional[int] = None  # Course expiry for certifications
+    is_mandatory: bool = False
+    created_by: str
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    last_updated: datetime = Field(default_factory=datetime.utcnow)
+
+class TrainingRecord(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    staff_id: str
+    course_id: str
+    enrollment_date: datetime = Field(default_factory=datetime.utcnow)
+    start_date: Optional[datetime] = None
+    completion_date: Optional[datetime] = None
+    score: Optional[int] = None
+    status: str = "enrolled"  # enrolled, in_progress, completed, failed, expired
+    attempt_number: int = 1
+    time_spent_minutes: int = 0
+    modules_completed: List[str] = []
+    certificate_issued: bool = False
+    certificate_expiry: Optional[datetime] = None
+    feedback: Optional[str] = None
+    instructor_notes: Optional[str] = None
+
+class PerformanceReview(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    staff_id: str
+    reviewer_id: str
+    review_period_start: datetime
+    review_period_end: datetime
+    overall_rating: int  # 1-5 scale
+    performance_areas: Dict[str, int] = {}  # area_name: rating
+    achievements: List[str] = []
+    areas_for_improvement: List[str] = []
+    goals_set: List[str] = []
+    training_recommendations: List[str] = []
+    salary_adjustment: Optional[float] = None
+    promotion_recommended: bool = False
+    disciplinary_actions: List[str] = []
+    employee_comments: Optional[str] = None
+    reviewer_comments: Optional[str] = None
+    review_status: str = "draft"  # draft, completed, approved
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    approved_by: Optional[str] = None
+    approval_date: Optional[datetime] = None
+
+class AdvancedAnalytics(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    analysis_type: str  # customer_ltv, churn_prediction, revenue_forecast, operational_efficiency
+    analysis_date: datetime = Field(default_factory=datetime.utcnow)
+    time_period: str  # daily, weekly, monthly, quarterly, yearly
+    data_points: Dict[str, Any] = {}
+    insights: List[str] = []
+    recommendations: List[str] = []
+    confidence_score: float = 0.0  # 0-100 model confidence
+    created_by: str
+    is_active: bool = True
+
+class CostOptimization(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    optimization_area: str  # staffing, energy, inventory, marketing, operations
+    current_cost: float
+    projected_savings: float
+    implementation_cost: float
+    roi_percentage: float
+    timeline_weeks: int
+    implementation_status: str = "proposed"  # proposed, approved, in_progress, completed, rejected
+    priority_level: str = "medium"  # low, medium, high, critical
+    responsible_department: str
+    success_metrics: List[str] = []
+    risks: List[str] = []
+    mitigation_strategies: List[str] = []
+    actual_savings: Optional[float] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class PredictiveModel(BaseModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
+    model_name: str
+    model_type: str  # churn_prediction, demand_forecasting, price_optimization, staff_scheduling
+    description: str
+    input_features: List[str] = []
+    target_variable: str
+    algorithm_used: str
+    training_data_size: int
+    accuracy_score: float
+    precision_score: float
+    recall_score: float
+    last_trained: datetime = Field(default_factory=datetime.utcnow)
+    model_version: str = "1.0"
+    is_production: bool = False
+    predictions_made: int = 0
+    success_rate: float = 0.0
+    created_by: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
 # Utility Functions
 def encrypt_sensitive_data(data: str) -> str:
     """Encrypt sensitive personal data for PDPA compliance"""
