@@ -444,6 +444,27 @@ class ApiService {
     });
   }
 
+  // Basic HTTP methods
+  async get(endpoint, options = {}) {
+    return this.request(endpoint, { method: 'GET', ...options });
+  }
+
+  async post(endpoint, data, options = {}) {
+    return this.request(endpoint, { method: 'POST', body: data, ...options });
+  }
+
+  async put(endpoint, data, options = {}) {
+    return this.request(endpoint, { method: 'PUT', body: data, ...options });
+  }
+
+  async patch(endpoint, data, options = {}) {
+    return this.request(endpoint, { method: 'PATCH', body: data, ...options });
+  }
+
+  async delete(endpoint, options = {}) {
+    return this.request(endpoint, { method: 'DELETE', ...options });
+  }
+
   // Health check
   async healthCheck() {
     return this.request('/health');
