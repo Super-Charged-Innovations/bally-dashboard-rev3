@@ -1782,6 +1782,258 @@ async def initialize_sample_data():
         marketing_campaigns_col.delete_many({})
         marketing_campaigns_col.insert_many([campaign.dict() for campaign in campaigns_data])
         
+        # Phase 3 Sample Data - Staff Management & Advanced Analytics
+        
+        # Generate staff members
+        staff_data = []
+        departments = ["Gaming", "F&B", "Security", "Management", "Maintenance"]
+        positions = {
+            "Gaming": ["Dealer", "Floor Supervisor", "Gaming Manager", "Pit Boss"],
+            "F&B": ["Server", "Bartender", "Chef", "Restaurant Manager"],
+            "Security": ["Security Guard", "Security Supervisor", "Head of Security"],
+            "Management": ["Assistant Manager", "Department Head", "Operations Manager"],
+            "Maintenance": ["Technician", "Maintenance Supervisor", "Facilities Manager"]
+        }
+        
+        for i in range(50):  # 50 staff members
+            dept = departments[i % 5]
+            position_list = positions[dept]
+            staff = StaffMember(
+                employee_id=f"EMP{1000 + i}",
+                first_name=f"Staff{i}",
+                last_name=f"Member{i}",
+                email=f"staff{i}@ballys.lk",
+                phone=f"077987{i:04d}",
+                position=position_list[i % len(position_list)],
+                department=dept,
+                hire_date=datetime.utcnow() - timedelta(days=30 + (i * 10)),
+                salary=30000 + (i * 1000),  # 30k-80k salary range
+                performance_score=60.0 + (i % 40),  # 60-100 performance range
+                commitment_score=70.0 + (i % 30),  # 70-100 commitment range
+                training_completion_rate=50.0 + (i % 50),  # 50-100% completion
+                skills=[f"Skill{j}" for j in range((i % 5) + 1)],
+                certifications=[f"Cert{j}" for j in range((i % 3) + 1)] if i % 3 == 0 else [],
+                next_review_due=datetime.utcnow() + timedelta(days=30 + (i % 90))
+            )
+            staff_data.append(staff.dict())
+        
+        staff_members_col.delete_many({})
+        staff_members_col.insert_many(staff_data)
+        
+        # Generate training courses
+        courses_data = [
+            TrainingCourse(
+                course_name="Casino Safety Protocols",
+                description="Essential safety procedures for casino operations",
+                category="safety",
+                difficulty_level="beginner",
+                duration_hours=4,
+                required_for_positions=["Dealer", "Floor Supervisor", "Security Guard"],
+                is_mandatory=True,
+                created_by=admin_users[0]["id"]
+            ),
+            TrainingCourse(
+                course_name="Customer Service Excellence",
+                description="Advanced customer service skills for gaming industry",
+                category="customer_service",
+                difficulty_level="intermediate",
+                duration_hours=8,
+                required_for_positions=["Server", "Bartender", "Dealer"],
+                created_by=admin_users[1]["id"]
+            ),
+            TrainingCourse(
+                course_name="Gaming Regulations Compliance",
+                description="Sri Lankan gaming laws and compliance requirements",
+                category="compliance",
+                difficulty_level="advanced",
+                duration_hours=12,
+                required_for_positions=["Gaming Manager", "Pit Boss", "Floor Supervisor"],
+                is_mandatory=True,
+                validity_months=12,
+                created_by=admin_users[0]["id"]
+            ),
+            TrainingCourse(
+                course_name="Leadership Development",
+                description="Management and leadership skills for supervisory roles",
+                category="leadership",
+                difficulty_level="advanced",
+                duration_hours=16,
+                required_for_positions=["Gaming Manager", "Restaurant Manager", "Head of Security"],
+                created_by=admin_users[0]["id"]
+            )
+        ]
+        
+        training_courses_col.delete_many({})
+        training_courses_col.insert_many([course.dict() for course in courses_data])
+        
+        # Generate training records
+        training_records_data = []
+        for i in range(100):  # 100 training records
+            staff_member = staff_data[i % 50]
+            course = courses_data[i % 4]
+            
+            record = TrainingRecord(
+                staff_id=staff_member["id"],
+                course_id=course.id,
+                enrollment_date=datetime.utcnow() - timedelta(days=i % 30),
+                start_date=datetime.utcnow() - timedelta(days=(i % 30) - 5) if i % 3 == 0 else None,
+                completion_date=datetime.utcnow() - timedelta(days=(i % 30) - 10) if i % 4 == 0 else None,
+                score=75 + (i % 25) if i % 4 == 0 else None,
+                status=["enrolled", "in_progress", "completed", "completed"][i % 4],
+                time_spent_minutes=course.duration_hours * 60 + (i % 120)
+            )
+            training_records_data.append(record.dict())
+        
+        training_records_col.delete_many({})
+        training_records_col.insert_many(training_records_data)
+        
+        # Generate performance reviews
+        performance_data = []
+        for i in range(25):  # 25 performance reviews
+            staff_member = staff_data[i * 2]  # Every other staff member
+            review = PerformanceReview(
+                staff_id=staff_member["id"],
+                reviewer_id=admin_users[i % 2]["id"],
+                review_period_start=datetime.utcnow() - timedelta(days=90),
+                review_period_end=datetime.utcnow() - timedelta(days=1),
+                overall_rating=3 + (i % 3),  # 3-5 rating
+                performance_areas={
+                    "Communication": 3 + (i % 3),
+                    "Teamwork": 3 + ((i + 1) % 3),
+                    "Technical Skills": 3 + ((i + 2) % 3),
+                    "Customer Service": 4 + (i % 2)
+                },
+                achievements=[f"Achievement {i + 1}", f"Goal completion {i + 1}"],
+                areas_for_improvement=[f"Improvement area {i + 1}"],
+                goals_set=[f"Goal {i + 1} for next period"],
+                review_status="completed"
+            )
+            performance_data.append(review.dict())
+        
+        performance_reviews_col.delete_many({})
+        performance_reviews_col.insert_many(performance_data)
+        
+        # Generate advanced analytics
+        analytics_data = [
+            AdvancedAnalytics(
+                analysis_type="customer_ltv",
+                time_period="monthly",
+                data_points={
+                    "avg_ltv_vip": 15000,
+                    "avg_ltv_diamond": 8000,
+                    "avg_ltv_sapphire": 4500,
+                    "avg_ltv_ruby": 2200,
+                    "retention_rate": 0.75
+                },
+                insights=[
+                    "VIP customers have 5x higher lifetime value than Ruby tier",
+                    "Gaming revenue comprises 70% of customer lifetime value"
+                ],
+                recommendations=[
+                    "Focus VIP acquisition programs",
+                    "Enhance gaming experience for mid-tier customers"
+                ],
+                confidence_score=87.5,
+                created_by=admin_users[0]["id"]
+            ),
+            AdvancedAnalytics(
+                analysis_type="churn_prediction",
+                time_period="weekly",
+                data_points={
+                    "high_risk_members": 45,
+                    "medium_risk_members": 120,
+                    "predicted_monthly_churn": 25
+                },
+                insights=[
+                    "Members inactive for 45+ days have 80% churn probability",
+                    "Declining gaming frequency is strongest churn predictor"
+                ],
+                recommendations=[
+                    "Implement 30-day re-engagement campaign",
+                    "Create gaming frequency alerts for managers"
+                ],
+                confidence_score=92.3,
+                created_by=admin_users[0]["id"]
+            )
+        ]
+        
+        advanced_analytics_col.delete_many({})
+        advanced_analytics_col.insert_many([analytics.dict() for analytics in analytics_data])
+        
+        # Generate cost optimization opportunities
+        cost_optimization_data = [
+            CostOptimization(
+                optimization_area="staffing",
+                current_cost=50000,
+                projected_savings=8000,
+                implementation_cost=2000,
+                roi_percentage=400,
+                timeline_weeks=4,
+                implementation_status="proposed",
+                priority_level="high",
+                responsible_department="Management",
+                success_metrics=["Staff utilization +15%", "Overtime costs -20%"],
+                risks=["Initial training period productivity dip"],
+                mitigation_strategies=["Gradual rollout", "Additional training support"]
+            ),
+            CostOptimization(
+                optimization_area="energy",
+                current_cost=15000,
+                projected_savings=3000,
+                implementation_cost=5000,
+                roi_percentage=200,
+                timeline_weeks=8,
+                implementation_status="approved",
+                priority_level="medium",
+                responsible_department="Maintenance",
+                success_metrics=["Energy consumption -20%", "Monthly utility savings $500"],
+                risks=["Equipment downtime during installation"],
+                mitigation_strategies=["Schedule during low-traffic hours", "Backup systems ready"]
+            )
+        ]
+        
+        cost_optimization_col.delete_many({})
+        cost_optimization_col.insert_many([opt.dict() for opt in cost_optimization_data])
+        
+        # Generate predictive models
+        models_data = [
+            PredictiveModel(
+                model_name="Customer Churn Predictor",
+                model_type="churn_prediction",
+                description="Predicts likelihood of customer churn based on gaming patterns",
+                input_features=["visit_frequency", "avg_spend", "days_since_last_visit", "tier_level"],
+                target_variable="will_churn_30_days",
+                algorithm_used="Random Forest",
+                training_data_size=5000,
+                accuracy_score=0.89,
+                precision_score=0.85,
+                recall_score=0.82,
+                is_production=True,
+                predictions_made=1250,
+                success_rate=0.87,
+                created_by=admin_users[0]["id"]
+            ),
+            PredictiveModel(
+                model_name="Revenue Forecaster",
+                model_type="demand_forecasting",
+                description="Forecasts daily gaming revenue based on historical patterns",
+                input_features=["day_of_week", "month", "weather", "events", "promotions"],
+                target_variable="daily_gaming_revenue",
+                algorithm_used="LSTM Neural Network",
+                training_data_size=2000,
+                accuracy_score=0.76,
+                precision_score=0.78,
+                recall_score=0.74,
+                is_production=False,
+                predictions_made=450,
+                success_rate=0.73,
+                created_by=admin_users[0]["id"]
+            )
+        ]
+        
+        predictive_models_col.delete_many({})
+        predictive_models_col.insert_many([model.dict() for model in models_data])
+        
         return {"message": "Sample data initialized successfully"}
         
     except Exception as e:
