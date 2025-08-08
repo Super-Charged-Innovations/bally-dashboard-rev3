@@ -3066,22 +3066,83 @@ async def initialize_sample_data():
         user_activity_tracking_col.delete_many({})
         user_activity_tracking_col.insert_many(activity_tracking_data)
         
-        # Create real-time events
+        # Create realistic real-time events for monitoring dashboard
+        event_types = ["user_action", "system_alert", "security_incident", "compliance_violation", "performance_alert"]
+        event_templates = {
+            "user_action": [
+                ("Large deposit made", "VIP member made deposit of $50,000"),
+                ("Rapid gameplay detected", "Member playing 5+ hands per minute on table T12"),
+                ("Member tier upgrade", "Ruby member qualified for Sapphire upgrade"),
+                ("Cashout request processed", "Diamond member cashed out $25,000"),
+                ("Account locked due to inactivity", "Member account auto-locked after 90 days")
+            ],
+            "system_alert": [
+                ("Database connection timeout", "Primary database connection experienced 3-second delay"),
+                ("High memory usage detected", "Server memory usage reached 85% capacity"),
+                ("Payment gateway offline", "Stripe payment processing temporarily unavailable"),
+                ("Backup process completed", "Daily database backup completed successfully"),
+                ("Cache refresh required", "Redis cache hit ratio dropped below 90%")
+            ],
+            "security_incident": [
+                ("Failed login attempts", "5 consecutive failed login attempts from IP 192.168.1.100"),
+                ("Unusual access pattern", "Admin login from new geographic location detected"),
+                ("Session timeout exceeded", "User session active for over 12 hours - forced logout"),
+                ("Privilege escalation attempt", "Unauthorized access to admin panel attempted"),
+                ("Data export anomaly", "Large data export outside normal business hours")
+            ],
+            "compliance_violation": [
+                ("AML threshold exceeded", "Single-day transaction limit exceeded by member MB10155"),
+                ("Know Your Customer incomplete", "Member operating without complete KYC verification"),
+                ("Self-exclusion violation", "Self-excluded member attempted to place bet"),
+                ("Underage gambling attempt", "Account verification flagged potential underage user"),
+                ("Jurisdiction restriction", "Gaming attempt from restricted geographic location")
+            ],
+            "performance_alert": [
+                ("Response time degradation", "Average API response time increased to 2.5 seconds"),
+                ("Gaming table utilization", "Peak capacity reached - 95% table utilization"),
+                ("Member wait time exceeded", "VIP service wait time exceeded 5-minute SLA"),
+                ("Revenue target milestone", "Daily revenue target achieved 4 hours early"),
+                ("Staff scheduling alert", "Insufficient staff scheduled for weekend peak hours")
+            ]
+        }
+        
         real_time_events_data = []
-        for i in range(50):
+        for i in range(100):  # More events for realistic monitoring
+            event_type = event_types[i % len(event_types)]
+            templates = event_templates[event_type]
+            title, description = templates[i % len(templates)]
+            
+            # Severity based on event type
+            severity_mapping = {
+                "user_action": ["info", "info", "warning", "info"][i % 4],
+                "system_alert": ["warning", "error", "critical", "info"][i % 4],
+                "security_incident": ["error", "critical", "critical", "error"][i % 4],
+                "compliance_violation": ["critical", "critical", "error", "error"][i % 4],
+                "performance_alert": ["warning", "warning", "error", "info"][i % 4]
+            }
+            
             event = RealTimeEvent(
-                event_type=["user_action", "system_alert", "security_incident", "compliance_violation"][i % 4],
-                severity=["info", "warning", "error", "critical"][i % 4],
-                source="casino_system" if i % 3 == 0 else "user_portal" if i % 3 == 1 else "payment_gateway",
-                user_id=sample_members[i % len(sample_members)]["id"] if i % 2 == 0 else None,
-                admin_id=admin_users[i % len(admin_users)]["id"] if i % 3 == 0 else None,
-                title=f"Event {i + 1}: " + ["User Login", "System Warning", "Failed Payment", "Security Alert"][i % 4],
-                description=f"Sample event description for event #{i + 1}. This is a {['routine', 'important', 'critical', 'urgent'][i % 4]} event.",
-                data={"event_id": i + 1, "timestamp": datetime.utcnow().isoformat()},
-                requires_action=i % 4 >= 2,
-                action_taken=i % 6 == 0 and i % 4 >= 2,
-                resolved=i % 8 == 0,
-                timestamp=datetime.utcnow() - timedelta(hours=i // 5, minutes=i % 60)
+                event_type=event_type,
+                severity=severity_mapping[event_type],
+                source=["casino_system", "user_portal", "payment_gateway", "gaming_floor", "admin_panel"][i % 5],
+                user_id=sample_members[i % len(sample_members)]["id"] if i % 3 == 0 else None,
+                admin_id=admin_users[i % len(admin_users)]["id"] if event_type in ["security_incident", "compliance_violation"] else None,
+                title=title,
+                description=f"{description} (Event #{i+1001})",
+                data={
+                    "event_id": i + 1001,
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "location": ["Gaming Floor", "VIP Lounge", "Main Entrance", "Online Portal"][i % 4],
+                    "affected_systems": ["payment", "member_portal", "gaming_tables", "security"][i % 4:i % 4 + 2]
+                },
+                requires_action=severity_mapping[event_type] in ["error", "critical"],
+                action_taken=(i % 8 == 0) and severity_mapping[event_type] in ["error", "critical"],
+                resolved=(i % 12 == 0),
+                timestamp=datetime.utcnow() - timedelta(
+                    hours=i // 8, 
+                    minutes=i % 60,
+                    seconds=i % 60
+                )
             )
             real_time_events_data.append(event.dict())
         
