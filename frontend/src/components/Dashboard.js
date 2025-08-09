@@ -314,10 +314,10 @@ const Dashboard = ({ user }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Gaming Floor Activity Chart */}
-        <div className="lg:col-span-2 casino-card p-6">
-          <div className="casino-card-header">
-            <h3 className="text-xl font-bold text-casino-gold font-casino-serif">🎯 Gaming Floor Activity</h3>
-            <p className="text-casino-luxury-light text-sm mt-1">Live player engagement across the week</p>
+        <div className="lg:col-span-2 bg-gray-800 border border-yellow-500/20 rounded-xl shadow-lg p-6">
+          <div className="border-b border-yellow-500/10 pb-4 mb-6">
+            <h3 className="text-xl font-bold text-yellow-500 font-serif">🎯 Gaming Floor Activity</h3>
+            <p className="text-gray-300 text-sm mt-1">Live player engagement across the week</p>
           </div>
           <div className="h-80">
             <Line data={casinoActivityData} options={chartOptions} />
@@ -325,10 +325,10 @@ const Dashboard = ({ user }) => {
         </div>
 
         {/* Member Tier Distribution */}
-        <div className="casino-card p-6">
-          <div className="casino-card-header">
-            <h3 className="text-xl font-bold text-casino-gold font-casino-serif">👑 VIP Tiers</h3>
-            <p className="text-casino-luxury-light text-sm mt-1">Premium member distribution</p>
+        <div className="bg-gray-800 border border-yellow-500/20 rounded-xl shadow-lg p-6">
+          <div className="border-b border-yellow-500/10 pb-4 mb-6">
+            <h3 className="text-xl font-bold text-yellow-500 font-serif">👑 VIP Tiers</h3>
+            <p className="text-gray-300 text-sm mt-1">Premium member distribution</p>
           </div>
           
           <div className="flex items-center justify-center mb-6">
@@ -338,8 +338,8 @@ const Dashboard = ({ user }) => {
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                  <span className="text-3xl font-bold text-casino-gold font-casino-mono">250</span>
-                  <p className="text-xs text-casino-luxury-light">Members</p>
+                  <span className="text-3xl font-bold text-yellow-500 font-mono">250</span>
+                  <p className="text-xs text-gray-300">Members</p>
                 </div>
               </div>
             </div>
@@ -347,19 +347,19 @@ const Dashboard = ({ user }) => {
           
           <div className="space-y-3">
             {[
-              { tier: 'VIP', count: 8, percentage: 8 },
-              { tier: 'Diamond', count: 15, percentage: 15 },
-              { tier: 'Sapphire', count: 35, percentage: 35 },
-              { tier: 'Ruby', count: 42, percentage: 42 }
+              { tier: 'VIP', count: 8, percentage: 8, color: 'bg-yellow-500 text-black' },
+              { tier: 'Diamond', count: 15, percentage: 15, color: 'bg-gray-400 text-white' },
+              { tier: 'Sapphire', count: 35, percentage: 35, color: 'bg-blue-500 text-white' },
+              { tier: 'Ruby', count: 42, percentage: 42, color: 'bg-red-500 text-white' }
             ].map((item, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className={getTierBadgeClass(item.tier)}>
+                  <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${item.color}`}>
                     {item.tier}
                   </div>
-                  <span className="text-sm text-casino-luxury-light">{item.count} members</span>
+                  <span className="text-sm text-gray-300">{item.count} members</span>
                 </div>
-                <span className="text-sm text-casino-gold font-bold">{item.percentage}%</span>
+                <span className="text-sm text-yellow-500 font-bold">{item.percentage}%</span>
               </div>
             ))}
           </div>
