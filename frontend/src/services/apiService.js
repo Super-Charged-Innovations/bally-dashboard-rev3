@@ -21,6 +21,7 @@ class ApiService {
     try {
       const response = await fetch(url, config);
       
+      // Enhanced error handling
       if (response.status === 401) {
         // Token expired, redirect to login
         localStorage.removeItem('access_token');
@@ -29,16 +30,69 @@ class ApiService {
         return;
       }
 
+      if (response.status === 403) {
+        throw new Error('Access denied. You don\'t have permission for this action.');
+      }
+
+      if (response.status === 429) {
+        throw new Error('Too many requests. Please wait a moment before trying again.');
+      }
+
+      if (response.status === 500) {
+        throw new Error('Server error. Please try again later or contact support.');
+      }
+
       if (!response.ok) {
-        const error = await response.json().catch(() => ({ detail: 'Request failed' }));
+        const error = await response.json().catch(() => ({ 
+          detail: `Request failed with status ${response.status}` 
+        }));
         throw new Error(error.detail || `Request failed with status ${response.status}`);
       }
 
       return await response.json();
     } catch (error) {
+      // Enhanced error logging and user feedback
       console.error(`API request failed: ${endpoint}`, error);
-      throw error;
+      
+      // Provide user-friendly error messages
+      const userFriendlyMessage = this.getUserFriendlyErrorMessage(error, endpoint);
+      throw new Error(userFriendlyMessage);
     }
+  }
+
+  getUserFriendlyErrorMessage(error, endpoint) {
+    // Network errors
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      return 'Network connection problem. Please check your internet connection.';
+    }
+
+    // Rate limiting
+    if (error.message.includes('Too many requests')) {
+      return 'Too many attempts. Please wait a minute before trying again.';
+    }
+
+    // Permission errors
+    if (error.message.includes('Access denied') || error.message.includes('Insufficient permissions')) {
+      return 'You don\'t have permission to perform this action.';
+    }
+
+    // Authentication errors
+    if (error.message.includes('Invalid username or password')) {
+      return 'Invalid login credentials. Please check your username and password.';
+    }
+
+    // Server errors
+    if (error.message.includes('Server error') || error.message.includes('500')) {
+      return 'Server temporarily unavailable. Please try again in a few moments.';
+    }
+
+    // Validation errors
+    if (error.message.includes('validation') || error.message.includes('invalid')) {
+      return 'Please check your input and try again.';
+    }
+
+    // Default message
+    return error.message || 'An unexpected error occurred. Please try again.';
   }
 
   // Dashboard endpoints
