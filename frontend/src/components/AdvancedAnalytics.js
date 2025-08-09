@@ -324,7 +324,7 @@ const AdvancedAnalytics = ({ user }) => {
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {costOptimization.map((opportunity) => (
+                    {(costOptimization || []).map((opportunity) => (
                       <div key={opportunity.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
                         <div className="flex items-center justify-between mb-4">
                           <div>
