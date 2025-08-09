@@ -27,13 +27,17 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS Configuration
+# CORS Configuration - SECURITY HARDENED
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://f57e797d-eaf4-4f7c-9eef-bcb910f777ef.preview.emergentagent.com",
+        "http://localhost:3000",  # Development only
+        "http://127.0.0.1:3000"   # Development only
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allow_headers=["Authorization", "Content-Type", "Accept", "Origin"],
 )
 
 # Security Configuration
