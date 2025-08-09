@@ -82,7 +82,7 @@ const NotificationsManagement = ({ user }) => {
   const markAsRead = async (notificationId) => {
     try {
       await apiService.patch(`/api/notifications/${notificationId}/read`);
-      setNotifications(notifications.map(n => 
+      setNotifications((notifications || []).map(n => 
         n.id === notificationId ? { ...n, status: 'read' } : n
       ));
       toast.success('Marked as read');
