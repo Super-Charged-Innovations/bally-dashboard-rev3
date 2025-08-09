@@ -453,34 +453,275 @@ const Settings = ({ user }) => {
         return renderAppearanceSettings();
       case 'notifications':
         return renderNotificationSettings();
-      case 'security':
-        return (
-          <div className="casino-card p-6">
-            <h3 className="text-xl font-bold text-adaptive-text-accent font-casino-serif mb-6">🔒 Security Settings</h3>
-            <p className="text-adaptive-text-muted">Security settings panel coming soon...</p>
+  const renderSecuritySettings = () => (
+    <div className="space-y-6">
+      <div className="casino-card p-6">
+        <h3 className="text-xl font-bold text-adaptive-text-accent font-casino-serif mb-6">🔒 Security & Authentication</h3>
+        
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-medium text-adaptive-text">Two-Factor Authentication</h4>
+              <p className="text-sm text-adaptive-text-muted">Add an extra layer of security to your account</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.twoFactorAuth}
+                onChange={(e) => handleSettingChange('twoFactorAuth', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-adaptive-text-accent/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-adaptive-text-accent"></div>
+            </label>
           </div>
-        );
-      case 'casino':
-        return (
-          <div className="casino-card p-6">
-            <h3 className="text-xl font-bold text-adaptive-text-accent font-casino-serif mb-6">🎰 Casino Preferences</h3>
-            <p className="text-adaptive-text-muted">Casino preferences panel coming soon...</p>
+
+          <div>
+            <label className="block text-sm font-medium text-adaptive-text-muted mb-2">Session Timeout (minutes)</label>
+            <select
+              className="casino-select w-full md:w-64"
+              value={settings.sessionTimeout}
+              onChange={(e) => handleSettingChange('sessionTimeout', parseInt(e.target.value))}
+            >
+              <option value={15}>15 minutes</option>
+              <option value={30}>30 minutes</option>
+              <option value={60}>1 hour</option>
+              <option value={120}>2 hours</option>
+              <option value={240}>4 hours</option>
+            </select>
           </div>
-        );
-      case 'system':
-        return (
-          <div className="casino-card p-6">
-            <h3 className="text-xl font-bold text-adaptive-text-accent font-casino-serif mb-6">⚙️ System Settings</h3>
-            <p className="text-adaptive-text-muted">System settings panel coming soon...</p>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-medium text-adaptive-text">Login Notifications</h4>
+              <p className="text-sm text-adaptive-text-muted">Get notified of new login attempts</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.loginNotifications}
+                onChange={(e) => handleSettingChange('loginNotifications', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-adaptive-text-accent/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-adaptive-text-accent"></div>
+            </label>
           </div>
-        );
-      case 'privacy':
-        return (
-          <div className="casino-card p-6">
-            <h3 className="text-xl font-bold text-adaptive-text-accent font-casino-serif mb-6">🛡️ Privacy Controls</h3>
-            <p className="text-adaptive-text-muted">Privacy controls panel coming soon...</p>
+
+          <div>
+            <label className="block text-sm font-medium text-adaptive-text-muted mb-2">Password Expiry (days)</label>
+            <select
+              className="casino-select w-full md:w-64"
+              value={settings.passwordExpiry}
+              onChange={(e) => handleSettingChange('passwordExpiry', parseInt(e.target.value))}
+            >
+              <option value={30}>30 days</option>
+              <option value={60}>60 days</option>
+              <option value={90}>90 days (Recommended)</option>
+              <option value={180}>180 days</option>
+              <option value={365}>365 days</option>
+            </select>
           </div>
-        );
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderCasinoSettings = () => (
+    <div className="space-y-6">
+      <div className="casino-card p-6">
+        <h3 className="text-xl font-bold text-adaptive-text-accent font-casino-serif mb-6">🎰 Casino Preferences</h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-adaptive-text-muted mb-2">Default Currency</label>
+            <select
+              className="casino-select w-full"
+              value={settings.defaultCurrency}
+              onChange={(e) => handleSettingChange('defaultCurrency', e.target.value)}
+            >
+              <option value="USD">USD - US Dollar</option>
+              <option value="LKR">LKR - Sri Lankan Rupee</option>
+              <option value="EUR">EUR - Euro</option>
+              <option value="GBP">GBP - British Pound</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-adaptive-text-muted mb-2">Timezone</label>
+            <select
+              className="casino-select w-full"
+              value={settings.timezone}
+              onChange={(e) => handleSettingChange('timezone', e.target.value)}
+            >
+              <option value="Asia/Colombo">Asia/Colombo (UTC+05:30)</option>
+              <option value="America/New_York">America/New_York (UTC-05:00)</option>
+              <option value="Europe/London">Europe/London (UTC+00:00)</option>
+              <option value="Asia/Singapore">Asia/Singapore (UTC+08:00)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-adaptive-text-muted mb-2">Language</label>
+            <select
+              className="casino-select w-full"
+              value={settings.language}
+              onChange={(e) => handleSettingChange('language', e.target.value)}
+            >
+              <option value="English">English</option>
+              <option value="Sinhala">Sinhala</option>
+              <option value="Tamil">Tamil</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-adaptive-text-muted mb-2">Dashboard Refresh (seconds)</label>
+            <select
+              className="casino-select w-full"
+              value={settings.dashboardRefresh}
+              onChange={(e) => handleSettingChange('dashboardRefresh', parseInt(e.target.value))}
+            >
+              <option value={10}>10 seconds</option>
+              <option value={30}>30 seconds</option>
+              <option value={60}>1 minute</option>
+              <option value={300}>5 minutes</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSystemSettings = () => (
+    <div className="space-y-6">
+      <div className="casino-card p-6">
+        <h3 className="text-xl font-bold text-adaptive-text-accent font-casino-serif mb-6">⚙️ System Preferences</h3>
+        
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-adaptive-text-muted mb-2">Auto Logout (minutes)</label>
+            <select
+              className="casino-select w-full md:w-64"
+              value={settings.autoLogout}
+              onChange={(e) => handleSettingChange('autoLogout', parseInt(e.target.value))}
+            >
+              <option value={60}>1 hour</option>
+              <option value={240}>4 hours</option>
+              <option value={480}>8 hours (Recommended)</option>
+              <option value={720}>12 hours</option>
+              <option value={1440}>24 hours</option>
+            </select>
+            <p className="text-xs text-adaptive-text-muted mt-1">System will automatically log you out after this period of inactivity</p>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-medium text-adaptive-text">Performance Mode</h4>
+              <p className="text-sm text-adaptive-text-muted">Reduce visual effects for better performance</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={!settings.animationsEnabled}
+                onChange={(e) => handleSettingChange('animationsEnabled', !e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-adaptive-text-accent/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-adaptive-text-accent"></div>
+            </label>
+          </div>
+
+          <div className="bg-adaptive-surface border border-adaptive-border rounded-lg p-4">
+            <h4 className="font-medium text-adaptive-text mb-3">🔧 System Information</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-adaptive-text-muted">Version:</span>
+                <span className="text-adaptive-text">v2.1.0</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-adaptive-text-muted">Last Update:</span>
+                <span className="text-adaptive-text">January 9, 2025</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-adaptive-text-muted">Environment:</span>
+                <span className="text-adaptive-text">Production</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPrivacySettings = () => (
+    <div className="space-y-6">
+      <div className="casino-card p-6">
+        <h3 className="text-xl font-bold text-adaptive-text-accent font-casino-serif mb-6">🛡️ Privacy & Data Controls</h3>
+        
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-adaptive-text-muted mb-2">Data Retention Period (days)</label>
+            <select
+              className="casino-select w-full md:w-64"
+              value={settings.dataRetention}
+              onChange={(e) => handleSettingChange('dataRetention', parseInt(e.target.value))}
+            >
+              <option value={30}>30 days</option>
+              <option value={90}>90 days</option>
+              <option value={365}>1 year (Recommended)</option>
+              <option value={1095}>3 years</option>
+              <option value={2555}>7 years (Legal Compliance)</option>
+            </select>
+            <p className="text-xs text-adaptive-text-muted mt-1">How long to retain user activity and audit logs</p>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-medium text-adaptive-text">Analytics Data Sharing</h4>
+              <p className="text-sm text-adaptive-text-muted">Share anonymized data for system improvements</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.analyticsSharing}
+                onChange={(e) => handleSettingChange('analyticsSharing', e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-adaptive-text-accent/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-adaptive-text-accent"></div>
+            </label>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-adaptive-text-muted mb-2">Cookie Preferences</label>
+            <select
+              className="casino-select w-full md:w-64"
+              value={settings.cookieSettings}
+              onChange={(e) => handleSettingChange('cookieSettings', e.target.value)}
+            >
+              <option value="necessary">Necessary Only</option>
+              <option value="functional">Functional</option>
+              <option value="analytics">Analytics</option>
+              <option value="all">All Cookies</option>
+            </select>
+          </div>
+
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/30 rounded-lg p-4">
+            <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">⚠️ GDPR & PDPA 2022 Compliance</h4>
+            <p className="text-sm text-yellow-700 dark:text-yellow-300">
+              Your privacy is protected under Sri Lankan Personal Data Protection Act 2022 and international standards. 
+              All data is encrypted and handled according to strict compliance requirements.
+            </p>
+            <div className="mt-3">
+              <button className="text-sm text-yellow-800 dark:text-yellow-200 underline hover:no-underline">
+                Download Privacy Policy
+              </button>
+              <span className="mx-2 text-yellow-600">•</span>
+              <button className="text-sm text-yellow-800 dark:text-yellow-200 underline hover:no-underline">
+                Request Data Export
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
       default:
         return renderAppearanceSettings();
     }
