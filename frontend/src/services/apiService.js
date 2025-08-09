@@ -800,16 +800,31 @@ class ApiService {
             report_type: "AML",
             status: "completed",
             generated_date: "2025-01-08",
+            report_period_start: "2024-12-01",
+            report_period_end: "2024-12-31",
             findings: "No issues detected",
-            compliance_score: 98.5
+            compliance_score: 98.5,
+            violations: [],
+            created_at: "2025-01-08T10:00:00Z"
           },
           {
             id: "comp-2",
             report_type: "PDPA",
             status: "in_progress",
             generated_date: "2025-01-09",
+            report_period_start: "2024-11-01",
+            report_period_end: "2024-11-30",
             findings: "Under review",
-            compliance_score: 95.0
+            compliance_score: 95.0,
+            violations: [
+              {
+                severity: "medium",
+                type: "data_retention",
+                description: "Some customer data retention periods exceed recommended guidelines",
+                recommendation: "Review and update data retention policies for customer information"
+              }
+            ],
+            created_at: "2025-01-09T09:00:00Z"
           }
         ],
         total: 8,
@@ -821,6 +836,99 @@ class ApiService {
           warnings: 2
         }
       });
+    }
+
+    // Enhanced Audit Logs
+    if (endpoint.startsWith('/api/audit/enhanced')) {
+      return Promise.resolve({
+        audit_logs: [
+          {
+            id: "audit-1",
+            admin_username: "Super Administrator",
+            action: "updated",
+            resource: "member",
+            resource_id: "member-123",
+            timestamp: "2025-01-09T15:30:00Z",
+            ip_address: "192.168.1.100",
+            risk_level: "low",
+            risk_score: 1,
+            details: { field_changed: "tier", old_value: "Ruby", new_value: "Diamond" }
+          },
+          {
+            id: "audit-2", 
+            admin_username: "Casino Manager",
+            action: "created",
+            resource: "gaming_session",
+            resource_id: "session-456",
+            timestamp: "2025-01-09T14:15:00Z",
+            ip_address: "192.168.1.101",
+            risk_level: "medium",
+            risk_score: 3,
+            details: { amount: 50000, table: "VIP-01" }
+          }
+        ],
+        summary: {
+          actions_breakdown: {
+            "create": 45,
+            "update": 78,
+            "delete": 12,
+            "view": 234
+          },
+          resources_breakdown: {
+            "member": 89,
+            "gaming_session": 67,
+            "transaction": 123
+          },
+          admin_activity: {
+            "Super Administrator": 145,
+            "Casino Manager": 89,
+            "Floor Supervisor": 67
+          },
+          high_risk_activities: 3
+        },
+        total: 369,
+        page: 1,
+        pages: 15
+      });
+    }
+
+    // Data Retention Policies
+    if (endpoint.startsWith('/api/data-retention/policies')) {
+      return Promise.resolve([
+        {
+          id: "policy-1",
+          policy_name: "Customer Data Retention",
+          data_category: "customer_personal",
+          retention_period_days: 2555, // 7 years
+          archive_after_days: 1095, // 3 years
+          auto_delete: true,
+          status: "active",
+          legal_basis: "PDPA 2022 Compliance",
+          next_review_date: "2025-06-01"
+        },
+        {
+          id: "policy-2",
+          policy_name: "Gaming Transaction Records",
+          data_category: "financial_transactions",
+          retention_period_days: 2555, // 7 years  
+          archive_after_days: 1825, // 5 years
+          auto_delete: true,
+          status: "active",
+          legal_basis: "AML/CFT Requirements",
+          next_review_date: "2025-03-15"
+        },
+        {
+          id: "policy-3",
+          policy_name: "Audit Logs",
+          data_category: "system_logs",
+          retention_period_days: 1095, // 3 years
+          archive_after_days: 365, // 1 year
+          auto_delete: false,
+          status: "active",
+          legal_basis: "Internal Security Policy",
+          next_review_date: "2025-12-01"
+        }
+      ]);
     }
 
     // Default empty response for other endpoints
