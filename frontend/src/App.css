@@ -1,16 +1,36 @@
-/* Bally's Casino Admin Dashboard - Luxury Design System */
+/* Bally's Casino Admin Dashboard - Adaptive Light/Dark Theme System */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Base Layer - Casino Luxury Foundations */
+/* Base Layer - Adaptive Theme Foundations */
 @layer base {
+  :root {
+    /* Light Mode Theme Variables */
+    --color-bg: 250 250 250; /* #FAFAFA */
+    --color-surface: 255 255 255; /* #FFFFFF */
+    --color-border: 229 231 235; /* #E5E7EB */
+    --color-text: 17 24 39; /* #111827 */
+    --color-text-muted: 107 114 128; /* #6B7280 */
+    --color-text-accent: 220 38 38; /* #DC2626 */
+  }
+
+  .dark {
+    /* Dark Mode Theme Variables */
+    --color-bg: 26 26 26; /* #1A1A1A */
+    --color-surface: 45 45 45; /* #2D2D2D */
+    --color-border: 74 74 74; /* #4A4A4A */
+    --color-text: 255 255 255; /* #FFFFFF */
+    --color-text-muted: 156 163 175; /* #9CA3AF */
+    --color-text-accent: 255 215 0; /* #FFD700 */
+  }
+
   html {
     font-family: 'Inter', 'Roboto', sans-serif;
   }
   
   body {
-    @apply antialiased bg-casino-luxury-black text-white;
+    @apply antialiased bg-adaptive-bg text-adaptive-text transition-colors duration-300;
     font-feature-settings: 'kern', 'liga', 'clig', 'calt';
   }
   
@@ -19,20 +39,21 @@
     font-family: 'Playfair Display', 'serif';
     font-weight: 600;
     letter-spacing: -0.025em;
+    @apply text-adaptive-text;
   }
   
-  /* Enhanced Scrollbars */
+  /* Enhanced Scrollbars - Adaptive */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
   
   ::-webkit-scrollbar-track {
-    @apply bg-casino-luxury-gray;
+    @apply bg-adaptive-surface;
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-bally-600 rounded-full;
+    @apply bg-adaptive-text-accent rounded-full;
   }
   
   ::-webkit-scrollbar-thumb:hover {
@@ -40,115 +61,267 @@
   }
 }
 
-/* Component Layer - Casino UI Components */
+/* Component Layer - Adaptive Casino UI Components */
 @layer components {
-  /* Casino Card System */
+  /* Casino Card System - Adaptive */
   .casino-card {
-    @apply bg-luxury-gradient border border-casino-gold/20 rounded-xl shadow-luxury backdrop-blur-sm;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    @apply bg-adaptive-surface border border-adaptive-border rounded-xl shadow-lg backdrop-blur-sm transition-all duration-300;
   }
-  
+
+  .dark .casino-card {
+    @apply shadow-luxury border-casino-gold/20;
+  }
+
   .casino-card:hover {
-    @apply border-casino-gold/40 shadow-gold transform -translate-y-1;
+    @apply transform -translate-y-1;
+  }
+
+  .dark .casino-card:hover {
+    @apply border-casino-gold/40 shadow-gold;
+  }
+
+  .casino-card:hover:not(.dark *) {
+    @apply border-bally-300 shadow-casino-light;
   }
   
   .casino-card-header {
-    @apply border-b border-casino-gold/10 pb-4 mb-6;
+    @apply border-b border-adaptive-border pb-4 mb-6;
+  }
+
+  .dark .casino-card-header {
+    @apply border-casino-gold/10;
   }
   
-  /* Premium Buttons */
+  /* Premium Buttons - Adaptive */
   .btn-casino-primary {
-    @apply bg-casino-gradient text-white px-6 py-3 rounded-lg font-casino-sans font-semibold;
-    @apply shadow-casino hover:shadow-gold transform hover:-translate-y-0.5 transition-all duration-300;
-    @apply focus:outline-none focus:ring-2 focus:ring-casino-gold focus:ring-opacity-50;
+    @apply px-6 py-3 rounded-lg font-casino-sans font-semibold transition-all duration-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-opacity-50;
+  }
+
+  .dark .btn-casino-primary {
+    @apply bg-casino-gradient text-white shadow-casino hover:shadow-gold focus:ring-casino-gold;
+    @apply transform hover:-translate-y-0.5;
+  }
+
+  .btn-casino-primary:not(.dark *) {
+    @apply bg-bally-600 text-white shadow-casino-light hover:bg-bally-700 focus:ring-bally-500;
+    @apply hover:shadow-lg transform hover:-translate-y-0.5;
   }
   
   .btn-casino-secondary {
-    @apply bg-casino-luxury-gray text-casino-gold border border-casino-gold/30 px-6 py-3 rounded-lg;
-    @apply font-casino-sans font-semibold hover:bg-casino-gold/10 transition-all duration-300;
-    @apply focus:outline-none focus:ring-2 focus:ring-casino-gold focus:ring-opacity-50;
+    @apply border px-6 py-3 rounded-lg font-casino-sans font-semibold transition-all duration-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-opacity-50;
+  }
+
+  .dark .btn-casino-secondary {
+    @apply bg-casino-luxury-gray text-casino-gold border-casino-gold/30 hover:bg-casino-gold/10 focus:ring-casino-gold;
+  }
+
+  .btn-casino-secondary:not(.dark *) {
+    @apply bg-white text-bally-600 border-bally-300 hover:bg-bally-50 focus:ring-bally-500;
   }
   
   .btn-casino-ghost {
-    @apply bg-transparent text-casino-gold border border-casino-gold/20 px-6 py-3 rounded-lg;
-    @apply font-casino-sans font-medium hover:border-casino-gold/40 hover:bg-casino-gold/5 transition-all duration-300;
+    @apply bg-transparent border px-6 py-3 rounded-lg font-casino-sans font-medium transition-all duration-300;
+  }
+
+  .dark .btn-casino-ghost {
+    @apply text-casino-gold border-casino-gold/20 hover:border-casino-gold/40 hover:bg-casino-gold/5;
+  }
+
+  .btn-casino-ghost:not(.dark *) {
+    @apply text-bally-600 border-bally-200 hover:border-bally-300 hover:bg-bally-50;
   }
   
-  /* Member Tier Badges */
+  /* Member Tier Badges - Enhanced for both themes */
   .tier-badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition-colors;
   }
   
   .tier-ruby {
-    @apply bg-tier-ruby text-white shadow-sm;
+    @apply text-white shadow-sm;
+  }
+
+  .dark .tier-ruby {
+    @apply bg-tier-ruby;
+  }
+
+  .tier-ruby:not(.dark *) {
+    @apply bg-tier-ruby text-white;
   }
   
   .tier-sapphire {
-    @apply bg-tier-sapphire text-white shadow-sm;
+    @apply text-white shadow-sm;
+  }
+
+  .dark .tier-sapphire {
+    @apply bg-tier-sapphire;
+  }
+
+  .tier-sapphire:not(.dark *) {
+    @apply bg-tier-sapphire text-white;
   }
   
   .tier-diamond {
-    @apply bg-tier-diamond text-white shadow-sm;
+    @apply text-white shadow-sm;
+  }
+
+  .dark .tier-diamond {
+    @apply bg-tier-diamond;
+  }
+
+  .tier-diamond:not(.dark *) {
+    @apply bg-tier-diamond text-white;
   }
   
   .tier-vip {
-    @apply bg-tier-vip text-casino-luxury-black shadow-gold animate-pulse-gold;
+    @apply shadow-gold animate-pulse-gold;
+  }
+
+  .dark .tier-vip {
+    @apply bg-tier-vip text-casino-luxury-black;
+  }
+
+  .tier-vip:not(.dark *) {
+    @apply bg-tier-vip text-gray-900;
   }
   
-  /* Status Indicators */
+  /* Status Indicators - Adaptive */
   .status-active {
-    @apply bg-status-active/20 text-status-active border border-status-active/30;
+    @apply border font-medium px-2 py-1 rounded text-xs;
+  }
+
+  .dark .status-active {
+    @apply bg-status-active/20 text-status-active border-status-active/30;
+  }
+
+  .status-active:not(.dark *) {
+    @apply bg-status-active-light text-status-active border-status-active/30;
   }
   
   .status-inactive {
-    @apply bg-status-inactive/20 text-status-inactive border border-status-inactive/30;
+    @apply border font-medium px-2 py-1 rounded text-xs;
+  }
+
+  .dark .status-inactive {
+    @apply bg-status-inactive/20 text-status-inactive border-status-inactive/30;
+  }
+
+  .status-inactive:not(.dark *) {
+    @apply bg-status-inactive-light text-status-inactive border-status-inactive/30;
   }
   
   .status-warning {
-    @apply bg-status-warning/20 text-status-warning border border-status-warning/30;
+    @apply border font-medium px-2 py-1 rounded text-xs;
+  }
+
+  .dark .status-warning {
+    @apply bg-status-warning/20 text-status-warning border-status-warning/30;
+  }
+
+  .status-warning:not(.dark *) {
+    @apply bg-status-warning-light text-status-warning border-status-warning/30;
   }
   
   .status-critical {
-    @apply bg-status-critical/20 text-status-critical border border-status-critical/30;
+    @apply border font-medium px-2 py-1 rounded text-xs;
+  }
+
+  .dark .status-critical {
+    @apply bg-status-critical/20 text-status-critical border-status-critical/30;
+  }
+
+  .status-critical:not(.dark *) {
+    @apply bg-status-critical-light text-status-critical border-status-critical/30;
   }
   
-  /* Premium Form Elements */
+  /* Premium Form Elements - Adaptive */
   .casino-input {
+    @apply rounded-lg px-4 py-3 transition-all duration-300;
+    @apply focus:ring-1;
+  }
+
+  .dark .casino-input {
     @apply bg-casino-luxury-gray border border-casino-gold/20 text-white placeholder-casino-luxury-light;
-    @apply rounded-lg px-4 py-3 focus:border-casino-gold focus:ring-1 focus:ring-casino-gold;
-    @apply transition-all duration-300;
+    @apply focus:border-casino-gold focus:ring-casino-gold;
+  }
+
+  .casino-input:not(.dark *) {
+    @apply bg-white border border-gray-300 text-gray-900 placeholder-gray-500;
+    @apply focus:border-bally-500 focus:ring-bally-500;
   }
   
   .casino-select {
-    @apply bg-casino-luxury-gray border border-casino-gold/20 text-white rounded-lg px-4 py-3;
-    @apply focus:border-casino-gold focus:ring-1 focus:ring-casino-gold transition-all duration-300;
+    @apply rounded-lg px-4 py-3 transition-all duration-300;
+    @apply focus:ring-1;
+  }
+
+  .dark .casino-select {
+    @apply bg-casino-luxury-gray border border-casino-gold/20 text-white;
+    @apply focus:border-casino-gold focus:ring-casino-gold;
+  }
+
+  .casino-select:not(.dark *) {
+    @apply bg-white border border-gray-300 text-gray-900;
+    @apply focus:border-bally-500 focus:ring-bally-500;
   }
   
-  /* Navigation Enhancements */
+  /* Navigation Enhancements - Adaptive */
   .nav-item {
-    @apply flex items-center px-4 py-3 text-casino-luxury-light rounded-lg transition-all duration-200;
-    @apply hover:bg-casino-gold/10 hover:text-casino-gold;
+    @apply flex items-center px-4 py-3 rounded-lg transition-all duration-200;
+  }
+
+  .dark .nav-item {
+    @apply text-casino-luxury-light hover:bg-casino-gold/10 hover:text-casino-gold;
+  }
+
+  .nav-item:not(.dark *) {
+    @apply text-gray-600 hover:bg-bally-50 hover:text-bally-700;
   }
   
   .nav-item.active {
+    @apply shadow-lg;
+  }
+
+  .dark .nav-item.active {
     @apply bg-casino-gradient text-white shadow-casino;
+  }
+
+  .nav-item.active:not(.dark *) {
+    @apply bg-bally-600 text-white shadow-casino-light;
   }
   
   .nav-item-icon {
     @apply w-5 h-5 mr-3 transition-all duration-200;
   }
   
-  /* Metric Cards */
+  /* Metric Cards - Adaptive */
   .metric-card {
     @apply casino-card p-6;
   }
   
   .metric-card-value {
-    @apply text-3xl font-bold font-casino-mono text-casino-gold mb-2;
+    @apply text-3xl font-bold font-casino-mono mb-2;
+  }
+
+  .dark .metric-card-value {
+    @apply text-casino-gold;
+  }
+
+  .metric-card-value:not(.dark *) {
+    @apply text-bally-600;
   }
   
   .metric-card-label {
-    @apply text-sm text-casino-luxury-light font-medium;
+    @apply text-sm font-medium;
+  }
+
+  .dark .metric-card-label {
+    @apply text-casino-luxury-light;
+  }
+
+  .metric-card-label:not(.dark *) {
+    @apply text-gray-600;
   }
   
   .metric-card-trend {
@@ -163,35 +336,88 @@
     @apply text-status-critical;
   }
   
-  /* Tables */
+  /* Tables - Adaptive */
   .casino-table {
     @apply w-full border-collapse;
   }
   
   .casino-table th {
-    @apply bg-casino-luxury-gray text-casino-gold text-left px-4 py-3 font-semibold text-sm;
-    @apply border-b border-casino-gold/20;
+    @apply text-left px-4 py-3 font-semibold text-sm border-b;
+  }
+
+  .dark .casino-table th {
+    @apply bg-casino-luxury-gray text-casino-gold border-casino-gold/20;
+  }
+
+  .casino-table th:not(.dark *) {
+    @apply bg-gray-50 text-gray-700 border-gray-200;
   }
   
   .casino-table td {
-    @apply px-4 py-3 border-b border-casino-luxury-light/10 text-casino-luxury-light;
+    @apply px-4 py-3 border-b;
+  }
+
+  .dark .casino-table td {
+    @apply border-casino-luxury-light/10 text-casino-luxury-light;
+  }
+
+  .casino-table td:not(.dark *) {
+    @apply border-gray-200 text-gray-900;
   }
   
   .casino-table tr:hover {
+    @apply transition-colors duration-150;
+  }
+
+  .dark .casino-table tr:hover {
     @apply bg-casino-luxury-gray/30;
   }
+
+  .casino-table tr:hover:not(.dark *) {
+    @apply bg-gray-50;
+  }
   
-  /* Loading States */
+  /* Loading States - Adaptive */
   .casino-spinner {
-    @apply inline-block w-6 h-6 border-2 border-casino-gold/20 border-t-casino-gold rounded-full animate-spin;
+    @apply inline-block w-6 h-6 border-2 rounded-full animate-spin;
+  }
+
+  .dark .casino-spinner {
+    @apply border-casino-gold/20 border-t-casino-gold;
+  }
+
+  .casino-spinner:not(.dark *) {
+    @apply border-gray-200 border-t-bally-600;
   }
   
   .casino-skeleton {
-    @apply bg-casino-luxury-gray/50 rounded animate-pulse;
+    @apply rounded animate-pulse;
+  }
+
+  .dark .casino-skeleton {
+    @apply bg-casino-luxury-gray/50;
+  }
+
+  .casino-skeleton:not(.dark *) {
+    @apply bg-gray-200;
+  }
+
+  /* Theme Toggle Button */
+  .theme-toggle {
+    @apply relative p-2 rounded-lg transition-all duration-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-opacity-50;
+  }
+
+  .dark .theme-toggle {
+    @apply bg-casino-luxury-gray text-casino-gold hover:bg-casino-gold/10 focus:ring-casino-gold;
+  }
+
+  .theme-toggle:not(.dark *) {
+    @apply bg-gray-100 text-gray-600 hover:bg-gray-200 focus:ring-gray-500;
   }
 }
 
-/* Utility Layer - Casino Specific Utilities */
+/* Utility Layer - Adaptive Specific Utilities */
 @layer utilities {
   /* Typography Utilities */
   .text-casino-display {
@@ -230,18 +456,6 @@
   .animate-luxury-glow {
     animation: luxuryGlow 2s ease-in-out infinite alternate;
   }
-  
-  /* Background Utilities */
-  .bg-casino-pattern {
-    background-image: 
-      radial-gradient(circle at 2px 2px, rgba(255, 215, 0, 0.15) 1px, transparent 0);
-    background-size: 20px 20px;
-  }
-  
-  .bg-luxury-texture {
-    background-image: 
-      linear-gradient(45deg, transparent 40%, rgba(255, 215, 0, 0.03) 50%, transparent 60%);
-  }
 }
 
 /* Additional Keyframes */
@@ -278,17 +492,26 @@
 
 /* Dark Theme Override for Casino Aesthetic */
 .dashboard-container {
-  @apply bg-casino-luxury-black min-h-screen;
+  @apply bg-adaptive-bg min-h-screen transition-colors duration-300;
 }
 
 /* Sidebar Enhancements */
 .sidebar {
-  @apply bg-luxury-gradient border-r border-casino-gold/20 shadow-luxury;
+  @apply bg-adaptive-surface border-r border-adaptive-border shadow-lg transition-colors duration-300;
+}
+
+.dark .sidebar {
+  @apply bg-luxury-gradient border-casino-gold/20 shadow-luxury;
 }
 
 /* Casino Branding */
 .gradient-casino {
   @apply bg-casino-gradient;
+}
+
+/* Light mode gradient */
+.gradient-casino-light {
+  @apply bg-casino-gradient-light;
 }
 
 /* Responsive Design Enhancements */
@@ -309,11 +532,27 @@
 /* High Contrast Mode Support */
 @media (prefers-contrast: high) {
   .casino-card {
-    @apply border-2 border-casino-gold;
+    @apply border-2;
+  }
+
+  .dark .casino-card {
+    @apply border-casino-gold;
+  }
+
+  .casino-card:not(.dark *) {
+    @apply border-bally-400;
   }
   
   .nav-item.active {
-    @apply border-2 border-casino-gold;
+    @apply border-2;
+  }
+
+  .dark .nav-item.active {
+    @apply border-casino-gold;
+  }
+
+  .nav-item.active:not(.dark *) {
+    @apply border-bally-400;
   }
 }
 
@@ -323,5 +562,17 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus Visible Support for Better Accessibility */
+@supports selector(:focus-visible) {
+  button:focus:not(:focus-visible),
+  [role="button"]:focus:not(:focus-visible),
+  input:focus:not(:focus-visible),
+  select:focus:not(:focus-visible),
+  textarea:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
   }
 }
