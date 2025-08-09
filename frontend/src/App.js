@@ -117,20 +117,6 @@ function App() {
           {!user ? (
             <>
               <Login onLogin={handleLogin} onDirectAccess={handleDirectAccess} />
-              <Toaster 
-                position="top-right"
-                toastOptions={{
-                  duration: 4000,
-                  className: '',
-                  style: {
-                    background: 'rgb(var(--color-surface))',
-                    color: 'rgb(var(--color-text))',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid rgb(var(--color-border))',
-                  },
-                }}
-              />
             </>
           ) : (
             <div className="flex h-screen">
@@ -171,6 +157,7 @@ function App() {
             </div>
           )}
           
+          {/* Single Global Toaster */}
           <Toaster 
             position="top-right"
             toastOptions={{
