@@ -33,27 +33,34 @@ const Login = ({ onLogin, loading }) => {
   };
 
   return (
-    <div className="min-h-screen bg-casino-luxury-black bg-luxury-texture flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-adaptive-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-300">
       {/* Casino Background Pattern */}
-      <div className="absolute inset-0 bg-casino-pattern opacity-30"></div>
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0" style={{
+          backgroundImage: isDark 
+            ? 'radial-gradient(circle at 2px 2px, rgba(255, 215, 0, 0.15) 1px, transparent 0)' 
+            : 'radial-gradient(circle at 2px 2px, rgba(220, 38, 38, 0.1) 1px, transparent 0)',
+          backgroundSize: '20px 20px'
+        }}></div>
+      </div>
       
       {/* Luxury Glow Effects */}
-      <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-casino-gold/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-bally-600/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-adaptive-text-accent/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-adaptive-text-accent/5 rounded-full blur-3xl animate-pulse"></div>
       
       <div className="max-w-md w-full space-y-8 relative z-10">
         {/* Logo and Title */}
         <div className="text-center animate-fade-in-up">
-          <div className="mx-auto h-24 w-24 casino-card flex items-center justify-center mb-6 animate-luxury-glow">
-            <span className="text-3xl font-bold text-casino-gold font-casino-serif">B</span>
+          <div className="mx-auto h-24 w-24 casino-card flex items-center justify-center mb-6">
+            <span className="text-3xl font-bold text-adaptive-text-accent font-casino-serif">B</span>
           </div>
-          <h2 className="mt-6 text-4xl font-extrabold text-white font-casino-serif">
+          <h2 className="mt-6 text-4xl font-extrabold text-adaptive-text font-casino-serif">
             Bally's Casino
           </h2>
-          <p className="mt-3 text-lg text-casino-gold font-casino-sans font-medium">
+          <p className="mt-3 text-lg text-adaptive-text-accent font-casino-sans font-medium">
             Admin Dashboard
           </p>
-          <p className="mt-1 text-sm text-casino-luxury-light">
+          <p className="mt-1 text-sm text-adaptive-text-muted">
             Sri Lanka's Premier Gaming Experience
           </p>
         </div>
