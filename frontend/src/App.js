@@ -126,7 +126,7 @@ function App() {
         <div className="min-h-screen bg-adaptive-bg">
           {!user ? (
             <>
-              <Login onLogin={handleLogin} onDirectAccess={handleDirectAccess} />
+              <Login onLogin={handleLogin} onDirectAccess={handleDirectAccess} loading={loading} />
             </>
           ) : (
             <div className="flex h-screen">
