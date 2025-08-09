@@ -140,6 +140,7 @@ function App() {
                       <Route path="/enterprise" element={<EnterpriseDashboard user={user} />} />
                       <Route path="/notifications" element={<NotificationsManagement user={user} />} />
                       <Route path="/compliance" element={<ComplianceDashboard user={user} />} />
+                      <Route path="/settings" element={<Settings user={user} />} />
                       <Route path="/" element={<Navigate to="/dashboard" />} />
                     </Routes>
                   </div>
