@@ -190,6 +190,7 @@ const Dashboard = ({ user }) => {
       amount: '+$12,500',
       time: '2 mins ago',
       icon: '💎',
+      tierColor: 'bg-yellow-500 text-black'
     },
     {
       id: 2,
@@ -199,6 +200,7 @@ const Dashboard = ({ user }) => {
       amount: '+$3,200',
       time: '8 mins ago',
       icon: '🏆',
+      tierColor: 'bg-gray-400 text-white'
     },
     {
       id: 3,
@@ -208,6 +210,7 @@ const Dashboard = ({ user }) => {
       amount: '+$1,850',
       time: '15 mins ago',
       icon: '🃏',
+      tierColor: 'bg-blue-500 text-white'
     },
     {
       id: 4,
@@ -217,18 +220,9 @@ const Dashboard = ({ user }) => {
       amount: '+$8,750',
       time: '23 mins ago',
       icon: '🎰',
+      tierColor: 'bg-yellow-500 text-black'
     },
   ];
-
-  const getTierBadgeClass = (tier) => {
-    switch (tier) {
-      case 'VIP': return 'tier-badge tier-vip';
-      case 'Diamond': return 'tier-badge tier-diamond';
-      case 'Sapphire': return 'tier-badge tier-sapphire';
-      case 'Ruby': return 'tier-badge tier-ruby';
-      default: return 'tier-badge bg-casino-luxury-gray';
-    }
-  };
 
   if (loading) {
     return (
