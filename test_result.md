@@ -203,6 +203,21 @@ backend:
         agent: "testing"
         comment: "✅ Data retention policy management fully functional. All PDPA compliance features working with proper categorization."
 
+  - task: "Rewards Management System"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ Missing /api/rewards endpoint causing 404 errors and potential frontend crashes."
+      - working: true
+        agent: "testing"
+        comment: "✅ FIXED: Added complete /api/rewards endpoint with GET (list with pagination/filtering), GET (single reward), and POST (create) operations. Returns proper array structure with 4 reward items. Prevents '.filter is not a function' errors in frontend components."
+
 frontend:
   - task: "Enterprise Dashboard UI"
     implemented: true
