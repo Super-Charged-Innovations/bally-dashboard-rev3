@@ -10,6 +10,7 @@ import {
   MoonIcon
 } from '@heroicons/react/24/outline';
 import { useTheme } from '../contexts/ThemeContext';
+import { Link } from 'react-router-dom';
 
 const Header = ({ user, onLogout, onMenuToggle }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
