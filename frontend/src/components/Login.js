@@ -33,109 +33,155 @@ const Login = ({ onLogin, loading }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen bg-casino-luxury-black bg-luxury-texture flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Casino Background Pattern */}
+      <div className="absolute inset-0 bg-casino-pattern opacity-30"></div>
+      
+      {/* Luxury Glow Effects */}
+      <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-casino-gold/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-bally-600/10 rounded-full blur-3xl animate-pulse"></div>
+      
+      <div className="max-w-md w-full space-y-8 relative z-10">
         {/* Logo and Title */}
-        <div className="text-center">
-          <div className="mx-auto h-20 w-20 rounded-full gradient-casino flex items-center justify-center mb-4">
-            <span className="text-2xl font-bold text-white">B</span>
+        <div className="text-center animate-fade-in-up">
+          <div className="mx-auto h-24 w-24 casino-card flex items-center justify-center mb-6 animate-luxury-glow">
+            <span className="text-3xl font-bold text-casino-gold font-casino-serif">B</span>
           </div>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-4xl font-extrabold text-white font-casino-serif">
             Bally's Casino
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Admin Dashboard - Sri Lanka
+          <p className="mt-3 text-lg text-casino-gold font-casino-sans font-medium">
+            Admin Dashboard
+          </p>
+          <p className="mt-1 text-sm text-casino-luxury-light">
+            Sri Lanka's Premier Gaming Experience
           </p>
         </div>
 
         {/* Login Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                className="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-950 focus:border-primary-950 focus:z-10 sm:text-sm transition-colors"
-                placeholder="Enter your username"
-                value={formData.username}
-                onChange={handleChange}
-                disabled={loading}
-              />
+        <form className="mt-8 space-y-6 animate-slide-in-right" onSubmit={handleSubmit}>
+          <div className="casino-card p-8 space-y-6">
+            <div className="casino-card-header">
+              <h3 className="text-xl font-semibold text-center text-casino-gold font-casino-serif">
+                Secure Access Portal
+              </h3>
             </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <div className="relative">
+            
+            <div className="space-y-6">
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-casino-gold mb-2 font-casino-sans">
+                  Username
+                </label>
                 <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
+                  id="username"
+                  name="username"
+                  type="text"
                   required
-                  className="appearance-none rounded-lg relative block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-950 focus:border-primary-950 focus:z-10 sm:text-sm transition-colors"
-                  placeholder="Enter your password"
-                  value={formData.password}
+                  className="casino-input w-full"
+                  placeholder="Enter your username"
+                  value={formData.username}
                   onChange={handleChange}
                   disabled={loading}
                 />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                  disabled={loading}
-                >
-                  {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <EyeIcon className="h-5 w-5 text-gray-400" />
-                  )}
-                </button>
+              </div>
+              
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-casino-gold mb-2 font-casino-sans">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    className="casino-input w-full pr-12"
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-casino-luxury-light hover:text-casino-gold transition-colors"
+                    onClick={() => setShowPassword(!showPassword)}
+                    disabled={loading}
+                  >
+                    {showPassword ? (
+                      <EyeSlashIcon className="h-5 w-5" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-800">{error}</div>
-            </div>
-          )}
+            {error && (
+              <div className="bg-status-critical/20 border border-status-critical/40 rounded-lg p-4 animate-fade-in-up">
+                <div className="text-sm text-status-critical font-medium">{error}</div>
+              </div>
+            )}
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-950 hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-            >
-              {loading ? (
-                <div className="flex items-center">
-                  <div className="spinner w-4 h-4 mr-2"></div>
-                  Signing in...
-                </div>
-              ) : (
-                'Sign in to Dashboard'
-              )}
-            </button>
-          </div>
-
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <h4 className="text-sm font-medium text-blue-900 mb-2">Demo Credentials:</h4>
-            <div className="text-xs text-blue-800 space-y-1">
-              <div><strong>Super Admin:</strong> superadmin / admin123</div>
-              <div><strong>Manager:</strong> manager / manager123</div>
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-casino-primary w-full text-lg py-4 relative overflow-hidden group"
+              >
+                <span className="relative z-10 flex items-center justify-center">
+                  {loading ? (
+                    <>
+                      <div className="casino-spinner mr-3"></div>
+                      <span className="font-casino-sans">Authenticating...</span>
+                    </>
+                  ) : (
+                    <span className="font-casino-sans font-semibold">Enter Casino Dashboard</span>
+                  )}
+                </span>
+                <div className="absolute inset-0 bg-gold-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </button>
             </div>
           </div>
         </form>
 
+        {/* Demo Credentials */}
+        <div className="casino-card p-6 animate-fade-in-up">
+          <div className="casino-card-header">
+            <h4 className="text-sm font-semibold text-casino-gold text-center font-casino-sans">
+              🎰 Demo Access Credentials
+            </h4>
+          </div>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center p-3 bg-casino-luxury-gray/30 rounded-lg">
+              <div>
+                <span className="text-xs text-casino-luxury-light font-medium">Super Admin:</span>
+                <div className="text-sm text-white font-casino-mono">superadmin / admin123</div>
+              </div>
+              <div className="tier-badge tier-vip text-xs">
+                Full Access
+              </div>
+            </div>
+            <div className="flex justify-between items-center p-3 bg-casino-luxury-gray/30 rounded-lg">
+              <div>
+                <span className="text-xs text-casino-luxury-light font-medium">Manager:</span>
+                <div className="text-sm text-white font-casino-mono">manager / manager123</div>
+              </div>
+              <div className="tier-badge tier-sapphire text-xs">
+                Limited Access
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Footer */}
-        <div className="text-center text-xs text-gray-500">
-          <p>&copy; 2025 Bally's Casino. All rights reserved.</p>
-          <p>Enterprise Admin Dashboard v1.0.0</p>
+        <div className="text-center text-xs text-casino-luxury-light space-y-1 animate-fade-in-up">
+          <p className="font-casino-sans">&copy; 2025 Bally's Casino Sri Lanka. All rights reserved.</p>
+          <p className="text-casino-gold">Enterprise Admin Dashboard v1.0.0</p>
+          <div className="flex items-center justify-center space-x-2 mt-3">
+            <div className="w-2 h-2 bg-status-active rounded-full animate-pulse"></div>
+            <span className="text-xs text-status-active font-medium">System Online</span>
+          </div>
         </div>
       </div>
     </div>
