@@ -145,13 +145,14 @@ const Header = ({ user, onLogout, onMenuToggle }) => {
               </div>
               
               <div className="py-2">
-                <button
+                <Link
+                  to="/settings"
                   className="flex items-center w-full px-4 py-3 text-sm text-adaptive-text-muted hover:bg-adaptive-text-accent/10 hover:text-adaptive-text-accent transition-all duration-200 group"
                   onClick={() => setDropdownOpen(false)}
                 >
                   <Cog6ToothIcon className="h-4 w-4 mr-3 group-hover:rotate-90 transition-transform duration-300" />
                   Account Settings
-                </button>
+                </Link>
                 
                 <div className="border-t border-adaptive-border my-2"></div>
                 
