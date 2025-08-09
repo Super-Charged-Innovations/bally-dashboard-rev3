@@ -157,11 +157,11 @@ const Login = ({ onLogin, onDirectAccess, loading }) => {
         {/* Demo Credentials */}
         <div className="casino-card p-6 animate-fade-in-up">
           <div className="casino-card-header">
-            <h4 className="text-sm font-semibold text-casino-gold text-center font-casino-sans">
+            <h4 className="text-sm font-semibold text-casino-gold text-center font-casino-sans mb-4">
               🎰 Demo Access Credentials
             </h4>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-3 mb-6">
             <div className="flex justify-between items-center p-3 bg-casino-luxury-gray/30 rounded-lg">
               <div>
                 <span className="text-xs text-casino-luxury-light font-medium">Super Admin:</span>
@@ -180,6 +180,40 @@ const Login = ({ onLogin, onDirectAccess, loading }) => {
                 Limited Access
               </div>
             </div>
+          </div>
+          
+          {/* TEMPORARY: Direct Access Buttons */}
+          <div className="border-t border-casino-luxury-gray/30 pt-4">
+            <h5 className="text-xs font-medium text-casino-luxury-light text-center mb-3 font-casino-sans">
+              ⚡ TEMPORARY: Direct Dashboard Access
+            </h5>
+            <div className="space-y-3">
+              <button
+                onClick={() => onDirectAccess('SuperAdmin')}
+                className="w-full btn-casino-primary py-3 text-sm font-medium group relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center justify-center">
+                  <span className="mr-2">👑</span>
+                  <span>Enter as Super Admin</span>
+                </span>
+                <div className="absolute inset-0 bg-red-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </button>
+              
+              <button
+                onClick={() => onDirectAccess('Manager')}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 text-sm group relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center justify-center">
+                  <span className="mr-2">💼</span>
+                  <span>Enter as Manager</span>
+                </span>
+                <div className="absolute inset-0 bg-blue-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </button>
+            </div>
+            
+            <p className="text-xs text-casino-luxury-light text-center mt-3 font-casino-sans">
+              ⚠️ Authentication temporarily disabled for testing
+            </p>
           </div>
         </div>
 
