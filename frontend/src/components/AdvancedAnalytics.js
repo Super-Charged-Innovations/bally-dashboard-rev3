@@ -280,7 +280,7 @@ const AdvancedAnalytics = ({ user }) => {
                                 Key Insights
                               </h5>
                               <ul className="space-y-1">
-                                {analysis.insights?.slice(0, 3).map((insight, idx) => (
+                                {(analysis.insights || []).slice(0, 3).map((insight, idx) => (
                                   <li key={idx} className="text-sm text-gray-700 flex items-start">
                                     <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
                                     {insight}
