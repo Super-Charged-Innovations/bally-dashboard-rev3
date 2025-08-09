@@ -19,105 +19,132 @@ const Header = ({ user, onLogout, onMenuToggle }) => {
   const getRoleColor = (role) => {
     switch (role) {
       case 'SuperAdmin':
-        return 'text-red-600 bg-red-50';
+        return 'tier-ruby text-white';
       case 'GeneralAdmin':
-        return 'text-blue-600 bg-blue-50';
+        return 'tier-sapphire text-white';
       case 'Manager':
-        return 'text-green-600 bg-green-50';
+        return 'tier-diamond text-white';
       case 'Supervisor':
-        return 'text-yellow-600 bg-yellow-50';
+        return 'bg-status-warning/20 text-status-warning border border-status-warning/30';
       default:
-        return 'text-gray-600 bg-gray-50';
+        return 'bg-casino-luxury-gray text-casino-luxury-light';
+    }
+  };
+
+  const getRoleDisplay = (role) => {
+    switch (role) {
+      case 'SuperAdmin':
+        return '👑 Super Admin';
+      case 'GeneralAdmin':
+        return '💎 General Admin';
+      case 'Manager':
+        return '🎰 Manager';
+      case 'Supervisor':
+        return '🛡️ Supervisor';
+      default:
+        return role;
     }
   };
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+    <header className="bg-luxury-gradient border-b border-casino-gold/20 px-6 py-4 flex items-center justify-between shadow-luxury">
       {/* Left Section */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-6">
         <button
           onClick={onMenuToggle}
-          className="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-950 transition-colors"
+          className="p-2 rounded-lg text-casino-luxury-light hover:text-casino-gold hover:bg-casino-gold/10 focus:outline-none focus:ring-2 focus:ring-casino-gold focus:ring-opacity-50 transition-all duration-200"
         >
           <Bars3Icon className="h-6 w-6" />
         </button>
         
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900">
-            Welcome back, {user?.full_name?.split(' ')[0] || 'Admin'}
+        <div className="animate-fade-in-up">
+          <h1 className="text-2xl font-bold text-white font-casino-serif">
+            Welcome back, <span className="text-casino-gold">{user?.full_name?.split(' ')[0] || 'Admin'}</span>
           </h1>
-          <p className="text-sm text-gray-500">
-            We're very happy to see you on your personal dashboard
+          <p className="text-sm text-casino-luxury-light font-casino-sans">
+            Manage your casino operations with confidence
           </p>
         </div>
       </div>
 
       {/* Right Section */}
       <div className="flex items-center space-x-4">
-        {/* View Reports Button */}
-        <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
-          View Reports
+        {/* Quick Action Buttons */}
+        <button className="btn-casino-ghost px-4 py-2 text-sm">
+          📊 View Reports
         </button>
 
-        {/* Manage Store Button */}
-        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
-          Manage Store
+        <button className="btn-casino-secondary px-4 py-2 text-sm">
+          🎰 Casino Floor
         </button>
 
         {/* Notifications */}
-        <button className="relative p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-950 transition-colors">
-          <BellIcon className="h-6 w-6" />
-          {notificationCount > 0 && (
-            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-              {notificationCount}
-            </span>
-          )}
-        </button>
+        <div className="relative">
+          <button className="relative p-3 text-casino-luxury-light hover:text-casino-gold hover:bg-casino-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-casino-gold focus:ring-opacity-50 transition-all duration-200">
+            <BellIcon className="h-6 w-6" />
+            {notificationCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-5 w-5 bg-status-critical text-white text-xs rounded-full flex items-center justify-center font-bold animate-pulse">
+                {notificationCount}
+              </span>
+            )}
+          </button>
+        </div>
 
         {/* User Dropdown */}
         <div className="relative">
           <button
             onClick={handleDropdownToggle}
-            className="flex items-center space-x-3 p-2 text-gray-700 hover:bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-950 transition-colors"
+            className="flex items-center space-x-3 p-3 text-casino-luxury-light hover:bg-casino-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-casino-gold focus:ring-opacity-50 transition-all duration-200 group"
           >
-            <UserCircleIcon className="h-8 w-8 text-gray-400" />
+            <UserCircleIcon className="h-8 w-8 text-casino-gold group-hover:text-white transition-colors" />
             <div className="text-left hidden sm:block">
-              <p className="text-sm font-medium">{user?.full_name}</p>
-              <p className={`text-xs px-2 py-1 rounded-full font-medium ${getRoleColor(user?.role)}`}>
-                {user?.role}
-              </p>
+              <p className="text-sm font-semibold text-white font-casino-sans">{user?.full_name}</p>
+              <div className={`text-xs px-2 py-1 rounded-full font-medium tier-badge ${getRoleColor(user?.role)} mt-1`}>
+                {getRoleDisplay(user?.role)}
+              </div>
             </div>
-            <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+            <ChevronDownIcon className={`h-4 w-4 text-casino-luxury-light transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {/* Dropdown Menu */}
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-              <div className="px-4 py-3 border-b border-gray-100">
-                <p className="text-sm font-medium text-gray-900">{user?.full_name}</p>
-                <p className="text-xs text-gray-500">{user?.email}</p>
-                <span className={`inline-block mt-1 text-xs px-2 py-1 rounded-full font-medium ${getRoleColor(user?.role)}`}>
-                  {user?.role}
-                </span>
+            <div className="absolute right-0 mt-2 w-64 casino-card border border-casino-gold/30 focus:outline-none z-50 animate-slide-in-right">
+              <div className="px-4 py-3 casino-card-header">
+                <div className="flex items-center space-x-3">
+                  <div className="h-12 w-12 rounded-full bg-casino-gradient flex items-center justify-center">
+                    <span className="text-lg font-bold text-white font-casino-serif">
+                      {user?.full_name?.charAt(0)}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white font-casino-sans">{user?.full_name}</p>
+                    <p className="text-xs text-casino-luxury-light">{user?.email || `${user?.username}@ballyscasino.lk`}</p>
+                    <div className={`inline-flex items-center text-xs px-2 py-1 rounded-full font-medium tier-badge ${getRoleColor(user?.role)} mt-1`}>
+                      {getRoleDisplay(user?.role)}
+                    </div>
+                  </div>
+                </div>
               </div>
               
-              <div className="py-1">
+              <div className="py-2">
                 <button
-                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="flex items-center w-full px-4 py-3 text-sm text-casino-luxury-light hover:bg-casino-gold/10 hover:text-casino-gold transition-all duration-200 group"
                   onClick={() => setDropdownOpen(false)}
                 >
-                  <Cog6ToothIcon className="h-4 w-4 mr-3" />
-                  Settings
+                  <Cog6ToothIcon className="h-4 w-4 mr-3 group-hover:rotate-90 transition-transform duration-300" />
+                  Account Settings
                 </button>
+                
+                <div className="border-t border-casino-gold/10 my-2"></div>
                 
                 <button
                   onClick={() => {
                     setDropdownOpen(false);
                     onLogout();
                   }}
-                  className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  className="flex items-center w-full px-4 py-3 text-sm text-status-critical hover:bg-status-critical/10 transition-all duration-200 group"
                 >
-                  <ArrowRightOnRectangleIcon className="h-4 w-4 mr-3" />
+                  <ArrowRightOnRectangleIcon className="h-4 w-4 mr-3 group-hover:translate-x-1 transition-transform duration-200" />
                   Sign out
                 </button>
               </div>
