@@ -5,8 +5,11 @@ import {
   UserCircleIcon,
   ChevronDownIcon,
   Cog6ToothIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  SunIcon,
+  MoonIcon
 } from '@heroicons/react/24/outline';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Header = ({ user, onLogout, onMenuToggle }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
