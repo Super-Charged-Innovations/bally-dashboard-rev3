@@ -87,103 +87,83 @@ function App() {
     );
   }
 
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Login onLogin={handleLogin} loading={loading} />
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#ffffff',
-              color: '#374151',
-              borderRadius: '8px',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            },
-            success: {
-              iconTheme: {
-                primary: '#10b981',
-                secondary: '#ffffff',
-              },
-            },
-            error: {
-              iconTheme: {
-                primary: '#ef4444',
-                secondary: '#ffffff',
-              },
-            },
-          }}
-        />
-      </div>
-    );
-  }
-
   return (
-    <Router>
-      <div className="flex h-screen bg-gray-50 dashboard-container">
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#ffffff',
-              color: '#374151',
-              borderRadius: '8px',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            },
-            success: {
-              iconTheme: {
-                primary: '#10b981',
-                secondary: '#ffffff',
-              },
-            },
-            error: {
-              iconTheme: {
-                primary: '#ef4444',
-                secondary: '#ffffff',
-              },
-            },
-          }}
-        />
-
-        {/* Sidebar */}
-        <div className={`${sidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 ease-in-out flex-shrink-0`}>
-          <Sidebar 
-            isOpen={sidebarOpen}
-            onToggle={() => setSidebarOpen(!sidebarOpen)}
-            user={user}
-          />
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <Header 
-            user={user} 
-            onLogout={handleLogout}
-            onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
-          />
+    <ThemeProvider>
+      <Router>
+        <div className="min-h-screen bg-adaptive-bg">
+          {!user ? (
+            <>
+              <Login onLogin={handleLogin} />
+              <Toaster 
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  className: '',
+                  style: {
+                    background: 'rgb(var(--color-surface))',
+                    color: 'rgb(var(--color-text))',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    border: '1px solid rgb(var(--color-border))',
+                  },
+                }}
+              />
+            </>
+          ) : (
+            <div className="flex h-screen">
+              <Sidebar 
+                isOpen={sidebarOpen} 
+                onToggle={() => setSidebarOpen(!sidebarOpen)}
+                user={user}
+              />
+              
+              <div className="flex-1 flex flex-col overflow-hidden">
+                <Header 
+                  user={user} 
+                  onLogout={handleLogout}
+                  onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
+                />
+                
+                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-adaptive-bg">
+                  <div className="container mx-auto px-6 py-8">
+                    <Routes>
+                      <Route path="/dashboard" element={<Dashboard user={user} />} />
+                      <Route path="/members" element={<MemberManagement user={user} />} />
+                      <Route path="/gaming" element={<GamingManagement user={user} />} />
+                      <Route path="/rewards" element={<RewardsManagement user={user} />} />
+                      <Route path="/marketing" element={<MarketingIntelligence user={user} />} />
+                      <Route path="/travel" element={<TravelManagement user={user} />} />
+                      <Route path="/staff" element={<StaffManagement user={user} />} />
+                      <Route path="/advanced-analytics" element={<AdvancedAnalytics user={user} />} />
+                      <Route path="/analytics" element={<Analytics user={user} />} />
+                      <Route path="/enterprise" element={<EnterpriseDashboard user={user} />} />
+                      <Route path="/notifications" element={<NotificationsManagement user={user} />} />
+                      <Route path="/compliance" element={<ComplianceDashboard user={user} />} />
+                      <Route path="/" element={<Navigate to="/dashboard" />} />
+                    </Routes>
+                  </div>
+                </main>
+              </div>
+            </div>
+          )}
           
-          <main className="flex-1 overflow-auto p-6">
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard user={user} />} />
-              <Route path="/enterprise" element={<EnterpriseDashboard user={user} />} />
-              <Route path="/members" element={<MemberManagement user={user} />} />
-              <Route path="/gaming" element={<GamingManagement user={user} />} />
-              <Route path="/rewards" element={<RewardsManagement user={user} />} />
-              <Route path="/marketing" element={<MarketingIntelligence user={user} />} />
-              <Route path="/travel" element={<TravelManagement user={user} />} />
-              <Route path="/staff" element={<StaffManagement user={user} />} />
-              <Route path="/advanced-analytics" element={<AdvancedAnalytics user={user} />} />
-              <Route path="/analytics" element={<Analytics user={user} />} />
-              <Route path="/notifications" element={<NotificationsManagement user={user} />} />
-              <Route path="/compliance" element={<ComplianceDashboard user={user} />} />
-            </Routes>
-          </main>
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              className: '',
+              style: {
+                background: 'rgb(var(--color-surface))',
+                color: 'rgb(var(--color-text))',
+                borderRadius: '8px',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                border: '1px solid rgb(var(--color-border))',
+              },
+            }}
+          />
         </div>
-      </div>
-    </Router>
+      </Router>
+    </ThemeProvider>
   );
 }
 
