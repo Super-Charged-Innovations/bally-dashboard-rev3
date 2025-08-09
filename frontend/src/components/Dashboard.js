@@ -239,38 +239,38 @@ const Dashboard = ({ user }) => {
   }
 
   return (
-    <div className="space-y-8 bg-casino-luxury-black bg-luxury-texture min-h-screen p-6 animate-fade-in-up">
+    <div className="space-y-8 bg-gray-900 min-h-screen p-6 animate-fade-in-up">
       {/* Welcome Header with Casino Ambiance */}
-      <div className="casino-card p-8 bg-luxury-texture relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-casino-gold/5 rounded-full blur-2xl"></div>
+      <div className="bg-gray-800 border border-yellow-500/20 rounded-xl shadow-lg p-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 rounded-full blur-2xl"></div>
         <div className="relative z-10 flex items-center justify-between">
           <div className="flex-1">
-            <h1 className="text-4xl font-bold text-white font-casino-serif mb-3">
-              Welcome back, <span className="text-casino-gold">{user?.full_name?.split(' ')[0] || 'Pixy Krovasky'}</span>
+            <h1 className="text-4xl font-bold text-white font-serif mb-3">
+              Welcome back, <span className="text-yellow-500">{user?.full_name?.split(' ')[0] || 'Admin'}</span>
             </h1>
-            <p className="text-lg text-casino-luxury-light font-casino-sans">
+            <p className="text-lg text-gray-300 font-sans">
               Your casino empire awaits. Monitor operations, track VIP members, and maximize revenue.
             </p>
             <div className="flex items-center mt-4 space-x-6">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-status-active rounded-full animate-pulse"></div>
-                <span className="text-sm text-status-active font-medium">All Systems Operational</span>
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm text-green-500 font-medium">All Systems Operational</span>
               </div>
               <div className="flex items-center space-x-2">
-                <SparklesIcon className="w-4 h-4 text-casino-gold" />
-                <span className="text-sm text-casino-gold font-medium">Peak Gaming Hours</span>
+                <SparklesIcon className="w-4 h-4 text-yellow-500" />
+                <span className="text-sm text-yellow-500 font-medium">Peak Gaming Hours</span>
               </div>
             </div>
           </div>
           
           {/* Casino Ambiance Icons */}
           <div className="flex items-center space-x-6">
-            <div className="text-6xl animate-pulse-gold">🎰</div>
+            <div className="text-6xl animate-pulse">🎰</div>
             <div className="flex flex-col items-center space-y-2">
-              <div className="w-4 h-4 bg-casino-gold rounded-full animate-pulse"></div>
-              <div className="w-3 h-3 bg-casino-gold/60 rounded-full animate-pulse"></div>
+              <div className="w-4 h-4 bg-yellow-500 rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-yellow-500/60 rounded-full animate-pulse"></div>
             </div>
-            <div className="text-5xl animate-luxury-glow">💎</div>
+            <div className="text-5xl">💎</div>
           </div>
         </div>
       </div>
