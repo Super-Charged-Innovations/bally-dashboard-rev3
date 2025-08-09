@@ -402,7 +402,7 @@ const AdvancedAnalytics = ({ user }) => {
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {predictiveModels.map((model) => (
+                    {(predictiveModels || []).map((model) => (
                       <div key={model.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
                         <div className="flex items-center justify-between mb-4">
                           <div>
