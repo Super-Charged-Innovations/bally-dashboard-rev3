@@ -21,6 +21,7 @@ import Analytics from './components/Analytics';
 import EnterpriseDashboard from './components/EnterpriseDashboard';
 import NotificationsManagement from './components/NotificationsManagement';
 import ComplianceDashboard from './components/ComplianceDashboard';
+import Settings from './components/Settings';
 
 // Services
 import authService from './services/authService';
