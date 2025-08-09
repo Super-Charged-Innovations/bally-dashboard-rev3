@@ -1,167 +1,327 @@
-/* Bally's Casino Admin Dashboard Styles */
+/* Bally's Casino Admin Dashboard - Luxury Design System */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Layer - Casino Luxury Foundations */
+@layer base {
+  html {
+    font-family: 'Inter', 'Roboto', sans-serif;
+  }
+  
+  body {
+    @apply antialiased bg-casino-luxury-black text-white;
+    font-feature-settings: 'kern', 'liga', 'clig', 'calt';
+  }
+  
+  /* Premium Typography Hierarchy */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', 'serif';
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  
+  /* Enhanced Scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-casino-luxury-gray;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-bally-600 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-casino-gold;
+  }
+}
+
+/* Component Layer - Casino UI Components */
+@layer components {
+  /* Casino Card System */
+  .casino-card {
+    @apply bg-luxury-gradient border border-casino-gold/20 rounded-xl shadow-luxury backdrop-blur-sm;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .casino-card:hover {
+    @apply border-casino-gold/40 shadow-gold transform -translate-y-1;
+  }
+  
+  .casino-card-header {
+    @apply border-b border-casino-gold/10 pb-4 mb-6;
+  }
+  
+  /* Premium Buttons */
+  .btn-casino-primary {
+    @apply bg-casino-gradient text-white px-6 py-3 rounded-lg font-casino-sans font-semibold;
+    @apply shadow-casino hover:shadow-gold transform hover:-translate-y-0.5 transition-all duration-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-casino-gold focus:ring-opacity-50;
+  }
+  
+  .btn-casino-secondary {
+    @apply bg-casino-luxury-gray text-casino-gold border border-casino-gold/30 px-6 py-3 rounded-lg;
+    @apply font-casino-sans font-semibold hover:bg-casino-gold/10 transition-all duration-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-casino-gold focus:ring-opacity-50;
+  }
+  
+  .btn-casino-ghost {
+    @apply bg-transparent text-casino-gold border border-casino-gold/20 px-6 py-3 rounded-lg;
+    @apply font-casino-sans font-medium hover:border-casino-gold/40 hover:bg-casino-gold/5 transition-all duration-300;
+  }
+  
+  /* Member Tier Badges */
+  .tier-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  }
+  
+  .tier-ruby {
+    @apply bg-tier-ruby text-white shadow-sm;
+  }
+  
+  .tier-sapphire {
+    @apply bg-tier-sapphire text-white shadow-sm;
+  }
+  
+  .tier-diamond {
+    @apply bg-tier-diamond text-white shadow-sm;
+  }
+  
+  .tier-vip {
+    @apply bg-tier-vip text-casino-luxury-black shadow-gold animate-pulse-gold;
+  }
+  
+  /* Status Indicators */
+  .status-active {
+    @apply bg-status-active/20 text-status-active border border-status-active/30;
+  }
+  
+  .status-inactive {
+    @apply bg-status-inactive/20 text-status-inactive border border-status-inactive/30;
+  }
+  
+  .status-warning {
+    @apply bg-status-warning/20 text-status-warning border border-status-warning/30;
+  }
+  
+  .status-critical {
+    @apply bg-status-critical/20 text-status-critical border border-status-critical/30;
+  }
+  
+  /* Premium Form Elements */
+  .casino-input {
+    @apply bg-casino-luxury-gray border border-casino-gold/20 text-white placeholder-casino-luxury-light;
+    @apply rounded-lg px-4 py-3 focus:border-casino-gold focus:ring-1 focus:ring-casino-gold;
+    @apply transition-all duration-300;
+  }
+  
+  .casino-select {
+    @apply bg-casino-luxury-gray border border-casino-gold/20 text-white rounded-lg px-4 py-3;
+    @apply focus:border-casino-gold focus:ring-1 focus:ring-casino-gold transition-all duration-300;
+  }
+  
+  /* Navigation Enhancements */
+  .nav-item {
+    @apply flex items-center px-4 py-3 text-casino-luxury-light rounded-lg transition-all duration-200;
+    @apply hover:bg-casino-gold/10 hover:text-casino-gold;
+  }
+  
+  .nav-item.active {
+    @apply bg-casino-gradient text-white shadow-casino;
+  }
+  
+  .nav-item-icon {
+    @apply w-5 h-5 mr-3 transition-all duration-200;
+  }
+  
+  /* Metric Cards */
+  .metric-card {
+    @apply casino-card p-6;
+  }
+  
+  .metric-card-value {
+    @apply text-3xl font-bold font-casino-mono text-casino-gold mb-2;
+  }
+  
+  .metric-card-label {
+    @apply text-sm text-casino-luxury-light font-medium;
+  }
+  
+  .metric-card-trend {
+    @apply inline-flex items-center text-xs font-medium mt-2;
+  }
+  
+  .metric-card-trend.positive {
+    @apply text-status-active;
+  }
+  
+  .metric-card-trend.negative {
+    @apply text-status-critical;
+  }
+  
+  /* Tables */
+  .casino-table {
+    @apply w-full border-collapse;
+  }
+  
+  .casino-table th {
+    @apply bg-casino-luxury-gray text-casino-gold text-left px-4 py-3 font-semibold text-sm;
+    @apply border-b border-casino-gold/20;
+  }
+  
+  .casino-table td {
+    @apply px-4 py-3 border-b border-casino-luxury-light/10 text-casino-luxury-light;
+  }
+  
+  .casino-table tr:hover {
+    @apply bg-casino-luxury-gray/30;
+  }
+  
+  /* Loading States */
+  .casino-spinner {
+    @apply inline-block w-6 h-6 border-2 border-casino-gold/20 border-t-casino-gold rounded-full animate-spin;
+  }
+  
+  .casino-skeleton {
+    @apply bg-casino-luxury-gray/50 rounded animate-pulse;
+  }
+}
+
+/* Utility Layer - Casino Specific Utilities */
+@layer utilities {
+  /* Typography Utilities */
+  .text-casino-display {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 4rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  
+  .text-casino-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  
+  .text-casino-body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+  }
+  
+  .text-casino-mono {
+    font-family: 'Fira Code', monospace;
+    font-feature-settings: 'kern', 'liga', 'clig', 'calt';
+  }
+  
+  /* Animation Utilities */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+  
+  .animate-slide-in-right {
+    animation: slideInRight 0.4s ease-out forwards;
+  }
+  
+  .animate-luxury-glow {
+    animation: luxuryGlow 2s ease-in-out infinite alternate;
+  }
+  
+  /* Background Utilities */
+  .bg-casino-pattern {
+    background-image: 
+      radial-gradient(circle at 2px 2px, rgba(255, 215, 0, 0.15) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+  
+  .bg-luxury-texture {
+    background-image: 
+      linear-gradient(45deg, transparent 40%, rgba(255, 215, 0, 0.03) 50%, transparent 60%);
+  }
+}
+
+/* Additional Keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes luxuryGlow {
+  from {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.3);
+  }
+}
+
+/* Dark Theme Override for Casino Aesthetic */
 .dashboard-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  @apply bg-casino-luxury-black min-h-screen;
 }
 
+/* Sidebar Enhancements */
 .sidebar {
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  @apply bg-luxury-gradient border-r border-casino-gold/20 shadow-luxury;
 }
 
-.metric-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+/* Casino Branding */
+.gradient-casino {
+  @apply bg-casino-gradient;
 }
 
-.metric-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+/* Responsive Design Enhancements */
+@media (max-width: 768px) {
+  .casino-card {
+    @apply mx-2 rounded-lg;
+  }
+  
+  .metric-card-value {
+    @apply text-2xl;
+  }
+  
+  .btn-casino-primary, .btn-casino-secondary, .btn-casino-ghost {
+    @apply px-4 py-2 text-sm;
+  }
 }
 
-.chart-container {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .casino-card {
+    @apply border-2 border-casino-gold;
+  }
+  
+  .nav-item.active {
+    @apply border-2 border-casino-gold;
+  }
 }
 
-.activity-item {
-  transition: all 0.2s ease;
-}
-
-.activity-item:hover {
-  background-color: #f8fafc;
-  transform: translateX(4px);
-}
-
-.casino-accent {
-  color: #C41E3A;
-}
-
-.gold-accent {
-  color: #FFD700;
-}
-
-.progress-circle {
-  stroke-linecap: round;
-  transition: stroke-dasharray 0.6s ease-in-out;
-}
-
-/* Loading spinner */
-.spinner {
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #C41E3A;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Button styles */
-.btn-primary {
-  background: linear-gradient(135deg, #C41E3A 0%, #8B0000 100%);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
-}
-
-.btn-secondary {
-  background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
-  color: #8B0000;
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-}
-
-/* Table styles */
-.data-table {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.table-header {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  font-weight: 600;
-  color: #374151;
-}
-
-.table-row {
-  border-bottom: 1px solid #e5e7eb;
-  transition: background-color 0.2s ease;
-}
-
-.table-row:hover {
-  background-color: #f9fafb;
-}
-
-/* Status badges */
-.status-active {
-  background-color: #10b981;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.status-inactive {
-  background-color: #6b7280;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.status-vip {
-  background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
-  color: #8B0000;
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.tier-ruby {
-  color: #DC2626;
-  font-weight: 600;
-}
-
-.tier-sapphire {
-  color: #2563EB;
-  font-weight: 600;
-}
-
-.tier-diamond {
-  color: #6B7280;
-  font-weight: 600;
-}
-
-.tier-vip {
-  color: #B8860B;
-  font-weight: 600;
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
