@@ -55,6 +55,7 @@ function App() {
       setUser(response.user_info);
       localStorage.setItem('access_token', response.access_token);
       localStorage.setItem('refresh_token', response.refresh_token);
+      localStorage.setItem('user_data', JSON.stringify(response.user_info));
       toast.success(`Welcome back, ${response.user_info.full_name}!`);
       return { success: true };
     } catch (error) {
