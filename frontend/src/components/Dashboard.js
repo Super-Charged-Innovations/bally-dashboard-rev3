@@ -280,18 +280,18 @@ const Dashboard = ({ user }) => {
         {metricCards.map((card, index) => {
           const Icon = card.icon;
           return (
-            <div key={index} className="metric-card group">
+            <div key={index} className="bg-gray-800 border border-yellow-500/20 rounded-xl shadow-lg p-6 group">
               <div className="flex items-center justify-between mb-6">
                 <div className={`p-4 rounded-xl ${card.bgColor} group-hover:scale-110 transition-transform duration-300`}>
                   <Icon className={`h-8 w-8 ${card.color}`} />
                 </div>
-                <div className={`text-sm font-bold px-3 py-1 rounded-full ${card.trend === 'positive' ? 'bg-status-active/20 text-status-active' : 'bg-status-critical/20 text-status-critical'}`}>
+                <div className={`text-sm font-bold px-3 py-1 rounded-full ${card.trend === 'positive' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}`}>
                   {card.change}
                 </div>
               </div>
               
               {/* Mini Casino Chart */}
-              <div className="h-20 mb-6 bg-casino-luxury-gray/20 rounded-lg p-2">
+              <div className="h-20 mb-6 bg-gray-700/20 rounded-lg p-2">
                 <div className="h-full flex items-end justify-between space-x-1">
                   {[4, 8, 6, 10, 12, 8, 14, 10, 16, 12, 18, 15].map((height, i) => (
                     <div
@@ -304,8 +304,8 @@ const Dashboard = ({ user }) => {
               </div>
               
               <div>
-                <p className="text-sm text-casino-luxury-light mb-2 font-casino-sans">{card.title}</p>
-                <p className="metric-card-value">{card.value}</p>
+                <p className="text-sm text-gray-300 mb-2 font-sans">{card.title}</p>
+                <p className="text-3xl font-bold text-yellow-500 mb-2">{card.value}</p>
               </div>
             </div>
           );
