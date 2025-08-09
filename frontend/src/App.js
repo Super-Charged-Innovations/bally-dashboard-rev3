@@ -35,14 +35,15 @@ function App() {
   const checkAuthStatus = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      if (token) {
-        const userData = await authService.getCurrentUser();
-        setUser(userData);
+      const userData = localStorage.getItem('user_data');
+      if (token && userData) {
+        setUser(JSON.parse(userData));
       }
     } catch (error) {
       console.error('Auth check failed:', error);
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user_data');
     } finally {
       setLoading(false);
     }
