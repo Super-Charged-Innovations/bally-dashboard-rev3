@@ -9,6 +9,7 @@ const Login = ({ onLogin, loading }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const { isDark } = useTheme();
 
   const handleChange = (e) => {
     setFormData({
