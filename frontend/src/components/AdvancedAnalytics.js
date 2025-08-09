@@ -234,7 +234,7 @@ const AdvancedAnalytics = ({ user }) => {
                       </div>
                     ) : (
                       <div className="space-y-4">
-                        {analytics.map((analysis) => (
+                        {(analytics || []).map((analysis) => (
                           <div key={analysis.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
                             <div className="flex items-center justify-between mb-4">
                               <div>
