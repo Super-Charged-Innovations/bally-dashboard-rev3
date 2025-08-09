@@ -538,9 +538,9 @@ class ApiService {
         total_members: 250,
         members_by_tier: { "Ruby": 75, "Sapphire": 100, "Diamond": 60, "VIP": 15 },
         active_sessions: 125,
-        daily_revenue: 0,
-        weekly_revenue: 25000,
-        monthly_revenue: 150000,
+        daily_revenue: 45750,
+        weekly_revenue: 325000,
+        monthly_revenue: 1450000,
         top_games: [
           { name: "Blackjack", sessions: 45 },
           { name: "Roulette", sessions: 38 },
@@ -577,11 +577,23 @@ class ApiService {
             total_spent: 45000,
             is_active: true,
             registration_date: "2023-08-22"
+          },
+          {
+            id: "3", 
+            first_name: "David",
+            last_name: "Wilson",
+            email: "david.wilson@example.com",
+            phone: "+94701111111",
+            tier: "Ruby",
+            points_balance: 850,
+            total_spent: 5200,
+            is_active: true,
+            registration_date: "2024-03-10"
           }
         ],
         total: 250,
         page: 1,
-        pages: 10
+        pages: 84
       });
     }
 
@@ -599,17 +611,224 @@ class ApiService {
             status: "completed",
             total_bet: 5000,
             total_win: 5750,
-            points_earned: 50
+            points_earned: 50,
+            member_name: "John Doe"
+          },
+          {
+            id: "sess-2",
+            member_id: "2",
+            game_type: "Roulette",
+            table_number: "RT-03",
+            start_time: "2025-01-09T14:00:00Z",
+            end_time: "2025-01-09T16:45:00Z",
+            status: "completed",
+            total_bet: 12000,
+            total_win: 18500,
+            points_earned: 120,
+            member_name: "Jane Smith"
           }
         ],
         total: 125,
+        page: 1,
+        pages: 42
+      });
+    }
+
+    // Gaming packages
+    if (endpoint.startsWith('/api/gaming/packages')) {
+      return Promise.resolve([
+        {
+          id: "pkg-1",
+          name: "VIP Experience",
+          description: "Premium gaming package with exclusive perks",
+          price: 25000,
+          duration: "4 hours",
+          is_active: true,
+          services: ["Private Table", "Premium Drinks", "Dedicated Host"]
+        },
+        {
+          id: "pkg-2",
+          name: "High Roller",
+          description: "Elite gaming package for serious players",
+          price: 50000,
+          duration: "8 hours",
+          is_active: true,
+          services: ["VIP Room", "Premium Service", "Luxury Transportation"]
+        }
+      ]);
+    }
+
+    // Rewards data
+    if (endpoint.startsWith('/api/rewards')) {
+      return Promise.resolve([
+        {
+          id: "reward-1",
+          name: "Welcome Bonus",
+          type: "points",
+          value: 1000,
+          description: "New member welcome bonus",
+          is_active: true,
+          requirements: "First visit"
+        },
+        {
+          id: "reward-2",
+          name: "VIP Dining Voucher",
+          type: "voucher",
+          value: 5000,
+          description: "Complimentary dining at premium restaurants",
+          is_active: true,
+          requirements: "Diamond tier or above"
+        }
+      ]);
+    }
+
+    // Analytics data
+    if (endpoint.startsWith('/api/analytics')) {
+      return Promise.resolve({
+        revenue_trend: [
+          { date: "2025-01-01", amount: 125000 },
+          { date: "2025-01-02", amount: 143000 },
+          { date: "2025-01-03", amount: 156000 },
+          { date: "2025-01-04", amount: 134000 },
+          { date: "2025-01-05", amount: 167000 }
+        ],
+        member_acquisition: [
+          { month: "Nov", count: 45 },
+          { month: "Dec", count: 62 },
+          { month: "Jan", count: 58 }
+        ],
+        game_popularity: [
+          { game: "Blackjack", sessions: 856 },
+          { game: "Roulette", sessions: 743 },
+          { game: "Poker", sessions: 612 },
+          { game: "Slots", sessions: 987 }
+        ]
+      });
+    }
+
+    // Marketing data
+    if (endpoint.startsWith('/api/marketing')) {
+      return Promise.resolve({
+        campaigns: [
+          {
+            id: "camp-1",
+            name: "New Year Promotion",
+            status: "active",
+            target_audience: "All Members",
+            start_date: "2025-01-01",
+            end_date: "2025-01-31",
+            budget: 50000,
+            performance: { reach: 1250, conversions: 156 }
+          }
+        ],
+        birthday_members: [
+          { id: "1", member_name: "Alice Johnson", tier: "VIP", birthday_date: "2025-01-15" }
+        ],
+        inactive_members: [
+          { id: "2", member_name: "Bob Wilson", tier: "Ruby", last_visit: "2024-11-20" }
+        ]
+      });
+    }
+
+    // Staff data
+    if (endpoint.startsWith('/api/staff')) {
+      return Promise.resolve({
+        staff_members: [
+          {
+            id: "staff-1",
+            first_name: "Maria",
+            last_name: "Rodriguez",
+            department: "Gaming",
+            position: "Dealer",
+            employee_id: "EMP001",
+            performance_score: 4.8,
+            employment_status: "active"
+          },
+          {
+            id: "staff-2",
+            first_name: "James",
+            last_name: "Chen",
+            department: "Security",
+            position: "Security Officer",
+            employee_id: "EMP002", 
+            performance_score: 4.6,
+            employment_status: "active"
+          }
+        ],
+        total_staff: 45,
+        staff_by_department: { Gaming: 15, Security: 8, "F&B": 12, Management: 5, Maintenance: 5 },
+        training_completion_rate: 87.5,
+        average_performance_score: 4.7
+      });
+    }
+
+    // Notifications
+    if (endpoint.startsWith('/api/notifications')) {
+      return Promise.resolve({
+        notifications: [
+          {
+            id: "notif-1",
+            title: "High-Value Transaction Alert",
+            message: "VIP member Jane Smith has placed a $50,000 bet",
+            category: "gaming",
+            priority: "high",
+            status: "unread",
+            created_at: "2025-01-09T15:30:00Z"
+          },
+          {
+            id: "notif-2",
+            title: "Staff Training Due",
+            message: "5 staff members have mandatory training due this week",
+            category: "staff",
+            priority: "medium",
+            status: "unread",
+            created_at: "2025-01-09T09:15:00Z"
+          }
+        ],
+        total: 12,
         page: 1,
         pages: 3
       });
     }
 
+    // Compliance data
+    if (endpoint.startsWith('/api/compliance')) {
+      return Promise.resolve({
+        reports: [
+          {
+            id: "comp-1",
+            report_type: "AML",
+            status: "completed",
+            generated_date: "2025-01-08",
+            findings: "No issues detected",
+            compliance_score: 98.5
+          },
+          {
+            id: "comp-2",
+            report_type: "PDPA",
+            status: "in_progress",
+            generated_date: "2025-01-09",
+            findings: "Under review",
+            compliance_score: 95.0
+          }
+        ],
+        total: 8,
+        compliance_overview: {
+          overall_score: 96.8,
+          last_audit: "2024-12-15",
+          next_audit: "2025-03-15",
+          critical_issues: 0,
+          warnings: 2
+        }
+      });
+    }
+
     // Default empty response for other endpoints
-    return Promise.resolve({ message: "Mock data not available for this endpoint" });
+    return Promise.resolve({ 
+      message: "Mock data not available for this endpoint",
+      data: [],
+      total: 0
+    });
   }
 }
 
