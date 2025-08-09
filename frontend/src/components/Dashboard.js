@@ -362,35 +362,37 @@ const Dashboard = ({ user }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* VIP Member Activity Feed */}
-        <div className="lg:col-span-2 casino-card p-6">
-          <div className="casino-card-header">
+        <div className="lg:col-span-2 bg-gray-800 border border-yellow-500/20 rounded-xl shadow-lg p-6">
+          <div className="border-b border-yellow-500/10 pb-4 mb-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-casino-gold font-casino-serif">🔥 Live High-Value Activity</h3>
-                <p className="text-casino-luxury-light text-sm mt-1">Real-time premium member transactions</p>
+                <h3 className="text-xl font-bold text-yellow-500 font-serif">🔥 Live High-Value Activity</h3>
+                <p className="text-gray-300 text-sm mt-1">Real-time premium member transactions</p>
               </div>
-              <button className="btn-casino-ghost px-4 py-2 text-sm">View All</button>
+              <button className="bg-transparent text-yellow-500 border border-yellow-500/20 px-4 py-2 rounded-lg text-sm hover:border-yellow-500/40 hover:bg-yellow-500/5 transition-all duration-300">
+                View All
+              </button>
             </div>
           </div>
           
           <div className="space-y-4">
             {vipActivities.map((activity) => (
-              <div key={activity.id} className="flex items-center justify-between p-4 bg-casino-luxury-gray/20 rounded-lg hover:bg-casino-gold/5 transition-colors group">
+              <div key={activity.id} className="flex items-center justify-between p-4 bg-gray-700/20 rounded-lg hover:bg-yellow-500/5 transition-colors group">
                 <div className="flex items-center space-x-4">
                   <div className="text-3xl group-hover:scale-110 transition-transform">{activity.icon}</div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h4 className="font-semibold text-white font-casino-sans">{activity.member}</h4>
-                      <div className={getTierBadgeClass(activity.tier)}>
+                      <h4 className="font-semibold text-white font-sans">{activity.member}</h4>
+                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${activity.tierColor}`}>
                         {activity.tier}
                       </div>
                     </div>
-                    <p className="text-sm text-casino-luxury-light">{activity.activity}</p>
+                    <p className="text-sm text-gray-300">{activity.activity}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-status-active text-lg font-casino-mono">{activity.amount}</p>
-                  <p className="text-xs text-casino-luxury-light">{activity.time}</p>
+                  <p className="font-bold text-green-500 text-lg font-mono">{activity.amount}</p>
+                  <p className="text-xs text-gray-300">{activity.time}</p>
                 </div>
               </div>
             ))}
@@ -398,48 +400,48 @@ const Dashboard = ({ user }) => {
         </div>
 
         {/* Casino Performance Summary */}
-        <div className="casino-card p-6">
-          <div className="casino-card-header">
-            <h3 className="text-xl font-bold text-casino-gold font-casino-serif">📈 Today's Performance</h3>
-            <p className="text-casino-luxury-light text-sm mt-1">Key gaming metrics</p>
+        <div className="bg-gray-800 border border-yellow-500/20 rounded-xl shadow-lg p-6">
+          <div className="border-b border-yellow-500/10 pb-4 mb-6">
+            <h3 className="text-xl font-bold text-yellow-500 font-serif">📈 Today's Performance</h3>
+            <p className="text-gray-300 text-sm mt-1">Key gaming metrics</p>
           </div>
           
           <div className="space-y-6">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-casino-luxury-light">Table Games Revenue</span>
-                <span className="text-sm font-bold text-casino-gold">68%</span>
+                <span className="text-sm text-gray-300">Table Games Revenue</span>
+                <span className="text-sm font-bold text-yellow-500">68%</span>
               </div>
-              <div className="w-full bg-casino-luxury-gray rounded-full h-3">
-                <div className="bg-tier-ruby h-3 rounded-full animate-pulse" style={{ width: '68%' }}></div>
-              </div>
-            </div>
-            
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-casino-luxury-light">Slot Machines</span>
-                <span className="text-sm font-bold text-casino-gold">45%</span>
-              </div>
-              <div className="w-full bg-casino-luxury-gray rounded-full h-3">
-                <div className="bg-tier-sapphire h-3 rounded-full animate-pulse" style={{ width: '45%' }}></div>
+              <div className="w-full bg-gray-700 rounded-full h-3">
+                <div className="bg-red-500 h-3 rounded-full animate-pulse" style={{ width: '68%' }}></div>
               </div>
             </div>
             
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-casino-luxury-light">VIP Room Activity</span>
-                <span className="text-sm font-bold text-casino-gold">92%</span>
+                <span className="text-sm text-gray-300">Slot Machines</span>
+                <span className="text-sm font-bold text-yellow-500">45%</span>
               </div>
-              <div className="w-full bg-casino-luxury-gray rounded-full h-3">
-                <div className="bg-casino-gold h-3 rounded-full animate-pulse-gold" style={{ width: '92%' }}></div>
+              <div className="w-full bg-gray-700 rounded-full h-3">
+                <div className="bg-blue-500 h-3 rounded-full animate-pulse" style={{ width: '45%' }}></div>
+              </div>
+            </div>
+            
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-300">VIP Room Activity</span>
+                <span className="text-sm font-bold text-yellow-500">92%</span>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-3">
+                <div className="bg-yellow-500 h-3 rounded-full animate-pulse" style={{ width: '92%' }}></div>
               </div>
             </div>
           </div>
           
           <div className="mt-8 text-center">
-            <p className="text-3xl font-bold text-casino-gold font-casino-mono mb-2">$125,750</p>
-            <p className="text-sm text-casino-luxury-light mb-4">Total Revenue Today</p>
-            <button className="btn-casino-primary w-full">
+            <p className="text-3xl font-bold text-yellow-500 font-mono mb-2">$125,750</p>
+            <p className="text-sm text-gray-300 mb-4">Total Revenue Today</p>
+            <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-red-500/30 transform hover:-translate-y-0.5 transition-all duration-300 w-full">
               🎰 View Detailed Analytics
             </button>
           </div>
@@ -447,21 +449,21 @@ const Dashboard = ({ user }) => {
       </div>
 
       {/* VIP Experience Promotional Banner */}
-      <div className="casino-card bg-luxury-gradient relative overflow-hidden">
-        <div className="absolute inset-0 bg-casino-pattern opacity-20"></div>
+      <div className="bg-gray-800 border border-yellow-500/20 rounded-xl shadow-lg relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20"></div>
         <div className="relative z-10 flex items-center justify-between p-8">
           <div className="flex-1">
-            <h3 className="text-2xl font-bold text-casino-gold mb-3 font-casino-serif">
+            <h3 className="text-2xl font-bold text-yellow-500 mb-3 font-serif">
               🌟 Exclusive VIP Experience Management
             </h3>
-            <p className="text-casino-luxury-light mb-6 text-lg font-casino-sans">
+            <p className="text-gray-300 mb-6 text-lg font-sans">
               Elevate your premium members with personalized luxury services and exclusive gaming experiences
             </p>
-            <button className="btn-casino-primary text-lg px-8 py-4">
+            <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-red-500/30 transform hover:-translate-y-0.5 transition-all duration-300 text-lg">
               Manage VIP Services
             </button>
           </div>
-          <div className="text-8xl opacity-80 animate-luxury-glow">👑</div>
+          <div className="text-8xl opacity-80">👑</div>
         </div>
       </div>
     </div>
