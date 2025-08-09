@@ -139,80 +139,8 @@ const getFilteredNavigationItems = (user) => {
 };
 
 const Sidebar = ({ isOpen, onToggle, user }) => {
-  const navigationItems = [
-    {
-      name: 'Dashboard',
-      icon: HomeIcon,
-      href: '/dashboard',
-      current: false,
-    },
-    {
-      name: 'Enterprise',
-      icon: BuildingOfficeIcon,
-      href: '/enterprise',
-      current: false,
-    },
-    {
-      name: 'Members',
-      icon: UsersIcon,
-      href: '/members',
-      current: false,
-    },
-    {
-      name: 'Gaming',
-      icon: PuzzlePieceIcon,
-      href: '/gaming',
-      current: false,
-    },
-    {
-      name: 'Rewards',
-      icon: GiftIcon,
-      href: '/rewards',
-      current: false,
-    },
-    {
-      name: 'Marketing',
-      icon: MegaphoneIcon,
-      href: '/marketing',
-      current: false,
-    },
-    {
-      name: 'Travel & VIP',
-      icon: CalendarDaysIcon,
-      href: '/travel',
-      current: false,
-    },
-    {
-      name: 'Staff',
-      icon: AcademicCapIcon,
-      href: '/staff',
-      current: false,
-    },
-    {
-      name: 'Advanced Analytics',
-      icon: ChartPieIcon,
-      href: '/advanced-analytics',
-      current: false,
-    },
-    {
-      name: 'Reports',
-      icon: ChartBarIcon,
-      href: '/analytics',
-      current: false,
-    },
-    {
-      name: 'Notifications',
-      icon: BellIcon,
-      href: '/notifications',
-      current: false,
-    },
-    {
-      name: 'Compliance',
-      icon: ShieldCheckIcon,
-      href: '/compliance',
-      current: false,
-    },
-  ];
+  // Get filtered navigation items based on user role and permissions
+  const navigationItems = getFilteredNavigationItems(user);
 
   const bottomItems = [
     {
