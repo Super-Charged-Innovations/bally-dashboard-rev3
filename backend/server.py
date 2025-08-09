@@ -24,12 +24,19 @@ import re
 
 load_dotenv()
 
+# Rate Limiting Configuration
+limiter = Limiter(key_func=get_remote_address)
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Bally's Casino Admin Dashboard API",
     description="Enterprise Casino Management Platform - Sri Lanka Compliant",
     version="1.0.0"
 )
+
+# Add rate limiter state
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS Configuration - SECURITY HARDENED
 app.add_middleware(
