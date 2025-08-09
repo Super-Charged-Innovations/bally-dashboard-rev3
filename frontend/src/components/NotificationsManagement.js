@@ -112,9 +112,9 @@ const NotificationsManagement = ({ user }) => {
     }
   };
 
-  const filteredNotifications = notifications.filter(notification =>
-    notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    notification.content.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredNotifications = (notifications || []).filter(notification =>
+    notification.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    notification.content?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
