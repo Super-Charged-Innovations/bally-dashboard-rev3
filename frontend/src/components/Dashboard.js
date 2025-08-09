@@ -233,26 +233,26 @@ const Dashboard = ({ user }) => {
   }
 
   return (
-    <div className="space-y-8 bg-gray-900 min-h-screen p-6 animate-fade-in-up">
+    <div className="space-y-8 bg-adaptive-bg min-h-screen p-6 animate-fade-in-up">
       {/* Welcome Header with Casino Ambiance */}
-      <div className="bg-gray-800 border border-yellow-500/20 rounded-xl shadow-lg p-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 rounded-full blur-2xl"></div>
+      <div className="casino-card p-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-adaptive-text-accent/5 rounded-full blur-2xl"></div>
         <div className="relative z-10 flex items-center justify-between">
           <div className="flex-1">
-            <h1 className="text-4xl font-bold text-white font-serif mb-3">
-              Welcome back, <span className="text-yellow-500">{user?.full_name?.split(' ')[0] || 'Admin'}</span>
+            <h1 className="text-4xl font-bold text-adaptive-text font-casino-serif mb-3">
+              Welcome back, <span className="text-adaptive-text-accent">{user?.full_name?.split(' ')[0] || 'Admin'}</span>
             </h1>
-            <p className="text-lg text-gray-300 font-sans">
+            <p className="text-lg text-adaptive-text-muted font-casino-sans">
               Your casino empire awaits. Monitor operations, track VIP members, and maximize revenue.
             </p>
             <div className="flex items-center mt-4 space-x-6">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-sm text-green-500 font-medium">All Systems Operational</span>
+                <div className="w-3 h-3 bg-status-active rounded-full animate-pulse"></div>
+                <span className="text-sm text-status-active font-medium">All Systems Operational</span>
               </div>
               <div className="flex items-center space-x-2">
-                <SparklesIcon className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm text-yellow-500 font-medium">Peak Gaming Hours</span>
+                <SparklesIcon className="w-4 h-4 text-adaptive-text-accent" />
+                <span className="text-sm text-adaptive-text-accent font-medium">Peak Gaming Hours</span>
               </div>
             </div>
           </div>
@@ -261,8 +261,8 @@ const Dashboard = ({ user }) => {
           <div className="flex items-center space-x-6">
             <div className="text-6xl animate-pulse">🎰</div>
             <div className="flex flex-col items-center space-y-2">
-              <div className="w-4 h-4 bg-yellow-500 rounded-full animate-pulse"></div>
-              <div className="w-3 h-3 bg-yellow-500/60 rounded-full animate-pulse"></div>
+              <div className="w-4 h-4 bg-adaptive-text-accent rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-adaptive-text-accent/60 rounded-full animate-pulse"></div>
             </div>
             <div className="text-5xl">💎</div>
           </div>
@@ -274,18 +274,18 @@ const Dashboard = ({ user }) => {
         {metricCards.map((card, index) => {
           const Icon = card.icon;
           return (
-            <div key={index} className="bg-gray-800 border border-yellow-500/20 rounded-xl shadow-lg p-6 group">
+            <div key={index} className="casino-card p-6 group">
               <div className="flex items-center justify-between mb-6">
                 <div className={`p-4 rounded-xl ${card.bgColor} group-hover:scale-110 transition-transform duration-300`}>
                   <Icon className={`h-8 w-8 ${card.color}`} />
                 </div>
-                <div className={`text-sm font-bold px-3 py-1 rounded-full ${card.trend === 'positive' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}`}>
+                <div className={`text-sm font-bold px-3 py-1 rounded-full ${card.trend === 'positive' ? 'bg-status-active/20 text-status-active' : 'bg-status-critical/20 text-status-critical'}`}>
                   {card.change}
                 </div>
               </div>
               
               {/* Mini Casino Chart */}
-              <div className="h-20 mb-6 bg-gray-700/20 rounded-lg p-2">
+              <div className="h-20 mb-6 bg-adaptive-surface/50 rounded-lg p-2">
                 <div className="h-full flex items-end justify-between space-x-1">
                   {[4, 8, 6, 10, 12, 8, 14, 10, 16, 12, 18, 15].map((height, i) => (
                     <div
@@ -298,8 +298,8 @@ const Dashboard = ({ user }) => {
               </div>
               
               <div>
-                <p className="text-sm text-gray-300 mb-2 font-sans">{card.title}</p>
-                <p className="text-3xl font-bold text-yellow-500 mb-2">{card.value}</p>
+                <p className="text-sm text-adaptive-text-muted mb-2 font-casino-sans">{card.title}</p>
+                <p className="text-3xl font-bold text-adaptive-text-accent mb-2">{card.value}</p>
               </div>
             </div>
           );
