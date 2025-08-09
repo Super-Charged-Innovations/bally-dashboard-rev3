@@ -23,9 +23,11 @@ const RewardsManagement = ({ user }) => {
     try {
       setLoading(true);
       const rewardsData = await apiService.getRewards();
-      setRewards(rewardsData);
+      console.log('Rewards data received:', rewardsData); // Debug log
+      setRewards(Array.isArray(rewardsData) ? rewardsData : []); // Ensure it's always an array
     } catch (error) {
       console.error('Failed to fetch rewards:', error);
+      setRewards([]); // Set empty array on error
       toast.error('Failed to load rewards');
     } finally {
       setLoading(false);
