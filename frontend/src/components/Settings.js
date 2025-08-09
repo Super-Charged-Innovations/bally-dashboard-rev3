@@ -714,6 +714,23 @@ const Settings = ({ user }) => {
       </div>
     </div>
   );
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'profile':
+        return renderProfileSettings();
+      case 'appearance':
+        return renderAppearanceSettings();
+      case 'notifications':
+        return renderNotificationSettings();
+      case 'security':
+        return renderSecuritySettings();
+      case 'casino':
+        return renderCasinoSettings();
+      case 'system':
+        return renderSystemSettings();
+      case 'privacy':
+        return renderPrivacySettings();
       default:
         return renderAppearanceSettings();
     }
