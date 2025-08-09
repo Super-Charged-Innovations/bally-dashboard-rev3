@@ -529,6 +529,88 @@ class ApiService {
   async healthCheck() {
     return this.request('/api/health');
   }
+
+  // TEMPORARY: Mock data for bypass mode
+  getMockData(endpoint) {
+    // Dashboard metrics
+    if (endpoint === '/api/dashboard/metrics') {
+      return Promise.resolve({
+        total_members: 250,
+        members_by_tier: { "Ruby": 75, "Sapphire": 100, "Diamond": 60, "VIP": 15 },
+        active_sessions: 125,
+        daily_revenue: 0,
+        weekly_revenue: 25000,
+        monthly_revenue: 150000,
+        top_games: [
+          { name: "Blackjack", sessions: 45 },
+          { name: "Roulette", sessions: 38 },
+          { name: "Poker", sessions: 32 }
+        ],
+        recent_registrations: 8
+      });
+    }
+
+    // Members data
+    if (endpoint.startsWith('/api/members')) {
+      return Promise.resolve({
+        members: [
+          {
+            id: "1",
+            first_name: "John",
+            last_name: "Doe",
+            email: "john.doe@example.com",
+            phone: "+94701234567",
+            tier: "Diamond",
+            points_balance: 2500,
+            total_spent: 15000,
+            is_active: true,
+            registration_date: "2024-01-15"
+          },
+          {
+            id: "2", 
+            first_name: "Jane",
+            last_name: "Smith",
+            email: "jane.smith@example.com",
+            phone: "+94709876543",
+            tier: "VIP",
+            points_balance: 5500,
+            total_spent: 45000,
+            is_active: true,
+            registration_date: "2023-08-22"
+          }
+        ],
+        total: 250,
+        page: 1,
+        pages: 10
+      });
+    }
+
+    // Gaming sessions
+    if (endpoint.startsWith('/api/gaming/sessions')) {
+      return Promise.resolve({
+        sessions: [
+          {
+            id: "sess-1",
+            member_id: "1",
+            game_type: "Blackjack",
+            table_number: "BJ-01",
+            start_time: "2025-01-09T10:00:00Z",
+            end_time: "2025-01-09T12:30:00Z",
+            status: "completed",
+            total_bet: 5000,
+            total_win: 5750,
+            points_earned: 50
+          }
+        ],
+        total: 125,
+        page: 1,
+        pages: 3
+      });
+    }
+
+    // Default empty response for other endpoints
+    return Promise.resolve({ message: "Mock data not available for this endpoint" });
+  }
 }
 
 export default new ApiService();
