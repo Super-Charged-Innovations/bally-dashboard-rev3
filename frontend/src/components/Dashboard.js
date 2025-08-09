@@ -5,7 +5,8 @@ import {
   ArrowTrendingUpIcon,
   PuzzlePieceIcon,
   ChartBarIcon,
-  ClockIcon
+  ClockIcon,
+  SparklesIcon
 } from '@heroicons/react/24/outline';
 import { Line, Doughnut } from 'react-chartjs-2';
 import {
@@ -64,17 +65,22 @@ const Dashboard = ({ user }) => {
     }
   };
 
-  // Mock data for charts (in real implementation, this would come from API)
-  const weeklyUsersData = {
+  // Casino-themed chart data with luxury styling
+  const casinoActivityData = {
     labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     datasets: [
       {
-        label: 'Active Users',
+        label: 'Gaming Floor Activity',
         data: [8000, 12000, 15000, 18000, 22000, 25000, 30000],
-        borderColor: '#3B82F6',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderColor: '#FFD700',
+        backgroundColor: 'rgba(255, 215, 0, 0.1)',
         tension: 0.4,
         fill: true,
+        pointBorderColor: '#FFD700',
+        pointBackgroundColor: '#1A1A1A',
+        pointBorderWidth: 3,
+        pointRadius: 6,
+        pointHoverRadius: 8,
       },
     ],
   };
@@ -91,9 +97,14 @@ const Dashboard = ({ user }) => {
       y: {
         beginAtZero: true,
         grid: {
-          color: 'rgba(0, 0, 0, 0.05)',
+          color: 'rgba(255, 215, 0, 0.1)',
         },
         ticks: {
+          color: '#FFD700',
+          font: {
+            family: 'Inter',
+            size: 12,
+          },
           callback: function(value) {
             return value / 1000 + 'K';
           },
@@ -103,17 +114,26 @@ const Dashboard = ({ user }) => {
         grid: {
           display: false,
         },
+        ticks: {
+          color: '#4A4A4A',
+          font: {
+            family: 'Inter',
+            size: 12,
+          },
+        },
       },
     },
   };
 
-  const tierDistributionData = {
-    labels: ['Individual Orders', 'Tourist Crowd'],
+  const memberTierData = {
+    labels: ['VIP', 'Diamond', 'Sapphire', 'Ruby'],
     datasets: [
       {
-        data: [38, 12],
-        backgroundColor: ['#3B82F6', '#F59E0B'],
+        data: [8, 15, 35, 42],
+        backgroundColor: ['#FFD700', '#9E9E9E', '#1976D2', '#E53935'],
         borderWidth: 0,
+        hoverBorderColor: '#FFD700',
+        hoverBorderWidth: 3,
       },
     ],
   };
@@ -130,268 +150,324 @@ const Dashboard = ({ user }) => {
 
   const metricCards = [
     {
-      title: 'Total Members',
-      value: metrics?.total_members || '1001',
+      title: 'Active Members',
+      value: metrics?.total_members || '250',
       change: '+12%',
       icon: UsersIcon,
-      color: 'text-pink-600',
-      bgColor: 'bg-pink-50',
-      chart: 'purchases'
+      color: 'text-tier-ruby',
+      bgColor: 'bg-tier-ruby/10',
+      gradient: 'bg-tier-ruby',
+      trend: 'positive'
     },
     {
-      title: 'Active Sessions',
-      value: metrics?.active_sessions || '1005',
+      title: 'Gaming Sessions',
+      value: metrics?.active_sessions || '125',
       change: '+8%',
       icon: PuzzlePieceIcon,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-      chart: 'sales'
+      color: 'text-tier-sapphire',
+      bgColor: 'bg-tier-sapphire/10',
+      gradient: 'bg-tier-sapphire',
+      trend: 'positive'
     },
     {
       title: 'Daily Revenue',
-      value: `$${metrics?.daily_revenue?.toFixed(0) || '101'}`,
+      value: `$${metrics?.daily_revenue?.toLocaleString() || '45,750'}`,
       change: '+15%',
       icon: CurrencyDollarIcon,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
-      chart: 'returns'
+      color: 'text-casino-gold',
+      bgColor: 'bg-casino-gold/10',
+      gradient: 'bg-gold-gradient',
+      trend: 'positive'
     },
   ];
 
-  const recentActivities = [
+  const vipActivities = [
     {
       id: 1,
-      title: 'Birdsight',
-      subtitle: 'Site Complete',
-      value: '+$290',
-      items: 'items1',
-      icon: '🏢',
-      color: 'text-green-600'
+      member: 'Patricia Wong',
+      tier: 'VIP',
+      activity: 'High Stakes Table',
+      amount: '+$12,500',
+      time: '2 mins ago',
+      icon: '💎',
     },
     {
       id: 2,
-      title: 'Flower Shop',
-      subtitle: 'Bouquet',
-      value: '+$72',
-      items: 'items21',
-      icon: '🌸',
-      color: 'text-green-600'
+      member: 'James Rodriguez',
+      tier: 'Diamond',
+      activity: 'Slot Tournament',
+      amount: '+$3,200',
+      time: '8 mins ago',
+      icon: '🏆',
     },
     {
       id: 3,
-      title: 'Book Shop',
-      subtitle: 'Collection',
-      value: '+$35',
-      items: 'items7',
-      icon: '📚',
-      color: 'text-green-600'
+      member: 'Chen Wei Lin',
+      tier: 'Sapphire',
+      activity: 'Blackjack Session',
+      amount: '+$1,850',
+      time: '15 mins ago',
+      icon: '🃏',
     },
     {
       id: 4,
-      title: 'Illustration',
-      subtitle: 'Window Theme',
-      value: '+$196',
-      items: 'items54',
-      icon: '🎨',
-      color: 'text-green-600'
+      member: 'Sarah Johnson',
+      tier: 'VIP',
+      activity: 'Private Room',
+      amount: '+$8,750',
+      time: '23 mins ago',
+      icon: '🎰',
     },
   ];
 
+  const getTierBadgeClass = (tier) => {
+    switch (tier) {
+      case 'VIP': return 'tier-badge tier-vip';
+      case 'Diamond': return 'tier-badge tier-diamond';
+      case 'Sapphire': return 'tier-badge tier-sapphire';
+      case 'Ruby': return 'tier-badge tier-ruby';
+      default: return 'tier-badge bg-casino-luxury-gray';
+    }
+  };
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="spinner w-8 h-8"></div>
+      <div className="flex items-center justify-center h-64 bg-casino-luxury-black">
+        <div className="casino-spinner w-12 h-12"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in-up">
-      {/* Header with Illustration */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm">
-        <div className="flex items-center justify-between">
+    <div className="space-y-8 bg-casino-luxury-black bg-luxury-texture min-h-screen p-6 animate-fade-in-up">
+      {/* Welcome Header with Casino Ambiance */}
+      <div className="casino-card p-8 bg-luxury-texture relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-casino-gold/5 rounded-full blur-2xl"></div>
+        <div className="relative z-10 flex items-center justify-between">
           <div className="flex-1">
-            <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-              Welcome back, {user?.full_name?.split(' ')[0] || 'Pixy Krovasky'}
+            <h1 className="text-4xl font-bold text-white font-casino-serif mb-3">
+              Welcome back, <span className="text-casino-gold">{user?.full_name?.split(' ')[0] || 'Pixy Krovasky'}</span>
             </h1>
-            <p className="text-gray-600">
-              We're very happy to see you on your personal dashboard
+            <p className="text-lg text-casino-luxury-light font-casino-sans">
+              Your casino empire awaits. Monitor operations, track VIP members, and maximize revenue.
             </p>
+            <div className="flex items-center mt-4 space-x-6">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-status-active rounded-full animate-pulse"></div>
+                <span className="text-sm text-status-active font-medium">All Systems Operational</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <SparklesIcon className="w-4 h-4 text-casino-gold" />
+                <span className="text-sm text-casino-gold font-medium">Peak Gaming Hours</span>
+              </div>
+            </div>
           </div>
           
-          {/* Illustration */}
-          <div className="flex items-center space-x-4">
-            <div className="text-6xl">👨‍💼</div>
+          {/* Casino Ambiance Icons */}
+          <div className="flex items-center space-x-6">
+            <div className="text-6xl animate-pulse-gold">🎰</div>
             <div className="flex flex-col items-center space-y-2">
-              <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+              <div className="w-4 h-4 bg-casino-gold rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-casino-gold/60 rounded-full animate-pulse"></div>
             </div>
-            <div className="text-4xl">☕</div>
+            <div className="text-5xl animate-luxury-glow">💎</div>
           </div>
         </div>
       </div>
 
-      {/* Metric Cards */}
+      {/* Casino Performance Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {metricCards.map((card, index) => {
           const Icon = card.icon;
           return (
-            <div key={index} className="bg-white rounded-2xl p-6 shadow-sm metric-card">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-lg ${card.bgColor}`}>
-                  <Icon className={`h-6 w-6 ${card.color}`} />
+            <div key={index} className="metric-card group">
+              <div className="flex items-center justify-between mb-6">
+                <div className={`p-4 rounded-xl ${card.bgColor} group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon className={`h-8 w-8 ${card.color}`} />
                 </div>
-                <span className="text-sm text-green-600 font-medium">{card.change}</span>
+                <div className={`text-sm font-bold px-3 py-1 rounded-full ${card.trend === 'positive' ? 'bg-status-active/20 text-status-active' : 'bg-status-critical/20 text-status-critical'}`}>
+                  {card.change}
+                </div>
               </div>
               
-              {/* Mini Chart */}
-              <div className="h-16 mb-4">
-                {index === 0 && (
-                  <div className="h-full flex items-end justify-between space-x-1">
-                    {[4, 8, 6, 10, 12, 8, 14, 10, 16, 12, 18, 15].map((height, i) => (
-                      <div
-                        key={i}
-                        className="bg-pink-200 rounded-sm flex-1"
-                        style={{ height: `${height * 3}px` }}
-                      />
-                    ))}
-                  </div>
-                )}
-                {index === 1 && (
-                  <div className="h-full flex items-end justify-between space-x-1">
-                    {[6, 10, 8, 14, 16, 12, 18, 14, 20, 16, 22, 18].map((height, i) => (
-                      <div
-                        key={i}
-                        className="bg-purple-200 rounded-sm flex-1"
-                        style={{ height: `${height * 3}px` }}
-                      />
-                    ))}
-                  </div>
-                )}
-                {index === 2 && (
-                  <div className="h-full flex items-end justify-between space-x-1">
-                    {[8, 12, 10, 16, 18, 14, 20, 16, 22, 18, 24, 20].map((height, i) => (
-                      <div
-                        key={i}
-                        className="bg-blue-200 rounded-sm flex-1"
-                        style={{ height: `${height * 3}px` }}
-                      />
-                    ))}
-                  </div>
-                )}
+              {/* Mini Casino Chart */}
+              <div className="h-20 mb-6 bg-casino-luxury-gray/20 rounded-lg p-2">
+                <div className="h-full flex items-end justify-between space-x-1">
+                  {[4, 8, 6, 10, 12, 8, 14, 10, 16, 12, 18, 15].map((height, i) => (
+                    <div
+                      key={i}
+                      className={`${card.gradient} rounded-sm flex-1 opacity-60 hover:opacity-100 transition-opacity`}
+                      style={{ height: `${height * 3}px` }}
+                    />
+                  ))}
+                </div>
               </div>
               
               <div>
-                <p className="text-sm text-gray-600 mb-1">{card.title}</p>
-                <p className="text-2xl font-bold text-gray-900">{card.value}</p>
+                <p className="text-sm text-casino-luxury-light mb-2 font-casino-sans">{card.title}</p>
+                <p className="metric-card-value">{card.value}</p>
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Users Chart */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm chart-container">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Users in the last 6 hours</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Gaming Floor Activity Chart */}
+        <div className="lg:col-span-2 casino-card p-6">
+          <div className="casino-card-header">
+            <h3 className="text-xl font-bold text-casino-gold font-casino-serif">🎯 Gaming Floor Activity</h3>
+            <p className="text-casino-luxury-light text-sm mt-1">Live player engagement across the week</p>
+          </div>
           <div className="h-80">
-            <Line data={weeklyUsersData} options={chartOptions} />
+            <Line data={casinoActivityData} options={chartOptions} />
           </div>
         </div>
 
-        {/* Followers Section */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Followers</h3>
-          <p className="text-gray-600 mb-4">
-            We're very happy to see you again on your personal dashboard.
-          </p>
-          <button className="text-orange-500 font-medium text-sm mb-6">Learn More</button>
+        {/* Member Tier Distribution */}
+        <div className="casino-card p-6">
+          <div className="casino-card-header">
+            <h3 className="text-xl font-bold text-casino-gold font-casino-serif">👑 VIP Tiers</h3>
+            <p className="text-casino-luxury-light text-sm mt-1">Premium member distribution</p>
+          </div>
           
-          <div className="flex items-center justify-center mb-4">
-            <div className="relative w-32 h-32">
+          <div className="flex items-center justify-center mb-6">
+            <div className="relative w-40 h-40">
               <div className="w-full h-full">
-                <Doughnut data={tierDistributionData} options={doughnutOptions} />
+                <Doughnut data={memberTierData} options={doughnutOptions} />
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-bold text-gray-900">86%</span>
+                <div className="text-center">
+                  <span className="text-3xl font-bold text-casino-gold font-casino-mono">250</span>
+                  <p className="text-xs text-casino-luxury-light">Members</p>
+                </div>
               </div>
             </div>
+          </div>
+          
+          <div className="space-y-3">
+            {[
+              { tier: 'VIP', count: 8, percentage: 8 },
+              { tier: 'Diamond', count: 15, percentage: 15 },
+              { tier: 'Sapphire', count: 35, percentage: 35 },
+              { tier: 'Ruby', count: 42, percentage: 42 }
+            ].map((item, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className={getTierBadgeClass(item.tier)}>
+                    {item.tier}
+                  </div>
+                  <span className="text-sm text-casino-luxury-light">{item.count} members</span>
+                </div>
+                <span className="text-sm text-casino-gold font-bold">{item.percentage}%</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Active Projects */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Active Projects</h3>
-            <button className="text-blue-600 text-sm font-medium">View All</button>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* VIP Member Activity Feed */}
+        <div className="lg:col-span-2 casino-card p-6">
+          <div className="casino-card-header">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-casino-gold font-casino-serif">🔥 Live High-Value Activity</h3>
+                <p className="text-casino-luxury-light text-sm mt-1">Real-time premium member transactions</p>
+              </div>
+              <button className="btn-casino-ghost px-4 py-2 text-sm">View All</button>
+            </div>
           </div>
           
           <div className="space-y-4">
-            {recentActivities.map((activity) => (
-              <div key={activity.id} className="flex items-center justify-between p-3 rounded-lg activity-item">
-                <div className="flex items-center space-x-3">
-                  <div className="text-2xl">{activity.icon}</div>
+            {vipActivities.map((activity) => (
+              <div key={activity.id} className="flex items-center justify-between p-4 bg-casino-luxury-gray/20 rounded-lg hover:bg-casino-gold/5 transition-colors group">
+                <div className="flex items-center space-x-4">
+                  <div className="text-3xl group-hover:scale-110 transition-transform">{activity.icon}</div>
                   <div>
-                    <h4 className="font-medium text-gray-900">{activity.title}</h4>
-                    <p className="text-sm text-gray-500">{activity.subtitle}</p>
+                    <div className="flex items-center space-x-2">
+                      <h4 className="font-semibold text-white font-casino-sans">{activity.member}</h4>
+                      <div className={getTierBadgeClass(activity.tier)}>
+                        {activity.tier}
+                      </div>
+                    </div>
+                    <p className="text-sm text-casino-luxury-light">{activity.activity}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className={`font-semibold ${activity.color}`}>{activity.value}</p>
-                  <p className="text-sm text-gray-500">{activity.items}</p>
+                  <p className="font-bold text-status-active text-lg font-casino-mono">{activity.amount}</p>
+                  <p className="text-xs text-casino-luxury-light">{activity.time}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Monthly Profits */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Monthly Profits</h3>
-          <p className="text-sm text-gray-600 mb-6">Total Profit Growth of 25%</p>
+        {/* Casino Performance Summary */}
+        <div className="casino-card p-6">
+          <div className="casino-card-header">
+            <h3 className="text-xl font-bold text-casino-gold font-casino-serif">📈 Today's Performance</h3>
+            <p className="text-casino-luxury-light text-sm mt-1">Key gaming metrics</p>
+          </div>
           
-          <div className="space-y-4 mb-6">
+          <div className="space-y-6">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600">Individual Orders</span>
-                <span className="text-sm font-medium">38%</span>
+                <span className="text-sm text-casino-luxury-light">Table Games Revenue</span>
+                <span className="text-sm font-bold text-casino-gold">68%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-blue-600 h-2 rounded-full" style={{ width: '38%' }}></div>
+              <div className="w-full bg-casino-luxury-gray rounded-full h-3">
+                <div className="bg-tier-ruby h-3 rounded-full animate-pulse" style={{ width: '68%' }}></div>
               </div>
             </div>
             
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600">Tourist Crowd</span>
-                <span className="text-sm font-medium">12%</span>
+                <span className="text-sm text-casino-luxury-light">Slot Machines</span>
+                <span className="text-sm font-bold text-casino-gold">45%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-orange-500 h-2 rounded-full" style={{ width: '12%' }}></div>
+              <div className="w-full bg-casino-luxury-gray rounded-full h-3">
+                <div className="bg-tier-sapphire h-3 rounded-full animate-pulse" style={{ width: '45%' }}></div>
+              </div>
+            </div>
+            
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-casino-luxury-light">VIP Room Activity</span>
+                <span className="text-sm font-bold text-casino-gold">92%</span>
+              </div>
+              <div className="w-full bg-casino-luxury-gray rounded-full h-3">
+                <div className="bg-casino-gold h-3 rounded-full animate-pulse-gold" style={{ width: '92%' }}></div>
               </div>
             </div>
           </div>
           
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 mb-1">$1200</p>
-            <p className="text-sm text-gray-600">Total</p>
+          <div className="mt-8 text-center">
+            <p className="text-3xl font-bold text-casino-gold font-casino-mono mb-2">$125,750</p>
+            <p className="text-sm text-casino-luxury-light mb-4">Total Revenue Today</p>
+            <button className="btn-casino-primary w-full">
+              🎰 View Detailed Analytics
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Promotional Banner */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl p-6 text-white">
-        <div className="flex items-center justify-between">
+      {/* VIP Experience Promotional Banner */}
+      <div className="casino-card bg-luxury-gradient relative overflow-hidden">
+        <div className="absolute inset-0 bg-casino-pattern opacity-20"></div>
+        <div className="relative z-10 flex items-center justify-between p-8">
           <div className="flex-1">
-            <h3 className="text-xl font-bold mb-2">Buy Uko & Get 15% Off</h3>
-            <p className="text-pink-100 mb-4">Well Designed Theme to make everything better</p>
-            <button className="bg-white text-purple-600 px-6 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-              Buy Now
+            <h3 className="text-2xl font-bold text-casino-gold mb-3 font-casino-serif">
+              🌟 Exclusive VIP Experience Management
+            </h3>
+            <p className="text-casino-luxury-light mb-6 text-lg font-casino-sans">
+              Elevate your premium members with personalized luxury services and exclusive gaming experiences
+            </p>
+            <button className="btn-casino-primary text-lg px-8 py-4">
+              Manage VIP Services
             </button>
           </div>
-          <div className="text-6xl opacity-80">🎁</div>
+          <div className="text-8xl opacity-80 animate-luxury-glow">👑</div>
         </div>
       </div>
     </div>
