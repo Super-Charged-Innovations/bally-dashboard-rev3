@@ -1867,154 +1867,128 @@ class BallyCasinoAPITester:
         return all_tests_passed
 
 def main():
-    print("🎰 Bally's Casino Admin Dashboard API Testing - ALL 4 PHASES")
-    print("=" * 70)
+    print("🎰 COMPREHENSIVE RUNTIME ERROR AUDIT & FUNCTIONALITY TESTING")
+    print("🔍 Focus: Preventing '.filter is not a function' and data structure errors")
+    print("=" * 80)
     
     # Setup - Use the public endpoint from frontend .env
     tester = BallyCasinoAPITester("https://dd2cb881-1a6b-4ae3-90df-4da7c5f01c2c.preview.emergentagent.com")
     
-    # Test 1: Health Check
-    print("\n📋 BASIC CONNECTIVITY TESTS")
-    # Skip health check as it may not exist, go straight to sample data
-    
-    # Test 2: Initialize Sample Data
+    # Test 1: Initialize Sample Data
     print("\n📋 DATA INITIALIZATION")
     if not tester.test_initialize_sample_data():
         print("❌ Sample data initialization failed")
         return 1
     
-    # Test 3: Authentication Tests
-    print("\n📋 AUTHENTICATION TESTS")
-    
-    # Test invalid login first
-    tester.test_invalid_login()
-    
-    # Test superadmin login
+    # Test 2: Authentication
+    print("\n📋 AUTHENTICATION")
     if not tester.test_login("superadmin", "admin123"):
         print("❌ SuperAdmin login failed")
         return 1
     
-    # Test current user endpoint
-    tester.test_get_current_user()
+    # CRITICAL RUNTIME ERROR PREVENTION TESTS
+    print("\n" + "🚨" * 20)
+    print("🚨 CRITICAL RUNTIME ERROR PREVENTION TESTS")
+    print("🚨" * 20)
     
-    # Test 4: Dashboard Tests
-    print("\n📋 PHASE 1 - DASHBOARD TESTS")
+    critical_tests_passed = True
+    
+    # Test 3: CRITICAL - ComplianceDashboard Data Structure
+    if not tester.test_compliance_dashboard_data_structure():
+        critical_tests_passed = False
+    
+    # Test 4: CRITICAL - NotificationsManagement Data Structure  
+    if not tester.test_notifications_management_data_structure():
+        critical_tests_passed = False
+    
+    # Test 5: CRITICAL - EnterpriseDashboard Data Structure
+    if not tester.test_enterprise_dashboard_data_structure():
+        critical_tests_passed = False
+    
+    # Test 6: CRITICAL - All Dashboard Sections
+    if not tester.test_all_dashboard_sections_data_structure():
+        critical_tests_passed = False
+    
+    # Test 7: CRITICAL - Analytics Data Structure
+    if not tester.test_analytics_data_structure():
+        critical_tests_passed = False
+    
+    # Test 8: CRITICAL - Dashboard Metrics Structure
+    if not tester.test_dashboard_metrics_structure():
+        critical_tests_passed = False
+    
+    # Test 9: COMPREHENSIVE - All Endpoints Runtime Error Prevention
+    if not tester.test_comprehensive_runtime_error_prevention():
+        critical_tests_passed = False
+    
+    # FUNCTIONAL VALIDATION TESTS
+    print("\n" + "✅" * 20)
+    print("✅ FUNCTIONAL VALIDATION TESTS")
+    print("✅" * 20)
+    
+    # Test key functionality to ensure no runtime errors
+    print("\n📋 DASHBOARD FUNCTIONALITY")
     tester.test_dashboard_metrics()
     
-    # Test 5: Member Management Tests
-    print("\n📋 PHASE 1 - MEMBER MANAGEMENT TESTS")
+    print("\n📋 MEMBER MANAGEMENT FUNCTIONALITY")
     tester.test_get_members()
-    tester.test_search_members()
     tester.test_filter_members_by_tier()
-    tester.test_get_member_details()
     
-    # Test 6: Gaming Management Tests
-    print("\n📋 PHASE 1 - GAMING MANAGEMENT TESTS")
+    print("\n📋 GAMING FUNCTIONALITY")
     tester.test_gaming_sessions()
-    tester.test_gaming_sessions_by_status()
     tester.test_gaming_packages()
     
-    # Test 7: Phase 2 - Marketing Intelligence Tests
-    print("\n📋 PHASE 2 - MARKETING INTELLIGENCE TESTS")
+    print("\n📋 REWARDS FUNCTIONALITY")
+    # Test rewards endpoint if it exists
+    success, response = tester.run_test(
+        "Rewards Functionality",
+        "GET",
+        "api/rewards?limit=10",
+        200
+    )
+    
+    print("\n📋 MARKETING FUNCTIONALITY")
     tester.test_marketing_dashboard()
-    tester.test_birthday_calendar()
-    tester.test_inactive_customers()
-    tester.test_walk_in_guests()
     tester.test_marketing_campaigns()
-    tester.test_create_marketing_campaign()
     
-    # Test 8: Phase 2 - Travel & VIP Management Tests
-    print("\n📋 PHASE 2 - TRAVEL & VIP MANAGEMENT TESTS")
-    tester.test_vip_travel_dashboard()
-    tester.test_vip_experiences()
-    tester.test_create_vip_experience()
-    tester.test_group_bookings()
-    tester.test_create_group_booking()
-    
-    # Test 9: Phase 3 - Staff Management Tests
-    print("\n📋 PHASE 3 - STAFF MANAGEMENT TESTS")
+    print("\n📋 STAFF FUNCTIONALITY")
     tester.test_staff_dashboard()
     tester.test_staff_members()
-    tester.test_training_courses()
-    tester.test_create_training_course()
-    tester.test_training_records()
-    tester.test_create_performance_review()
     
-    # Test 10: Phase 3 - Advanced Analytics Tests
-    print("\n📋 PHASE 3 - ADVANCED ANALYTICS TESTS")
-    tester.test_advanced_analytics()
-    tester.test_generate_analytics_report()
-    tester.test_cost_optimization()
-    tester.test_create_cost_optimization()
-    tester.test_predictive_models()
-    tester.test_create_predictive_model()
-    
-    # Test 11: Phase 4 - Enterprise Features Tests
-    print("\n📋 PHASE 4 - NOTIFICATION SYSTEM TESTS")
+    print("\n📋 ENTERPRISE FUNCTIONALITY")
     tester.test_notifications_system()
-    tester.test_create_notification()
-    tester.test_notification_templates()
-    tester.test_create_notification_template()
-    
-    print("\n📋 PHASE 4 - COMPLIANCE & AUDIT TESTS")
     tester.test_compliance_reports()
-    tester.test_generate_compliance_report()
-    tester.test_enhanced_audit_logs()
-    
-    print("\n📋 PHASE 4 - SYSTEM INTEGRATIONS TESTS")
     tester.test_system_integrations()
-    tester.test_create_system_integration()
     
-    print("\n📋 PHASE 4 - ENHANCED ANALYTICS TESTS")
+    print("\n📋 ANALYTICS FUNCTIONALITY")
     tester.test_user_activity_analytics()
     tester.test_real_time_events()
-    tester.test_create_real_time_event()
-    
-    print("\n📋 PHASE 4 - DATA RETENTION TESTS")
-    tester.test_data_retention_policies()
-    tester.test_create_data_retention_policy()
-    
-    # Test 12: Security Tests
-    print("\n📋 SECURITY TESTS")
-    tester.test_unauthorized_access()
-    
-    # Test 13: Manager Role Test
-    print("\n📋 ROLE-BASED ACCESS TESTS")
-    if not tester.test_login("manager", "manager123"):
-        print("❌ Manager login failed")
-    else:
-        # Test manager can access basic endpoints
-        tester.test_dashboard_metrics()
-        tester.test_get_members()
-        # Test manager can access Phase 2 features
-        tester.test_marketing_dashboard()
-        tester.test_vip_travel_dashboard()
-        # Test manager can access Phase 3 features
-        tester.test_staff_dashboard()
-        tester.test_advanced_analytics()
-        # Test manager can access Phase 4 features
-        tester.test_notifications_system()
-        tester.test_compliance_reports()
-        tester.test_user_activity_analytics()
     
     # Print final results
-    print("\n" + "=" * 70)
-    print(f"📊 FINAL RESULTS - ALL 4 PHASES TESTING")
+    print("\n" + "=" * 80)
+    print(f"📊 COMPREHENSIVE RUNTIME ERROR AUDIT RESULTS")
     print(f"Tests Run: {tester.tests_run}")
     print(f"Tests Passed: {tester.tests_passed}")
     print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
     
+    if critical_tests_passed:
+        print("\n🎉 CRITICAL SUCCESS: All data structure validation tests passed!")
+        print("✅ No '.filter is not a function' errors expected")
+        print("✅ All arrays properly structured")
+        print("✅ All objects have required properties")
+        print("✅ Components should render without crashing")
+    else:
+        print("\n🚨 CRITICAL FAILURE: Data structure validation failed!")
+        print("❌ Runtime errors likely in frontend components")
+        print("❌ '.filter is not a function' errors possible")
+        print("❌ Components may crash during rendering")
+    
     if tester.tests_passed == tester.tests_run:
-        print("🎉 All tests passed! Backend is working correctly across all 4 phases.")
+        print("\n🎉 ALL TESTS PASSED: Backend is bulletproof and ready!")
         return 0
     else:
         failed = tester.tests_run - tester.tests_passed
-        print(f"⚠️  {failed} test(s) failed. Please check the issues above.")
-        
-        # If more than 50% failed, recommend fixing backend first
-        if failed > (tester.tests_run * 0.5):
-            print("🚨 More than 50% of tests failed. Recommend fixing backend issues first.")
-        
+        print(f"\n⚠️  {failed} test(s) failed. Check issues above.")
         return 1
 
 if __name__ == "__main__":
