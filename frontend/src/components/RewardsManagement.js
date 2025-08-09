@@ -41,8 +41,8 @@ const RewardsManagement = ({ user }) => {
   ];
 
   const filteredRewards = selectedCategory === 'all' 
-    ? rewards 
-    : rewards.filter(reward => reward.category === selectedCategory);
+    ? (rewards || [])
+    : (rewards || []).filter(reward => reward.category === selectedCategory);
 
   const getCategoryColor = (category) => {
     const colors = {
