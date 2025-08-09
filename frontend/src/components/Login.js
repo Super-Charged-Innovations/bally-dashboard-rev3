@@ -190,22 +190,42 @@ const Login = ({ onLogin, onDirectAccess, loading }) => {
             <div className="space-y-3">
               <button
                 onClick={() => onDirectAccess('SuperAdmin')}
-                className="w-full btn-casino-primary py-3 text-sm font-medium group relative overflow-hidden"
+                disabled={loading}
+                className="w-full btn-casino-primary py-3 text-sm font-medium group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="relative z-10 flex items-center justify-center">
-                  <span className="mr-2">👑</span>
-                  <span>Enter as Super Admin</span>
+                  {loading ? (
+                    <>
+                      <div className="casino-spinner mr-2"></div>
+                      <span>Granting Access...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="mr-2">👑</span>
+                      <span>Enter as Super Admin</span>
+                    </>
+                  )}
                 </span>
                 <div className="absolute inset-0 bg-red-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
               </button>
               
               <button
                 onClick={() => onDirectAccess('Manager')}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 text-sm group relative overflow-hidden"
+                disabled={loading}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 text-sm group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="relative z-10 flex items-center justify-center">
-                  <span className="mr-2">💼</span>
-                  <span>Enter as Manager</span>
+                  {loading ? (
+                    <>
+                      <div className="casino-spinner mr-2"></div>
+                      <span>Granting Access...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="mr-2">💼</span>
+                      <span>Enter as Manager</span>
+                    </>
+                  )}
                 </span>
                 <div className="absolute inset-0 bg-blue-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
               </button>
