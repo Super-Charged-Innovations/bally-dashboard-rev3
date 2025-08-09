@@ -445,14 +445,6 @@ const Settings = ({ user }) => {
     </div>
   );
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'profile':
-        return renderProfileSettings();
-      case 'appearance':
-        return renderAppearanceSettings();
-      case 'notifications':
-        return renderNotificationSettings();
   const renderSecuritySettings = () => (
     <div className="space-y-6">
       <div className="casino-card p-6">
