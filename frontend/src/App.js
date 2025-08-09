@@ -68,6 +68,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user_data');
     setUser(null);
     toast.success('Logged out successfully');
   };
