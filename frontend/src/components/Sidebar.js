@@ -18,6 +18,126 @@ import {
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 
+// Permission checking utility
+const hasPermission = (userPermissions, requiredPermission) => {
+  if (!userPermissions) return false;
+  if (userPermissions.includes("*")) return true;
+  return userPermissions.includes(requiredPermission);
+};
+
+// Role-based access control for navigation items
+const getFilteredNavigationItems = (user) => {
+  if (!user) return [];
+  
+  const allNavigationItems = [
+    {
+      name: 'Dashboard',
+      icon: HomeIcon,
+      href: '/dashboard',
+      current: false,
+      requiredRole: null, // Available to all authenticated users
+    },
+    {
+      name: 'Enterprise',
+      icon: BuildingOfficeIcon,
+      href: '/enterprise',
+      current: false,
+      requiredRole: 'SuperAdmin', // Only SuperAdmin
+    },
+    {
+      name: 'Members',
+      icon: UsersIcon,
+      href: '/members',
+      current: false,
+      requiredPermissions: ['members:read'],
+    },
+    {
+      name: 'Gaming',
+      icon: PuzzlePieceIcon,
+      href: '/gaming',
+      current: false,
+      requiredPermissions: ['gaming:read'],
+    },
+    {
+      name: 'Rewards',
+      icon: GiftIcon,
+      href: '/rewards',
+      current: false,
+      requiredPermissions: ['members:read'], // Managers can manage rewards
+    },
+    {
+      name: 'Marketing',
+      icon: MegaphoneIcon,
+      href: '/marketing',
+      current: false,
+      requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Advanced feature
+    },
+    {
+      name: 'Travel & VIP',
+      icon: CalendarDaysIcon,
+      href: '/travel',
+      current: false,
+      requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Advanced feature
+    },
+    {
+      name: 'Staff',
+      icon: AcademicCapIcon,
+      href: '/staff',
+      current: false,
+      requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Only admins can manage staff
+    },
+    {
+      name: 'Advanced Analytics',
+      icon: ChartPieIcon,
+      href: '/advanced-analytics',
+      current: false,
+      requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Advanced feature
+    },
+    {
+      name: 'Reports',
+      icon: ChartBarIcon,
+      href: '/analytics',
+      current: false,
+      requiredPermissions: ['reports:read'], // Managers can view reports
+    },
+    {
+      name: 'Notifications',
+      icon: BellIcon,
+      href: '/notifications',
+      current: false,
+      requiredRole: ['SuperAdmin', 'GeneralAdmin', 'Manager'], // Not for supervisors
+    },
+    {
+      name: 'Compliance',
+      icon: ShieldCheckIcon,
+      href: '/compliance',
+      current: false,
+      requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Only admins
+    },
+  ];
+
+  return allNavigationItems.filter(item => {
+    // Check role-based access
+    if (item.requiredRole) {
+      if (typeof item.requiredRole === 'string') {
+        return user.role === item.requiredRole;
+      } else if (Array.isArray(item.requiredRole)) {
+        return item.requiredRole.includes(user.role);
+      }
+    }
+    
+    // Check permission-based access
+    if (item.requiredPermissions) {
+      return item.requiredPermissions.some(permission => 
+        hasPermission(user.permissions, permission)
+      );
+    }
+    
+    // Default: available to all authenticated users
+    return true;
+  });
+};
+
 const Sidebar = ({ isOpen, onToggle, user }) => {
   const navigationItems = [
     {
