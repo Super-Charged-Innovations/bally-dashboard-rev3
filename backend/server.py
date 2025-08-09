@@ -664,11 +664,22 @@ async def log_admin_action(admin_user_id: str, admin_username: str, action: str,
 
 # Authentication Routes
 @app.post("/api/auth/login", response_model=TokenResponse)
-async def login(login_request: LoginRequest):
-    """Admin user login with role-based access"""
+@limiter.limit("5/minute")
+async def login(request: Request, login_request: LoginRequest):
+    """Admin user login with role-based access and rate limiting"""
+    
+    # Additional security: Check for suspicious patterns
+    if any(char in login_request.username for char in ['<', '>', '"', "'", '&']):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid characters in username"
+        )
+    
     admin_user = admin_users_col.find_one({"username": login_request.username})
     
     if not admin_user or not pwd_context.verify(login_request.password, admin_user["password_hash"]):
+        # Log failed login attempt
+        logging.warning(f"Failed login attempt for username: {login_request.username} from IP: {request.client.host}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password"
@@ -699,10 +710,13 @@ async def login(login_request: LoginRequest):
         expires_delta=timedelta(days=7)
     )
     
+    # Log successful login
+    logging.info(f"Successful login for user: {admin_user['username']} ({admin_user['role']}) from IP: {request.client.host}")
+    
     # Log login action
     await log_admin_action(
         admin_user["id"], admin_user["username"], 
-        "login", "auth", details={"role": admin_user["role"]}
+        "login", "auth", details={"role": admin_user["role"], "ip": request.client.host}
     )
     
     return TokenResponse(
