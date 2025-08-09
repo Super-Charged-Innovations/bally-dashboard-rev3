@@ -69,6 +69,28 @@ function App() {
     }
   };
 
+  // TEMPORARY: Direct access without authentication
+  const handleDirectAccess = (role) => {
+    const mockUser = role === 'SuperAdmin' ? {
+      id: 'temp-superadmin-id',
+      username: 'superadmin',
+      full_name: 'Super Administrator',
+      role: 'SuperAdmin',
+      permissions: ['*']
+    } : {
+      id: 'temp-manager-id',
+      username: 'manager',
+      full_name: 'Casino Manager',
+      role: 'GeneralAdmin',
+      permissions: ['members:read', 'members:write', 'gaming:read', 'gaming:write', 'reports:read']
+    };
+    
+    setUser(mockUser);
+    localStorage.setItem('user_data', JSON.stringify(mockUser));
+    localStorage.setItem('access_token', 'temp-mock-token');
+    toast.success(`🎰 Direct access granted! Welcome, ${mockUser.full_name}!`);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
