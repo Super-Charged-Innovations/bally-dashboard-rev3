@@ -204,8 +204,20 @@ class AuditLog(BaseModel):
     user_agent: Optional[str] = None
 
 class LoginRequest(BaseModel):
-    username: str
-    password: str
+    username: str = Field(..., min_length=3, max_length=50)
+    password: str = Field(..., min_length=6, max_length=100)
+    
+    @validator('username')
+    def validate_username(cls, v):
+        if not re.match(r'^[a-zA-Z0-9_.-]+$', v):
+            raise ValueError('Username contains invalid characters')
+        return v.strip().lower()
+    
+    @validator('password')
+    def validate_password(cls, v):
+        if len(v.strip()) < 6:
+            raise ValueError('Password must be at least 6 characters')
+        return v
 
 class TokenResponse(BaseModel):
     access_token: str
