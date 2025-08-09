@@ -233,7 +233,7 @@ const Dashboard = ({ user }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64 bg-casino-luxury-black">
-        <div className="casino-spinner w-12 h-12"></div>
+        <div className="inline-block w-12 h-12 border-2 border-casino-gold/20 border-t-casino-gold rounded-full animate-spin"></div>
       </div>
     );
   }
