@@ -931,12 +931,94 @@ class ApiService {
       ]);
     }
 
-    // Default empty response for other endpoints
-    return Promise.resolve({ 
-      message: "Mock data not available for this endpoint",
-      data: [],
-      total: 0
-    });
+    // System Integrations
+    if (endpoint.startsWith('/api/integrations')) {
+      return Promise.resolve([
+        {
+          id: "int-1",
+          name: "Payment Gateway",
+          type: "payment",
+          status: "active",
+          provider: "Stripe",
+          last_sync: "2025-01-09T15:00:00Z",
+          sync_status: "success"
+        },
+        {
+          id: "int-2",
+          name: "CRM System",
+          type: "customer",
+          status: "active", 
+          provider: "Salesforce",
+          last_sync: "2025-01-09T14:30:00Z",
+          sync_status: "success"
+        },
+        {
+          id: "int-3",
+          name: "Security Monitoring",
+          type: "security",
+          status: "inactive",
+          provider: "DataDog",
+          last_sync: "2025-01-08T10:00:00Z",
+          sync_status: "error"
+        }
+      ]);
+    }
+
+    // Real-time Events
+    if (endpoint.startsWith('/api/analytics/real-time-events')) {
+      return Promise.resolve({
+        events: [
+          {
+            id: "event-1",
+            type: "high_value_transaction",
+            severity: "critical",
+            message: "Large cash-in: $75,000 by VIP member",
+            timestamp: "2025-01-09T15:45:00Z",
+            member_id: "member-vip-001",
+            details: { amount: 75000, method: "cash" }
+          },
+          {
+            id: "event-2",
+            type: "security_alert", 
+            severity: "medium",
+            message: "Multiple failed login attempts detected",
+            timestamp: "2025-01-09T15:30:00Z",
+            ip_address: "192.168.1.50",
+            details: { attempts: 5, user: "unknown" }
+          },
+          {
+            id: "event-3",
+            type: "system_performance",
+            severity: "low",
+            message: "Database query optimization completed",
+            timestamp: "2025-01-09T15:15:00Z",
+            details: { performance_gain: "15%" }
+          }
+        ],
+        total: 25,
+        page: 1,
+        pages: 3
+      });
+    }
+
+    // User Activity Analytics  
+    if (endpoint.startsWith('/api/analytics/user-activity')) {
+      return Promise.resolve({
+        daily_active_users: 89,
+        peak_hours: ["20:00", "21:00", "22:00"],
+        user_sessions: [
+          { hour: "14:00", count: 23 },
+          { hour: "15:00", count: 31 },
+          { hour: "16:00", count: 28 },
+          { hour: "17:00", count: 35 }
+        ],
+        top_features: [
+          { feature: "Gaming Floor", usage: 78 },
+          { feature: "Member Management", usage: 45 },
+          { feature: "Analytics", usage: 32 }
+        ]
+      });
+    }
   }
 }
 
