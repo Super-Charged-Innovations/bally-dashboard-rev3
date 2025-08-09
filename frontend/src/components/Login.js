@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useTheme } from '../contexts/ThemeContext';
 
-const Login = ({ onLogin, loading }) => {
+const Login = ({ onLogin, onDirectAccess, loading }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
