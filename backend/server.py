@@ -952,6 +952,74 @@ async def create_gaming_package(package: GamingPackage, token_payload: dict = De
     
     return {"id": package.id, "message": "Gaming package created successfully"}
 
+# Rewards Management Routes
+@app.get("/api/rewards")
+async def get_rewards(
+    skip: int = 0,
+    limit: int = 50,
+    category: Optional[str] = None,
+    tier_access: Optional[str] = None,
+    token_payload: dict = Depends(verify_token)
+):
+    """Get rewards catalog with pagination and filtering"""
+    query = {"is_active": True}
+    
+    if category:
+        query["category"] = category
+    
+    if tier_access:
+        query["tier_access"] = {"$in": [tier_access]}
+    
+    rewards = list(rewards_col.find(query).skip(skip).limit(limit))
+    total = rewards_col.count_documents(query)
+    
+    for reward in rewards:
+        reward.pop("_id", None)
+    
+    return {
+        "rewards": rewards,
+        "total": total,
+        "page": skip // limit + 1,
+        "pages": (total + limit - 1) // limit
+    }
+
+@app.get("/api/rewards/{reward_id}")
+async def get_reward(reward_id: str, token_payload: dict = Depends(verify_token)):
+    """Get detailed reward information"""
+    reward = rewards_col.find_one({"id": reward_id})
+    if not reward:
+        raise HTTPException(status_code=404, detail="Reward not found")
+    
+    reward.pop("_id", None)
+    
+    # Log reward access for audit trail
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "view", "reward", reward_id,
+        details={"reward_name": reward["name"], "category": reward["category"]}
+    )
+    
+    return reward
+
+@app.post("/api/rewards")
+async def create_reward(reward: RewardItem, token_payload: dict = Depends(verify_token)):
+    """Create new reward item"""
+    # Check permissions (only managers and above can create rewards)
+    if token_payload["role"] not in ["SuperAdmin", "GeneralAdmin", "Manager"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    reward_dict = reward.dict()
+    result = rewards_col.insert_one(reward_dict)
+    
+    # Log reward creation
+    await log_admin_action(
+        token_payload["user_id"], token_payload["sub"],
+        "create", "reward", reward.id,
+        details={"reward_name": reward.name, "category": reward.category, "points_required": reward.points_required}
+    )
+    
+    return {"id": reward.id, "message": "Reward created successfully"}
+
 # Phase 2 Routes - Marketing Intelligence & Travel Management
 
 # Marketing Intelligence Routes
