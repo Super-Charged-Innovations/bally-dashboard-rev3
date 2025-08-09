@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
+  darkMode: 'class', // Enable class-based dark mode
   theme: {
     extend: {
       colors: {
@@ -27,20 +28,43 @@ module.exports = {
           'luxury-gray': '#2D2D2D',
           'luxury-light': '#4A4A4A',
           'champagne': '#F7E7CE',
+          // Light mode versions
+          'light-bg': '#FAFAFA',
+          'light-surface': '#FFFFFF',
+          'light-accent': '#F5F5F5',
+          'light-text': '#1A1A1A',
+          'light-muted': '#6B7280',
         },
-        // Member Tier Colors
+        // Member Tier Colors - Enhanced for both modes
         'tier': {
-          'ruby': '#E53935',
+          'ruby': '#DC2626',
+          'ruby-light': '#FEE2E2',
           'sapphire': '#1976D2',
-          'diamond': '#9E9E9E', 
+          'sapphire-light': '#DBEAFE',
+          'diamond': '#6B7280', 
+          'diamond-light': '#F3F4F6',
           'vip': '#FFD700',
+          'vip-light': '#FEF3C7',
         },
-        // Casino Status Colors
+        // Casino Status Colors - Accessible contrast
         'status': {
-          'active': '#2E7D32',
-          'inactive': '#757575',
-          'warning': '#F57C00',
-          'critical': '#C62828',
+          'active': '#059669',
+          'active-light': '#D1FAE5',
+          'inactive': '#6B7280',
+          'inactive-light': '#F3F4F6',
+          'warning': '#D97706',
+          'warning-light': '#FED7AA',
+          'critical': '#DC2626',
+          'critical-light': '#FEE2E2',
+        },
+        // Adaptive colors for light/dark mode
+        'adaptive': {
+          'bg': 'rgb(var(--color-bg) / <alpha-value>)',
+          'surface': 'rgb(var(--color-surface) / <alpha-value>)',
+          'border': 'rgb(var(--color-border) / <alpha-value>)',
+          'text': 'rgb(var(--color-text) / <alpha-value>)',
+          'text-muted': 'rgb(var(--color-text-muted) / <alpha-value>)',
+          'text-accent': 'rgb(var(--color-text-accent) / <alpha-value>)',
         },
         // Primary color override
         'primary': {
@@ -82,18 +106,29 @@ module.exports = {
       },
       boxShadow: {
         'casino': '0 8px 32px rgba(220, 38, 38, 0.15)',
+        'casino-light': '0 4px 16px rgba(220, 38, 38, 0.08)',
         'luxury': '0 8px 32px rgba(0, 0, 0, 0.3)',
+        'luxury-light': '0 4px 16px rgba(0, 0, 0, 0.08)',
         'gold': '0 4px 16px rgba(255, 215, 0, 0.3)',
+        'gold-light': '0 2px 8px rgba(255, 215, 0, 0.15)',
         'inner-luxury': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.1)',
+        'inner-light': 'inset 0 1px 2px 0 rgba(0, 0, 0, 0.05)',
       },
       backgroundImage: {
         'casino-gradient': 'linear-gradient(135deg, #dc2626 0%, #8B0000 100%)',
+        'casino-gradient-light': 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)',
         'gold-gradient': 'linear-gradient(135deg, #FFD700 0%, #FFA000 100%)',
+        'gold-gradient-light': 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
         'luxury-gradient': 'linear-gradient(135deg, #2D2D2D 0%, #1A1A1A 100%)',
-        'tier-ruby': 'linear-gradient(135deg, #E53935 0%, #B71C1C 100%)',
-        'tier-sapphire': 'linear-gradient(135deg, #1976D2 0%, #0D47A1 100%)',
-        'tier-diamond': 'linear-gradient(135deg, #9E9E9E 0%, #424242 100%)',
-        'tier-vip': 'linear-gradient(135deg, #FFD700 0%, #FF8F00 100%)',
+        'luxury-gradient-light': 'linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%)',
+        'tier-ruby': 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)',
+        'tier-ruby-light': 'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)',
+        'tier-sapphire': 'linear-gradient(135deg, #1976D2 0%, #1565C0 100%)',
+        'tier-sapphire-light': 'linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%)',
+        'tier-diamond': 'linear-gradient(135deg, #6B7280 0%, #4B5563 100%)',
+        'tier-diamond-light': 'linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%)',
+        'tier-vip': 'linear-gradient(135deg, #FFD700 0%, #F59E0B 100%)',
+        'tier-vip-light': 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
