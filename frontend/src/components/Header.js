@@ -14,6 +14,7 @@ import { useTheme } from '../contexts/ThemeContext';
 const Header = ({ user, onLogout, onMenuToggle }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notificationCount] = useState(3); // Mock notification count
+  const { theme, toggleTheme, isDark } = useTheme();
 
   const handleDropdownToggle = () => {
     setDropdownOpen(!dropdownOpen);
