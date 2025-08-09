@@ -42,7 +42,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://f57e797d-eaf4-4f7c-9eef-bcb910f777ef.preview.emergentagent.com",
+        "https://dd2cb881-1a6b-4ae3-90df-4da7c5f01c2c.preview.emergentagent.com",
         "http://localhost:3000",  # Development only
         "http://127.0.0.1:3000"   # Development only
     ],
