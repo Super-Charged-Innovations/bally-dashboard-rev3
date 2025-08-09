@@ -1507,6 +1507,365 @@ class BallyCasinoAPITester:
         
         return success
 
+    # COMPREHENSIVE RUNTIME ERROR AUDIT & DATA STRUCTURE VALIDATION TESTS
+    
+    def validate_array_structure(self, data, field_name, context=""):
+        """Validate that a field is an array and supports array methods"""
+        if not isinstance(data, list):
+            print(f"   ❌ CRITICAL: {context}{field_name} is not an array! Type: {type(data)}")
+            print(f"      This will cause '.filter is not a function' errors!")
+            return False
+        print(f"   ✅ {context}{field_name} is valid array with {len(data)} items")
+        return True
+    
+    def validate_object_structure(self, data, required_fields, context=""):
+        """Validate object has required fields"""
+        missing_fields = []
+        for field in required_fields:
+            if field not in data:
+                missing_fields.append(field)
+        
+        if missing_fields:
+            print(f"   ⚠️  {context}Missing fields: {missing_fields}")
+            return False
+        return True
+    
+    def test_compliance_dashboard_data_structure(self):
+        """CRITICAL: Test ComplianceDashboard component data structure"""
+        print("\n🔍 CRITICAL TEST: ComplianceDashboard Data Structure Validation")
+        
+        success, response = self.run_test(
+            "Compliance Reports Data Structure",
+            "GET",
+            "api/compliance/reports?limit=20",
+            200
+        )
+        
+        if not success:
+            return False
+        
+        # Validate reports is an array
+        if 'reports' not in response:
+            print("   ❌ CRITICAL: Missing 'reports' field in compliance response!")
+            return False
+        
+        if not self.validate_array_structure(response['reports'], 'reports', 'ComplianceDashboard: '):
+            return False
+        
+        # Test data retention policies array
+        success2, response2 = self.run_test(
+            "Data Retention Policies Array Structure",
+            "GET",
+            "api/data-retention/policies",
+            200
+        )
+        
+        if success2:
+            if not self.validate_array_structure(response2, 'dataRetentionPolicies', 'ComplianceDashboard: '):
+                return False
+        
+        return success and success2
+    
+    def test_notifications_management_data_structure(self):
+        """CRITICAL: Test NotificationsManagement component data structure"""
+        print("\n🔍 CRITICAL TEST: NotificationsManagement Data Structure Validation")
+        
+        success, response = self.run_test(
+            "Notifications Array Structure",
+            "GET",
+            "api/notifications?limit=50",
+            200
+        )
+        
+        if not success:
+            return False
+        
+        # Validate notifications is an array
+        if 'notifications' not in response:
+            print("   ❌ CRITICAL: Missing 'notifications' field!")
+            return False
+        
+        if not self.validate_array_structure(response['notifications'], 'notifications', 'NotificationsManagement: '):
+            return False
+        
+        # Test notification templates array
+        success2, response2 = self.run_test(
+            "Notification Templates Array Structure",
+            "GET",
+            "api/notifications/templates",
+            200
+        )
+        
+        if success2:
+            if not self.validate_array_structure(response2, 'templates', 'NotificationsManagement: '):
+                return False
+        
+        return success and success2
+    
+    def test_enterprise_dashboard_data_structure(self):
+        """CRITICAL: Test EnterpriseDashboard component data structure"""
+        print("\n🔍 CRITICAL TEST: EnterpriseDashboard Data Structure Validation")
+        
+        # Test integrations array
+        success, response = self.run_test(
+            "System Integrations Array Structure",
+            "GET",
+            "api/integrations",
+            200
+        )
+        
+        if success:
+            if not self.validate_array_structure(response, 'integrations', 'EnterpriseDashboard: '):
+                return False
+        
+        # Test real-time events array
+        success2, response2 = self.run_test(
+            "Real-time Events Array Structure",
+            "GET",
+            "api/analytics/real-time-events?limit=20",
+            200
+        )
+        
+        if success2 and 'events' in response2:
+            if not self.validate_array_structure(response2['events'], 'events', 'EnterpriseDashboard: '):
+                return False
+        
+        # Test user activity analytics
+        success3, response3 = self.run_test(
+            "User Activity Analytics Structure",
+            "GET",
+            "api/analytics/user-activity",
+            200
+        )
+        
+        return success and success2 and success3
+    
+    def test_all_dashboard_sections_data_structure(self):
+        """CRITICAL: Test all major dashboard sections for array structure"""
+        print("\n🔍 COMPREHENSIVE TEST: All Dashboard Sections Data Structure")
+        
+        all_tests_passed = True
+        
+        # Test Members section
+        success, response = self.run_test(
+            "Members Array Structure",
+            "GET",
+            "api/members?limit=20",
+            200
+        )
+        if success and 'members' in response:
+            if not self.validate_array_structure(response['members'], 'members', 'Members Section: '):
+                all_tests_passed = False
+        else:
+            all_tests_passed = False
+        
+        # Test Gaming Sessions
+        success, response = self.run_test(
+            "Gaming Sessions Array Structure",
+            "GET",
+            "api/gaming/sessions?limit=20",
+            200
+        )
+        if success and 'sessions' in response:
+            if not self.validate_array_structure(response['sessions'], 'sessions', 'Gaming Section: '):
+                all_tests_passed = False
+        else:
+            all_tests_passed = False
+        
+        # Test Gaming Packages
+        success, response = self.run_test(
+            "Gaming Packages Array Structure",
+            "GET",
+            "api/gaming/packages",
+            200
+        )
+        if success:
+            if not self.validate_array_structure(response, 'packages', 'Gaming Section: '):
+                all_tests_passed = False
+        else:
+            all_tests_passed = False
+        
+        # Test Rewards
+        success, response = self.run_test(
+            "Rewards Array Structure",
+            "GET",
+            "api/rewards?limit=20",
+            200
+        )
+        if success and isinstance(response, dict) and 'rewards' in response:
+            if not self.validate_array_structure(response['rewards'], 'rewards', 'Rewards Section: '):
+                all_tests_passed = False
+        elif success and isinstance(response, list):
+            if not self.validate_array_structure(response, 'rewards', 'Rewards Section: '):
+                all_tests_passed = False
+        
+        # Test Staff Members
+        success, response = self.run_test(
+            "Staff Members Array Structure",
+            "GET",
+            "api/staff/members?limit=20",
+            200
+        )
+        if success and 'staff_members' in response:
+            if not self.validate_array_structure(response['staff_members'], 'staff_members', 'Staff Section: '):
+                all_tests_passed = False
+        else:
+            all_tests_passed = False
+        
+        # Test Marketing Campaigns
+        success, response = self.run_test(
+            "Marketing Campaigns Array Structure",
+            "GET",
+            "api/marketing/campaigns?limit=20",
+            200
+        )
+        if success and 'campaigns' in response:
+            if not self.validate_array_structure(response['campaigns'], 'campaigns', 'Marketing Section: '):
+                all_tests_passed = False
+        else:
+            all_tests_passed = False
+        
+        return all_tests_passed
+    
+    def test_analytics_data_structure(self):
+        """CRITICAL: Test Analytics section data structures"""
+        print("\n🔍 CRITICAL TEST: Analytics Data Structure Validation")
+        
+        all_tests_passed = True
+        
+        # Test user activity analytics
+        success, response = self.run_test(
+            "User Activity Analytics Data Structure",
+            "GET",
+            "api/analytics/user-activity",
+            200
+        )
+        if success:
+            required_fields = ['total_activities', 'unique_users', 'activity_by_type', 'activity_by_hour']
+            if not self.validate_object_structure(response, required_fields, 'Analytics: '):
+                all_tests_passed = False
+        else:
+            all_tests_passed = False
+        
+        # Test real-time events
+        success, response = self.run_test(
+            "Real-time Events Data Structure",
+            "GET",
+            "api/analytics/real-time-events?limit=20",
+            200
+        )
+        if success and 'events' in response:
+            if not self.validate_array_structure(response['events'], 'events', 'Analytics: '):
+                all_tests_passed = False
+        else:
+            all_tests_passed = False
+        
+        return all_tests_passed
+    
+    def test_dashboard_metrics_structure(self):
+        """CRITICAL: Test Dashboard metrics data structure"""
+        print("\n🔍 CRITICAL TEST: Dashboard Metrics Structure Validation")
+        
+        success, response = self.run_test(
+            "Dashboard Metrics Structure",
+            "GET",
+            "api/dashboard/metrics",
+            200
+        )
+        
+        if not success:
+            return False
+        
+        # Validate required fields exist
+        required_fields = ['total_members', 'members_by_tier', 'active_sessions', 'top_games']
+        if not self.validate_object_structure(response, required_fields, 'Dashboard: '):
+            return False
+        
+        # Validate top_games is an array
+        if 'top_games' in response:
+            if not self.validate_array_structure(response['top_games'], 'top_games', 'Dashboard: '):
+                return False
+        
+        # Validate members_by_tier is an object
+        if 'members_by_tier' in response:
+            if not isinstance(response['members_by_tier'], dict):
+                print("   ❌ CRITICAL: members_by_tier is not an object!")
+                return False
+            print("   ✅ members_by_tier is valid object")
+        
+        return True
+    
+    def test_comprehensive_runtime_error_prevention(self):
+        """COMPREHENSIVE: Test all endpoints for runtime error prevention"""
+        print("\n🔍 COMPREHENSIVE RUNTIME ERROR PREVENTION TEST")
+        
+        all_tests_passed = True
+        
+        # List of all critical endpoints that frontend components call
+        critical_endpoints = [
+            ("api/compliance/reports", "ComplianceDashboard"),
+            ("api/data-retention/policies", "ComplianceDashboard"),
+            ("api/notifications", "NotificationsManagement"),
+            ("api/integrations", "EnterpriseDashboard"),
+            ("api/analytics/real-time-events", "EnterpriseDashboard"),
+            ("api/analytics/user-activity", "Analytics"),
+            ("api/gaming/sessions", "Gaming"),
+            ("api/gaming/packages", "Gaming"),
+            ("api/rewards", "Rewards"),
+            ("api/members", "Members"),
+            ("api/staff/members", "Staff"),
+            ("api/marketing/campaigns", "Marketing"),
+            ("api/dashboard/metrics", "Dashboard")
+        ]
+        
+        for endpoint, component in critical_endpoints:
+            print(f"\n   Testing {component} endpoint: {endpoint}")
+            success, response = self.run_test(
+                f"{component} Runtime Error Check",
+                "GET",
+                f"{endpoint}?limit=10",
+                200
+            )
+            
+            if not success:
+                print(f"   ❌ CRITICAL: {component} endpoint failed!")
+                all_tests_passed = False
+                continue
+            
+            # Check for common array fields that cause .filter errors
+            array_fields_to_check = []
+            
+            if 'reports' in response:
+                array_fields_to_check.append('reports')
+            if 'notifications' in response:
+                array_fields_to_check.append('notifications')
+            if 'events' in response:
+                array_fields_to_check.append('events')
+            if 'sessions' in response:
+                array_fields_to_check.append('sessions')
+            if 'members' in response:
+                array_fields_to_check.append('members')
+            if 'staff_members' in response:
+                array_fields_to_check.append('staff_members')
+            if 'campaigns' in response:
+                array_fields_to_check.append('campaigns')
+            if 'rewards' in response:
+                array_fields_to_check.append('rewards')
+            if 'top_games' in response:
+                array_fields_to_check.append('top_games')
+            
+            # If response itself is an array (like integrations, packages, policies)
+            if isinstance(response, list):
+                if not self.validate_array_structure(response, f'{component}_data', f'{component}: '):
+                    all_tests_passed = False
+            
+            # Check each array field
+            for field in array_fields_to_check:
+                if not self.validate_array_structure(response[field], field, f'{component}: '):
+                    all_tests_passed = False
+        
+        return all_tests_passed
+
 def main():
     print("🎰 Bally's Casino Admin Dashboard API Testing - ALL 4 PHASES")
     print("=" * 70)
