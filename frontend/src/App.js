@@ -116,7 +116,7 @@ function App() {
         <div className="min-h-screen bg-adaptive-bg">
           {!user ? (
             <>
-              <Login onLogin={handleLogin} />
+              <Login onLogin={handleLogin} onDirectAccess={handleDirectAccess} />
               <Toaster 
                 position="top-right"
                 toastOptions={{
