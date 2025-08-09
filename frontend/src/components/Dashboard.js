@@ -154,9 +154,9 @@ const Dashboard = ({ user }) => {
       value: metrics?.total_members || '250',
       change: '+12%',
       icon: UsersIcon,
-      color: 'text-tier-ruby',
-      bgColor: 'bg-tier-ruby/10',
-      gradient: 'bg-tier-ruby',
+      color: 'text-red-500',
+      bgColor: 'bg-red-500/10',
+      gradient: 'bg-red-500',
       trend: 'positive'
     },
     {
@@ -164,9 +164,9 @@ const Dashboard = ({ user }) => {
       value: metrics?.active_sessions || '125',
       change: '+8%',
       icon: PuzzlePieceIcon,
-      color: 'text-tier-sapphire',
-      bgColor: 'bg-tier-sapphire/10',
-      gradient: 'bg-tier-sapphire',
+      color: 'text-blue-500',
+      bgColor: 'bg-blue-500/10',
+      gradient: 'bg-blue-500',
       trend: 'positive'
     },
     {
@@ -174,9 +174,9 @@ const Dashboard = ({ user }) => {
       value: `$${metrics?.daily_revenue?.toLocaleString() || '45,750'}`,
       change: '+15%',
       icon: CurrencyDollarIcon,
-      color: 'text-casino-gold',
-      bgColor: 'bg-casino-gold/10',
-      gradient: 'bg-gold-gradient',
+      color: 'text-yellow-500',
+      bgColor: 'bg-yellow-500/10',
+      gradient: 'bg-yellow-500',
       trend: 'positive'
     },
   ];
