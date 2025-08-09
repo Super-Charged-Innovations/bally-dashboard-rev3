@@ -50,7 +50,6 @@ function App() {
 
   const handleLogin = async (credentials) => {
     try {
-      setLoading(true);
       const response = await authService.login(credentials);
       setUser(response.user_info);
       localStorage.setItem('access_token', response.access_token);
@@ -59,10 +58,8 @@ function App() {
       return { success: true };
     } catch (error) {
       console.error('Login failed:', error);
-      toast.error('Login failed. Please check your credentials.');
+      toast.error(error.message || 'Login failed. Please check your credentials.');
       return { success: false, error: error.message };
-    } finally {
-      setLoading(false);
     }
   };
 
