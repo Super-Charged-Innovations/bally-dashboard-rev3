@@ -607,18 +607,28 @@ class PredictiveModel(BaseModel):
 def encrypt_sensitive_data(data: str) -> str:
     """Encrypt sensitive personal data for PDPA compliance"""
     try:
+        if not data or not isinstance(data, str):
+            logging.warning("Invalid data provided for encryption")
+            return ""
         return cipher_suite.encrypt(data.encode()).decode()
     except Exception as e:
         logging.error(f"Encryption error: {e}")
-        return data
+        # CRITICAL: Never return unencrypted data
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Data encryption failed"
+        )
 
 def decrypt_sensitive_data(encrypted_data: str) -> str:
     """Decrypt sensitive personal data"""
     try:
+        if not encrypted_data or not isinstance(encrypted_data, str):
+            return ""
         return cipher_suite.decrypt(encrypted_data.encode()).decode()
     except Exception as e:
         logging.error(f"Decryption error: {e}")
-        return encrypted_data
+        # Return placeholder instead of potentially corrupted data
+        return "[ENCRYPTED_DATA]"
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
