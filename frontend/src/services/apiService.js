@@ -931,6 +931,129 @@ class ApiService {
       ]);
     }
 
+    // Advanced Analytics endpoints
+    if (endpoint.startsWith('/api/analytics/advanced')) {
+      return Promise.resolve([
+        {
+          id: "analytics-1",
+          metric_name: "Player Retention Rate",
+          current_value: 78.5,
+          trend: "increasing",
+          period: "monthly",
+          category: "player_behavior",
+          insights: "Significant improvement in VIP tier retention",
+          recommended_actions: ["Enhance VIP perks", "Personalized gaming experiences"]
+        },
+        {
+          id: "analytics-2", 
+          metric_name: "Average Session Duration",
+          current_value: 145,
+          trend: "stable",
+          period: "weekly",
+          category: "engagement",
+          insights: "Gaming sessions maintaining consistent length",
+          recommended_actions: ["Introduce time-based bonuses", "Break reminders for health"]
+        },
+        {
+          id: "analytics-3",
+          metric_name: "Revenue Per Player",
+          current_value: 2850,
+          trend: "increasing",
+          period: "monthly", 
+          category: "financial",
+          insights: "High-value players driving revenue growth",
+          recommended_actions: ["Expand premium gaming options", "VIP experience packages"]
+        }
+      ]);
+    }
+
+    // Cost Optimization endpoints
+    if (endpoint.startsWith('/api/optimization/cost-savings')) {
+      return Promise.resolve([
+        {
+          id: "cost-1",
+          optimization_type: "Energy Efficiency",
+          potential_savings: 125000,
+          implementation_cost: 45000,
+          roi_months: 4,
+          status: "recommended",
+          description: "LED lighting conversion across gaming floor",
+          environmental_impact: "Reduce CO2 by 15 tons annually"
+        },
+        {
+          id: "cost-2",
+          optimization_type: "Staff Scheduling",
+          potential_savings: 89000,
+          implementation_cost: 12000,
+          roi_months: 2,
+          status: "in_progress", 
+          description: "AI-powered optimal shift scheduling system",
+          environmental_impact: "Reduce operational overhead"
+        },
+        {
+          id: "cost-3",
+          optimization_type: "Inventory Management",
+          potential_savings: 67000,
+          implementation_cost: 25000,
+          roi_months: 5,
+          status: "completed",
+          description: "Automated beverage inventory tracking",
+          environmental_impact: "Reduce waste by 25%"
+        }
+      ]);
+    }
+
+    // Predictive Models endpoints  
+    if (endpoint.startsWith('/api/predictive/models')) {
+      return Promise.resolve([
+        {
+          id: "model-1",
+          model_name: "VIP Conversion Predictor",
+          accuracy: 89.5,
+          model_type: "classification",
+          last_trained: "2025-01-05T10:00:00Z",
+          status: "active",
+          predictions_today: 23,
+          key_features: ["spend_pattern", "visit_frequency", "game_preference"],
+          performance_metrics: {
+            precision: 91.2,
+            recall: 87.8,
+            f1_score: 89.4
+          }
+        },
+        {
+          id: "model-2",
+          model_name: "Churn Risk Assessment",
+          accuracy: 82.7,
+          model_type: "regression",
+          last_trained: "2025-01-03T15:30:00Z", 
+          status: "active",
+          predictions_today: 45,
+          key_features: ["days_since_last_visit", "total_losses", "tier_level"],
+          performance_metrics: {
+            precision: 84.1,
+            recall: 81.3,
+            f1_score: 82.7
+          }
+        },
+        {
+          id: "model-3",
+          model_name: "Game Popularity Forecaster",
+          accuracy: 76.2,
+          model_type: "time_series",
+          last_trained: "2025-01-01T09:00:00Z",
+          status: "training",
+          predictions_today: 12,
+          key_features: ["historical_sessions", "seasonal_trends", "new_releases"],
+          performance_metrics: {
+            precision: 78.5,
+            recall: 73.9,
+            f1_score: 76.1
+          }
+        }
+      ]);
+    }
+
     // System Integrations
     if (endpoint.startsWith('/api/integrations')) {
       return Promise.resolve([
