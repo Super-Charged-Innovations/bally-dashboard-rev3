@@ -34,16 +34,23 @@ const AdvancedAnalytics = ({ user }) => {
       
       if (activeTab === 'analytics') {
         const data = await apiService.getAdvancedAnalytics();
-        setAnalytics(data);
+        console.log('Advanced Analytics data received:', data); // Debug log
+        setAnalytics(Array.isArray(data) ? data : []);
       } else if (activeTab === 'optimization') {
         const data = await apiService.getCostOptimization();
-        setCostOptimization(data);
+        console.log('Cost Optimization data received:', data); // Debug log
+        setCostOptimization(Array.isArray(data) ? data : []);
       } else if (activeTab === 'predictive') {
         const data = await apiService.getPredictiveModels();
-        setPredictiveModels(data);
+        console.log('Predictive Models data received:', data); // Debug log
+        setPredictiveModels(Array.isArray(data) ? data : []);
       }
     } catch (error) {
       console.error('Failed to fetch advanced analytics:', error);
+      // Set empty arrays on error
+      setAnalytics([]);
+      setCostOptimization([]);
+      setPredictiveModels([]);
       toast.error('Failed to load analytics data');
     } finally {
       setLoading(false);
