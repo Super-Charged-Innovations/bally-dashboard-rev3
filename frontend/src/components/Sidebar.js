@@ -195,24 +195,6 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
   // Get filtered navigation sections based on user role and permissions
   const navigationSections = getFilteredNavigationItems(user);
 
-  const bottomItems = [
-    {
-      name: 'Settings',
-      icon: Cog6ToothIcon,
-      href: '/settings',
-    },
-    {
-      name: 'Search',
-      icon: MagnifyingGlassIcon,
-      href: '/search',
-    },
-    {
-      name: 'Help',
-      icon: QuestionMarkCircleIcon,
-      href: '/help',
-    },
-  ];
-
   return (
     <div className={`bg-white shadow-lg h-full flex flex-col transition-all duration-300 ${
       isOpen ? 'w-64' : 'w-16'
