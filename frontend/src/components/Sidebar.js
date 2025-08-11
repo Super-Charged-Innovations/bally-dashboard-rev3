@@ -82,6 +82,13 @@ const getFilteredNavigationItems = (user) => {
       requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Advanced feature
     },
     {
+      name: 'Drivers',
+      icon: TruckIcon,
+      href: '/drivers',
+      current: false,
+      requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Transportation management
+    },
+    {
       name: 'Staff',
       icon: AcademicCapIcon,
       href: '/staff',
