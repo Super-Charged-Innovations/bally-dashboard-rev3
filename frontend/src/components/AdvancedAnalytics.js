@@ -769,72 +769,78 @@ const AdvancedAnalytics = ({ user }) => {
                 </h3>
                 
                 {/* Key Metrics Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                  <div className="bg-white rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-green-600">
-                      ${(generatedReport.executive_summary.key_metrics.total_revenue / 1000000).toFixed(1)}M
+                {generatedReport.executive_summary?.key_metrics && (
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                    <div className="bg-white rounded-lg p-4 text-center">
+                      <div className="text-2xl font-bold text-green-600">
+                        ${(generatedReport.executive_summary.key_metrics.total_revenue / 1000000).toFixed(1)}M
+                      </div>
+                      <div className="text-sm text-gray-600">Total Revenue</div>
                     </div>
-                    <div className="text-sm text-gray-600">Total Revenue</div>
-                  </div>
-                  <div className="bg-white rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-blue-600">
-                      {generatedReport.executive_summary.key_metrics.customer_count.toLocaleString()}
+                    <div className="bg-white rounded-lg p-4 text-center">
+                      <div className="text-2xl font-bold text-blue-600">
+                        {generatedReport.executive_summary.key_metrics.customer_count.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-600">Customers</div>
                     </div>
-                    <div className="text-sm text-gray-600">Customers</div>
-                  </div>
-                  <div className="bg-white rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-purple-600">
-                      ${generatedReport.executive_summary.key_metrics.avg_ltv.toLocaleString()}
+                    <div className="bg-white rounded-lg p-4 text-center">
+                      <div className="text-2xl font-bold text-purple-600">
+                        ${generatedReport.executive_summary.key_metrics.avg_ltv.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-600">Avg LTV</div>
                     </div>
-                    <div className="text-sm text-gray-600">Avg LTV</div>
-                  </div>
-                  <div className="bg-white rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-red-600">
-                      {(generatedReport.executive_summary.key_metrics.churn_rate * 100).toFixed(1)}%
+                    <div className="bg-white rounded-lg p-4 text-center">
+                      <div className="text-2xl font-bold text-red-600">
+                        {(generatedReport.executive_summary.key_metrics.churn_rate * 100).toFixed(1)}%
+                      </div>
+                      <div className="text-sm text-gray-600">Churn Rate</div>
                     </div>
-                    <div className="text-sm text-gray-600">Churn Rate</div>
-                  </div>
-                  <div className="bg-white rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-yellow-600">
-                      {(generatedReport.executive_summary.key_metrics.efficiency_score * 100).toFixed(0)}%
+                    <div className="bg-white rounded-lg p-4 text-center">
+                      <div className="text-2xl font-bold text-yellow-600">
+                        {(generatedReport.executive_summary.key_metrics.efficiency_score * 100).toFixed(0)}%
+                      </div>
+                      <div className="text-sm text-gray-600">Efficiency</div>
                     </div>
-                    <div className="text-sm text-gray-600">Efficiency</div>
                   </div>
-                </div>
+                )}
 
                 {/* Top Insights */}
-                <div className="bg-white rounded-lg p-4 mb-4">
-                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                    <LightBulbIcon className="h-5 w-5 text-yellow-500 mr-2" />
-                    Key Insights
-                  </h4>
-                  <div className="space-y-2">
-                    {generatedReport.executive_summary.top_insights.map((insight, index) => (
-                      <div key={index} className="flex items-start space-x-2">
-                        <FireIcon className="h-4 w-4 text-orange-500 mt-1 flex-shrink-0" />
-                        <p className="text-sm text-gray-700">{insight}</p>
-                      </div>
-                    ))}
+                {generatedReport.executive_summary?.top_insights && (
+                  <div className="bg-white rounded-lg p-4 mb-4">
+                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                      <LightBulbIcon className="h-5 w-5 text-yellow-500 mr-2" />
+                      Key Insights
+                    </h4>
+                    <div className="space-y-2">
+                      {generatedReport.executive_summary.top_insights.map((insight, index) => (
+                        <div key={index} className="flex items-start space-x-2">
+                          <FireIcon className="h-4 w-4 text-orange-500 mt-1 flex-shrink-0" />
+                          <p className="text-sm text-gray-700">{insight}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Critical Actions */}
-                <div className="bg-white rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                    <ExclamationTriangleIcon className="h-5 w-5 text-red-500 mr-2" />
-                    Critical Actions Required
-                  </h4>
-                  <div className="space-y-2">
-                    {generatedReport.executive_summary.critical_actions.map((action, index) => (
-                      <div key={index} className="flex items-start space-x-2">
-                        <div className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-full mt-0.5">
-                          {index + 1}
+                {generatedReport.executive_summary?.critical_actions && (
+                  <div className="bg-white rounded-lg p-4">
+                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                      <ExclamationTriangleIcon className="h-5 w-5 text-red-500 mr-2" />
+                      Critical Actions Required
+                    </h4>
+                    <div className="space-y-2">
+                      {generatedReport.executive_summary.critical_actions.map((action, index) => (
+                        <div key={index} className="flex items-start space-x-2">
+                          <div className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-full mt-0.5">
+                            {index + 1}
+                          </div>
+                          <p className="text-sm text-gray-700 font-medium">{action}</p>
                         </div>
-                        <p className="text-sm text-gray-700 font-medium">{action}</p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Customer Segments Analysis */}
