@@ -115,6 +115,13 @@ const getFilteredNavigationItems = (user) => {
       current: false,
       requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Only admins
     },
+    {
+      name: 'Security',
+      icon: ShieldExclamationIcon,
+      href: '/security',
+      current: false,
+      requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Security-focused access
+    },
   ];
 
   return allNavigationItems.filter(item => {
