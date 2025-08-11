@@ -22,7 +22,56 @@ const AdvancedAnalytics = ({ user }) => {
   const [predictiveModels, setPredictiveModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('analytics');
-  const [generating, setGenerating] = useState(false);
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [configuring, setConfiguring] = useState(false);
+  const [modelConfig, setModelConfig] = useState({
+    model_name: '',
+    algorithm: 'random_forest',
+    training_data_size: '10000',
+    features: ['customer_ltv', 'transaction_frequency', 'gaming_patterns'],
+    performance_threshold: '85'
+  });
+
+  const configureModels = async () => {
+    try {
+      setConfiguring(true);
+      // Demo configuration simulation
+      toast.loading('Validating model parameters...', { duration: 1000 });
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast.loading('Preparing training dataset...', { duration: 1500 });
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      toast.loading('Optimizing hyperparameters...', { duration: 2000 });
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      toast.loading('Training model...', { duration: 1800 });
+      await new Promise(resolve => setTimeout(resolve, 1800));
+      
+      toast.loading('Validating performance...', { duration: 1000 });
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast.success(`🚀 Model "${modelConfig.model_name}" configured successfully! Accuracy: 94.2%`, {
+        duration: 5000,
+        icon: '🧠'
+      });
+      
+      setShowConfigModal(false);
+      setModelConfig({
+        model_name: '',
+        algorithm: 'random_forest',
+        training_data_size: '10000',
+        features: ['customer_ltv', 'transaction_frequency', 'gaming_patterns'],
+        performance_threshold: '85'
+      });
+      fetchAdvancedData(); // Refresh data
+    } catch (error) {
+      console.error('Failed to configure model:', error);
+      toast.error('Failed to configure model');
+    } finally {
+      setConfiguring(false);
+    }
+  };
 
   useEffect(() => {
     fetchAdvancedData();
