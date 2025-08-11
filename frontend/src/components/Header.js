@@ -90,13 +90,16 @@ const Header = ({ user, onLogout, onMenuToggle }) => {
         </button>
 
         {/* Quick Action Buttons */}
-        <button className="btn-casino-ghost px-4 py-2 text-sm">
+        <Link to="/reports" className="btn-casino-ghost px-4 py-2 text-sm">
           📊 View Reports
-        </button>
+        </Link>
 
-        <button className="btn-casino-secondary px-4 py-2 text-sm">
-          🎰 Casino Floor
-        </button>
+        {/* Casino Floor - Permission-based access */}
+        {(user?.role === 'SuperAdmin' || user?.role === 'GeneralAdmin' || user?.permissions?.includes('casino_floor_access')) && (
+          <Link to="/casino-floor" className="btn-casino-secondary px-4 py-2 text-sm">
+            🎰 Casino Floor
+          </Link>
+        )}
 
         {/* Notifications */}
         <div className="relative">
