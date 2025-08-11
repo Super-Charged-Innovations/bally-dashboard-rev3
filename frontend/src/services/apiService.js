@@ -1125,33 +1125,69 @@ class ApiService {
       return Promise.resolve([
         {
           id: "analytics-1",
-          metric_name: "Player Retention Rate",
-          current_value: 78.5,
-          trend: "increasing",
-          period: "monthly",
-          category: "player_behavior",
-          insights: "Significant improvement in VIP tier retention",
-          recommended_actions: ["Enhance VIP perks", "Personalized gaming experiences"]
+          analysis_type: "customer_ltv",
+          analysis_date: "2025-01-09T10:00:00Z",
+          time_period: "quarterly",
+          confidence_score: 94.8,
+          data_points: {
+            avg_ltv: 4250.75,
+            high_value_customers: 156,
+            churn_risk_reduction: 0.23,
+            revenue_increase: 0.15
+          },
+          insights: [
+            "VIP members show 340% higher lifetime value compared to regular members",
+            "Customers who engage with loyalty programs stay 2.5x longer",
+            "Mobile gaming sessions predict higher spending with 87% accuracy"
+          ],
+          recommended_actions: [
+            "Implement targeted VIP retention campaigns",
+            "Expand mobile gaming offerings"
+          ]
         },
         {
           id: "analytics-2", 
-          metric_name: "Average Session Duration",
-          current_value: 145,
-          trend: "stable",
-          period: "weekly",
-          category: "engagement",
-          insights: "Gaming sessions maintaining consistent length",
-          recommended_actions: ["Introduce time-based bonuses", "Break reminders for health"]
+          analysis_type: "churn_prediction",
+          analysis_date: "2025-01-08T15:30:00Z",
+          time_period: "monthly",
+          confidence_score: 91.2,
+          data_points: {
+            at_risk_customers: 87,
+            churn_probability: 0.18,
+            retention_potential: 0.74,
+            intervention_roi: 3.2
+          },
+          insights: [
+            "Customers inactive for 14+ days have 67% churn probability",
+            "Personalized offers reduce churn by 45% within first week",
+            "Gaming preference changes indicate early churn signals"
+          ],
+          recommended_actions: [
+            "Deploy automated re-engagement campaigns",
+            "Offer personalized gaming experiences"
+          ]
         },
         {
           id: "analytics-3",
-          metric_name: "Revenue Per Player",
-          current_value: 2850,
-          trend: "increasing",
-          period: "monthly", 
-          category: "financial",
-          insights: "High-value players driving revenue growth",
-          recommended_actions: ["Expand premium gaming options", "VIP experience packages"]
+          analysis_type: "operational_efficiency",
+          analysis_date: "2025-01-07T09:15:00Z",
+          time_period: "weekly",
+          confidence_score: 89.5,
+          data_points: {
+            efficiency_score: 0.82,
+            cost_reduction: 125000,
+            time_saved_hours: 340,
+            automation_potential: 0.65
+          },
+          insights: [
+            "Staff scheduling optimization can reduce costs by 15%",
+            "Automated KYC processes save 120 hours weekly",
+            "Peak hour analysis reveals 23% improvement opportunity"
+          ],
+          recommended_actions: [
+            "Implement AI-powered scheduling",
+            "Expand process automation"
+          ]
         }
       ]);
     }
