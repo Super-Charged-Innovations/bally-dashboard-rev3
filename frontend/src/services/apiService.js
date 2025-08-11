@@ -2462,14 +2462,239 @@ class ApiService {
           insights: [
             "Staff scheduling optimization can reduce costs by 18% while maintaining service quality",
             "Automated KYC processes save 165 hours weekly and improve accuracy by 23%",
-            "Peak hour analysis reveals 23% improvement opportunity"
+            "Peak hour table allocation increases revenue by $2.3M annually",
+            "Predictive maintenance reduces equipment downtime by 34%",
+            "Real-time analytics dashboards improve decision-making speed by 67%"
           ],
           recommended_actions: [
-            "Implement AI-powered scheduling",
-            "Expand process automation"
+            "Implement AI-powered staff scheduling system",
+            "Deploy predictive maintenance for gaming equipment",
+            "Automate routine compliance and reporting tasks",
+            "Optimize table allocation algorithms for peak hours"
+          ]
+        },
+        {
+          id: "analytics-004",
+          analysis_type: "revenue_optimization",
+          analysis_date: "2025-01-08T14:20:00Z",
+          time_period: "monthly",
+          confidence_score: 94.2,
+          data_points: {
+            total_revenue: 8750000,
+            revenue_growth: 0.23,
+            profit_margin: 0.34,
+            revenue_per_customer: 3420.75,
+            high_margin_games: 0.68,
+            cross_sell_success: 0.41
+          },
+          revenue_streams: [
+            { stream: "Table Games", revenue: 3850000, growth: 0.18, margin: 0.42 },
+            { stream: "Slot Machines", revenue: 2940000, growth: 0.28, margin: 0.38 },
+            { stream: "VIP Services", revenue: 1450000, growth: 0.35, margin: 0.55 },
+            { stream: "Food & Beverage", revenue: 510000, growth: 0.12, margin: 0.28 }
+          ],
+          insights: [
+            "VIP services show highest profit margins at 55% with 35% growth rate",
+            "Slot machine revenue growing fastest at 28% month-over-month",
+            "Cross-selling loyalty program increases customer spend by 67%",
+            "Premium gaming experiences command 3.2x higher margins",
+            "Weekend revenue 45% higher than weekdays across all segments"
+          ],
+          recommended_actions: [
+            "Expand VIP service offerings to capture high-margin opportunities",
+            "Invest in premium slot machine fleet for sustained growth",
+            "Develop integrated loyalty program with cross-selling features",
+            "Create weekend-specific premium gaming experiences"
+          ]
+        },
+        {
+          id: "analytics-005",
+          analysis_type: "player_behavior",
+          analysis_date: "2025-01-07T11:45:00Z",
+          time_period: "weekly",
+          confidence_score: 88.9,
+          data_points: {
+            avg_session_duration: 145.5,
+            games_per_session: 8.7,
+            peak_activity_time: "9:30 PM",
+            mobile_vs_desktop: 0.62,
+            new_vs_returning: 0.23,
+            social_gaming_adoption: 0.34
+          },
+          behavior_patterns: [
+            { pattern: "Weekend Warriors", percentage: 0.28, avg_spend: 450.75, sessions: 3.2 },
+            { pattern: "Weekday Regulars", percentage: 0.34, avg_spend: 280.50, sessions: 5.8 },
+            { pattern: "High Rollers", percentage: 0.12, avg_spend: 2850.25, sessions: 2.1 },
+            { pattern: "Casual Players", percentage: 0.26, avg_spend: 125.30, sessions: 1.4 }
+          ],
+          insights: [
+            "Weekend Warriors show highest revenue potential with concentrated high-value sessions",
+            "Mobile players stay engaged 2.3x longer than desktop-only players",
+            "Social gaming features increase session duration by 67%",
+            "Live dealer interactions correlate with 45% higher spend per session",
+            "Personalized game recommendations improve player satisfaction by 78%"
+          ],
+          recommended_actions: [
+            "Develop targeted weekend campaigns for high-value players",
+            "Enhance mobile gaming experience with exclusive features",
+            "Expand social gaming offerings to increase engagement",
+            "Implement AI-powered personalized game recommendations"
           ]
         }
       ]);
+    }
+
+    // Generate Analytics Report - Enhanced with real charts and comprehensive data
+    if (endpoint.startsWith('/api/analytics/generate')) {
+      return Promise.resolve({
+        report_id: `report_${Date.now()}`,
+        generated_at: new Date().toISOString(),
+        analysis_type: "comprehensive_analysis",
+        confidence_score: 95.8,
+        executive_summary: {
+          key_metrics: {
+            total_revenue: 8750000,
+            customer_count: 2596,
+            avg_ltv: 4850.75,
+            churn_rate: 0.16,
+            efficiency_score: 0.87
+          },
+          top_insights: [
+            "Revenue increased 23% month-over-month driven by VIP segment growth",
+            "Customer lifetime value improved 22% through loyalty program optimization",
+            "Operational efficiency gains saved $185K while improving service quality",
+            "Churn prediction models identify at-risk customers with 93% accuracy"
+          ],
+          critical_actions: [
+            "Expand VIP services - projected $2.4M additional annual revenue",
+            "Implement AI scheduling - 18% cost reduction potential",
+            "Deploy churn prevention campaigns - retain $285K at-risk revenue"
+          ]
+        },
+        detailed_analysis: {
+          customer_segments: [
+            {
+              segment: "VIP Players",
+              count: 89,
+              revenue: 3930000,
+              ltv: 15420.50,
+              retention: 0.962,
+              growth_potential: "High"
+            },
+            {
+              segment: "Diamond Members", 
+              count: 158,
+              revenue: 2845000,
+              ltv: 8750.25,
+              retention: 0.942,
+              growth_potential: "High"
+            },
+            {
+              segment: "Regular Players",
+              count: 1349,
+              revenue: 1975000,
+              ltv: 2240.35,
+              retention: 0.782,
+              growth_potential: "Medium"
+            },
+            {
+              segment: "New Players",
+              count: 1000,
+              revenue: 450000,
+              ltv: 450.00,
+              retention: 0.234,
+              growth_potential: "High"
+            }
+          ],
+          revenue_breakdown: {
+            table_games: { revenue: 3850000, margin: 0.42, trend: "up" },
+            slots: { revenue: 2940000, margin: 0.38, trend: "up" },
+            vip_services: { revenue: 1450000, margin: 0.55, trend: "up" },
+            dining: { revenue: 510000, margin: 0.28, trend: "stable" }
+          },
+          predictive_models: {
+            churn_prevention: {
+              accuracy: 93.4,
+              at_risk_customers: 127,
+              potential_savings: 285000
+            },
+            revenue_forecasting: {
+              accuracy: 91.7,
+              next_month_prediction: 9125000,
+              confidence_interval: [8850000, 9400000]
+            },
+            customer_ltv: {
+              accuracy: 96.8,
+              avg_predicted_ltv: 5120.45,
+              high_value_pipeline: 67
+            }
+          }
+        },
+        charts_data: {
+          revenue_trend: [
+            { month: "Aug 2024", revenue: 6850000, target: 7000000 },
+            { month: "Sep 2024", revenue: 7120000, target: 7200000 },
+            { month: "Oct 2024", revenue: 7450000, target: 7500000 },
+            { month: "Nov 2024", revenue: 7850000, target: 7800000 },
+            { month: "Dec 2024", revenue: 8340000, target: 8200000 },
+            { month: "Jan 2025", revenue: 8750000, target: 8600000 }
+          ],
+          customer_distribution: [
+            { segment: "VIP", count: 89, percentage: 3.4 },
+            { segment: "Diamond", count: 158, percentage: 6.1 },
+            { segment: "Sapphire", count: 421, percentage: 16.2 },
+            { segment: "Ruby", count: 928, percentage: 35.7 },
+            { segment: "New", count: 1000, percentage: 38.5 }
+          ],
+          game_performance: [
+            { game: "Blackjack", revenue: 1850000, sessions: 12450, avg_bet: 148.67 },
+            { game: "Roulette", revenue: 1520000, sessions: 8900, avg_bet: 170.79 },
+            { game: "Baccarat", revenue: 1180000, sessions: 3200, avg_bet: 368.75 },
+            { game: "Poker", revenue: 950000, sessions: 5670, avg_bet: 167.54 },
+            { game: "Slots", revenue: 2940000, sessions: 45600, avg_bet: 64.47 }
+          ],
+          efficiency_metrics: [
+            { metric: "Staff Utilization", current: 84, target: 90, benchmark: 87 },
+            { metric: "Table Occupancy", current: 78, target: 85, benchmark: 82 },
+            { metric: "Customer Satisfaction", current: 91, target: 95, benchmark: 89 },
+            { metric: "Response Time", current: 87, target: 90, benchmark: 85 }
+          ]
+        },
+        recommendations: [
+          {
+            priority: "High",
+            category: "Revenue Growth",
+            action: "Expand VIP Gaming Floor",
+            impact: "Projected $2.4M annual revenue increase",
+            timeline: "3 months",
+            investment_required: 450000
+          },
+          {
+            priority: "High", 
+            category: "Cost Optimization",
+            action: "Implement AI Staff Scheduling",
+            impact: "18% reduction in labor costs ($185K annually)",
+            timeline: "2 months",
+            investment_required: 75000
+          },
+          {
+            priority: "Medium",
+            category: "Customer Retention",
+            action: "Deploy Predictive Churn Prevention",
+            impact: "Retain $285K at-risk revenue",
+            timeline: "6 weeks",
+            investment_required: 35000
+          },
+          {
+            priority: "Medium",
+            category: "Operational Efficiency", 
+            action: "Optimize Table Allocation Algorithm",
+            impact: "12% increase in table utilization",
+            timeline: "4 weeks",
+            investment_required: 25000
+          }
+        ]
+      });
     }
 
     // Cost Optimization endpoints
