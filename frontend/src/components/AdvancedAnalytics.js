@@ -546,6 +546,174 @@ const AdvancedAnalytics = ({ user }) => {
           )}
         </div>
       </div>
+
+      {/* Configure Models Modal */}
+      {showConfigModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900">🧠 Configure AI Model</h3>
+                <button
+                  onClick={() => setShowConfigModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Model Name</label>
+                  <input
+                    type="text"
+                    value={modelConfig.model_name}
+                    onChange={(e) => setModelConfig({...modelConfig, model_name: e.target.value})}
+                    placeholder="e.g., VIP Conversion Predictor v2.0"
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Algorithm</label>
+                    <select
+                      value={modelConfig.algorithm}
+                      onChange={(e) => setModelConfig({...modelConfig, algorithm: e.target.value})}
+                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                    >
+                      <option value="random_forest">Random Forest</option>
+                      <option value="gradient_boosting">Gradient Boosting</option>
+                      <option value="neural_network">Neural Network</option>
+                      <option value="svm">Support Vector Machine</option>
+                      <option value="xgboost">XGBoost</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Training Data Size</label>
+                    <select
+                      value={modelConfig.training_data_size}
+                      onChange={(e) => setModelConfig({...modelConfig, training_data_size: e.target.value})}
+                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                    >
+                      <option value="5000">5,000 records</option>
+                      <option value="10000">10,000 records</option>
+                      <option value="25000">25,000 records</option>
+                      <option value="50000">50,000 records</option>
+                      <option value="100000">100,000 records</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Feature Selection</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      'customer_ltv', 'transaction_frequency', 'gaming_patterns', 
+                      'session_duration', 'deposit_behavior', 'bonus_usage',
+                      'device_preferences', 'time_patterns'
+                    ].map((feature) => (
+                      <label key={feature} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={modelConfig.features.includes(feature)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setModelConfig({
+                                ...modelConfig, 
+                                features: [...modelConfig.features, feature]
+                              });
+                            } else {
+                              setModelConfig({
+                                ...modelConfig,
+                                features: modelConfig.features.filter(f => f !== feature)
+                              });
+                            }
+                          }}
+                          className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700 capitalize">
+                          {feature.replace('_', ' ')}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Performance Threshold (%)</label>
+                  <input
+                    type="range"
+                    min="70"
+                    max="99"
+                    value={modelConfig.performance_threshold}
+                    onChange={(e) => setModelConfig({...modelConfig, performance_threshold: e.target.value})}
+                    className="mt-1 block w-full"
+                  />
+                  <div className="flex justify-between text-sm text-gray-500 mt-1">
+                    <span>70%</span>
+                    <span>Current: {modelConfig.performance_threshold}%</span>
+                    <span>99%</span>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-medium text-blue-900 mb-2">🎯 Estimated Performance</h4>
+                  <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <span className="text-blue-700">Accuracy:</span>
+                      <span className="font-semibold text-blue-900 ml-1">
+                        {Math.min(95, parseInt(modelConfig.performance_threshold) + Math.floor(Math.random() * 5))}%
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-blue-700">Training Time:</span>
+                      <span className="font-semibold text-blue-900 ml-1">
+                        {Math.ceil(parseInt(modelConfig.training_data_size) / 5000)} hours
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-blue-700">Features:</span>
+                      <span className="font-semibold text-blue-900 ml-1">
+                        {modelConfig.features.length} selected
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowConfigModal(false)}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    disabled={configuring}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={configureModels}
+                    disabled={configuring || !modelConfig.model_name}
+                    className="px-4 py-2 bg-primary-600 text-white rounded-md text-sm font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                  >
+                    {configuring ? (
+                      <>
+                        <div className="spinner w-4 h-4"></div>
+                        <span>Training Model...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CogIcon className="h-4 w-4" />
+                        <span>Train & Deploy Model</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
