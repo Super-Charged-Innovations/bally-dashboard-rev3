@@ -16,6 +16,7 @@ import RewardsManagement from './components/RewardsManagement';
 import MarketingIntelligence from './components/MarketingIntelligence';
 import TravelManagement from './components/TravelManagement';
 import DriversManagement from './components/DriversManagement';
+import MaintenanceManagement from './components/MaintenanceManagement';
 import StaffManagement from './components/StaffManagement';
 import AdvancedAnalytics from './components/AdvancedAnalytics';
 import Analytics from './components/Analytics';
