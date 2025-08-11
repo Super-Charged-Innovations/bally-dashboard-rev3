@@ -514,8 +514,71 @@
   @apply bg-casino-gradient-light;
 }
 
+/* Mobile-specific styles */
+.mobile-layout {
+  /* Ensure proper touch targets */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mobile-layout button,
+.mobile-layout a {
+  /* Minimum touch target size of 44px */
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile responsive wrapper for desktop components */
+.mobile-responsive-wrapper {
+  /* Adjust spacing for mobile */
+  @apply px-1;
+}
+
+.mobile-responsive-wrapper .container {
+  @apply px-2;
+}
+
+.mobile-responsive-wrapper h1 {
+  @apply text-xl;
+}
+
+.mobile-responsive-wrapper h2 {
+  @apply text-lg;
+}
+
+.mobile-responsive-wrapper h3 {
+  @apply text-base;
+}
+
+/* Mobile table responsiveness */
+.mobile-responsive-wrapper table {
+  @apply text-sm;
+}
+
+.mobile-responsive-wrapper .overflow-x-auto {
+  @apply -mx-4;
+}
+
+/* Mobile modal adjustments */
+.mobile-responsive-wrapper .modal {
+  @apply mx-2 max-h-[90vh];
+}
+
 /* Responsive Design Enhancements */
 @media (max-width: 768px) {
+  .mobile-hide {
+    display: none !important;
+  }
+  
+  .desktop-hide {
+    display: block !important;
+  }
+  
   .casino-card {
     @apply mx-2 rounded-lg;
   }
@@ -526,6 +589,58 @@
   
   .btn-casino-primary, .btn-casino-secondary, .btn-casino-ghost {
     @apply px-4 py-2 text-sm;
+  }
+  
+  /* Adjust spacing for mobile */
+  .container {
+    @apply px-4;
+  }
+  
+  /* Mobile navigation adjustments */
+  .mobile-nav-item {
+    @apply p-3 text-sm;
+  }
+  
+  /* Mobile card adjustments */
+  .card-mobile {
+    @apply mx-2 mb-4 rounded-lg;
+  }
+  
+  /* Mobile form adjustments */
+  .form-mobile input,
+  .form-mobile select,
+  .form-mobile textarea {
+    @apply text-base; /* Prevents zoom on iOS */
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-hide {
+    display: block !important;
+  }
+  
+  .desktop-hide {
+    display: none !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-full-width {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
+
+/* Dark theme support (for future use) */
+@media (prefers-color-scheme: dark) {
+  .auto-dark {
+    background-color: #1e293b;
+    color: #f8fafc;
   }
 }
 
