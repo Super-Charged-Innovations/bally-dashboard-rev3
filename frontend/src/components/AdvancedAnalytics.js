@@ -24,10 +24,12 @@ const AdvancedAnalytics = ({ user }) => {
   const [analytics, setAnalytics] = useState([]);
   const [costOptimization, setCostOptimization] = useState([]);
   const [predictiveModels, setPredictiveModels] = useState([]);
+  const [generatedReport, setGeneratedReport] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('analytics');
   const [generating, setGenerating] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [configuring, setConfiguring] = useState(false);
   const [modelConfig, setModelConfig] = useState({
     model_name: '',
