@@ -642,8 +642,11 @@ class ApiService {
           name: "VIP Experience",
           description: "Premium gaming package with exclusive perks",
           price: 25000,
+          credits: 30000,
+          validity_hours: 6,
           duration: "4 hours",
           is_active: true,
+          tier_access: ["Sapphire", "Diamond", "VIP"],
           services: ["Private Table", "Premium Drinks", "Dedicated Host"]
         },
         {
@@ -651,9 +654,36 @@ class ApiService {
           name: "High Roller",
           description: "Elite gaming package for serious players",
           price: 50000,
+          credits: 65000,
+          validity_hours: 12,
           duration: "8 hours",
           is_active: true,
+          tier_access: ["Diamond", "VIP"],
           services: ["VIP Room", "Premium Service", "Luxury Transportation"]
+        },
+        {
+          id: "pkg-3",
+          name: "Ruby Starter",
+          description: "Entry-level gaming package for new members",
+          price: 10000,
+          credits: 12000,
+          validity_hours: 3,
+          duration: "2 hours",
+          is_active: true,
+          tier_access: ["Ruby", "Sapphire", "Diamond", "VIP"],
+          services: ["Gaming Credits", "Welcome Drink", "Basic Support"]
+        },
+        {
+          id: "pkg-4",
+          name: "Weekend Special",
+          description: "Weekend exclusive package with bonus credits",
+          price: 35000,
+          credits: 42000,
+          validity_hours: 8,
+          duration: "6 hours",
+          is_active: false,
+          tier_access: ["Sapphire", "Diamond", "VIP"],
+          services: ["Weekend Bonus", "Premium Drinks", "Late Night Gaming"]
         }
       ]);
     }
