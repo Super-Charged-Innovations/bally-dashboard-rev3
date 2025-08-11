@@ -44,6 +44,17 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  // Check if this should be mobile app
+  const shouldUseMobileApp = () => {
+    const currentPath = window.location.pathname;
+    return currentPath.startsWith('/m/') || shouldRedirectToMobile();
+  };
+
+  // If mobile app should be used, render mobile app instead
+  if (shouldUseMobileApp()) {
+    return <MobileApp />;
+  }
+
   useEffect(() => {
     checkAuthStatus();
   }, []);
