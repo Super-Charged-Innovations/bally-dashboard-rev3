@@ -1529,8 +1529,296 @@ class ApiService {
       ]);
     }
 
-    // Compliance data
-    if (endpoint.startsWith('/api/compliance')) {
+    // Maintenance endpoints
+    if (endpoint.startsWith('/api/maintenance/facilities')) {
+      return Promise.resolve([
+        {
+          id: "facility-1",
+          name: "HVAC System - Main Floor",
+          equipment_id: "HVAC-001",
+          location: "Main Gaming Floor",
+          status: "operational",
+          type: "facility",
+          manufacturer: "Carrier",
+          model: "WeatherExpert 50TCQ",
+          last_maintenance: "2025-01-05",
+          assigned_technician: "Maria Santos"
+        },
+        {
+          id: "facility-2", 
+          name: "LED Lighting - VIP Area",
+          equipment_id: "LED-VIP-02",
+          location: "VIP Gaming Area",
+          status: "maintenance",
+          type: "facility",
+          manufacturer: "Philips",
+          model: "CoreLine LED",
+          last_maintenance: "2025-01-08",
+          assigned_technician: "Ahmed Hassan"
+        },
+        {
+          id: "facility-3",
+          name: "Fire Suppression System",
+          equipment_id: "FIRE-MAIN-01",
+          location: "Entire Building",
+          status: "operational",
+          type: "facility",
+          manufacturer: "Tyco",
+          model: "CPVC Sprinkler System",
+          last_maintenance: "2024-12-20",
+          assigned_technician: "John Silva"
+        },
+        {
+          id: "facility-4",
+          name: "Security Camera Network",
+          equipment_id: "CAM-NET-01",
+          location: "Casino Perimeter",
+          status: "operational",
+          type: "security",
+          manufacturer: "Hikvision",
+          model: "DS-2CD2385G1-I",
+          last_maintenance: "2025-01-03",
+          assigned_technician: "David Chen"
+        },
+        {
+          id: "facility-5",
+          name: "Emergency Backup Generator",
+          equipment_id: "GEN-BACKUP-01",
+          location: "Basement - Utility Room",
+          status: "scheduled",
+          type: "facility",
+          manufacturer: "Caterpillar",
+          model: "C15 500kW",
+          last_maintenance: "2024-11-15",
+          assigned_technician: "Ahmed Hassan"
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/maintenance/machines')) {
+      return Promise.resolve([
+        {
+          id: "machine-1",
+          name: "Lightning Link Slot",
+          equipment_id: "SLT-247",
+          location: "Main Gaming Floor - Row A",
+          status: "out_of_order", 
+          type: "machine",
+          manufacturer: "Aristocrat",
+          model: "Lightning Link",
+          last_maintenance: "2024-12-28",
+          assigned_technician: "Lisa Perera"
+        },
+        {
+          id: "machine-2",
+          name: "Blackjack Table #3",
+          equipment_id: "BJ-003",
+          location: "Table Games Area",
+          status: "operational",
+          type: "machine",
+          manufacturer: "Shuffle Master",
+          model: "I-Deal+",
+          last_maintenance: "2025-01-04",
+          assigned_technician: "Lisa Perera"
+        },
+        {
+          id: "machine-3",
+          name: "Roulette Wheel - European",
+          equipment_id: "RW-EUR-01",
+          location: "High Limit Area",
+          status: "operational",
+          type: "machine", 
+          manufacturer: "Cammegh",
+          model: "Mercury 360",
+          last_maintenance: "2025-01-02",
+          assigned_technician: "John Silva"
+        },
+        {
+          id: "machine-4",
+          name: "Buffalo Gold Slot",
+          equipment_id: "SLT-189",
+          location: "Main Gaming Floor - Row C",
+          status: "maintenance",
+          type: "machine",
+          manufacturer: "Aristocrat",
+          model: "Buffalo Gold",
+          last_maintenance: "2025-01-09",
+          assigned_technician: "Lisa Perera"
+        },
+        {
+          id: "machine-5",
+          name: "Baccarat Shoe #2",
+          equipment_id: "BAC-002",
+          location: "VIP Gaming Area",
+          status: "operational",
+          type: "machine",
+          manufacturer: "Shuffle Master",
+          model: "Batch Shuffler",
+          last_maintenance: "2024-12-30",
+          assigned_technician: "John Silva"
+        },
+        {
+          id: "machine-6",
+          name: "Wheel of Fortune Slot",
+          equipment_id: "SLT-356",
+          location: "Main Gaming Floor - Row B",
+          status: "scheduled",
+          type: "machine",
+          manufacturer: "IGT",
+          model: "Wheel of Fortune 4D",
+          last_maintenance: "2024-12-15",
+          assigned_technician: "Lisa Perera"
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/maintenance/terminals')) {
+      return Promise.resolve([
+        {
+          id: "terminal-1",
+          name: "POS Terminal - Main Bar",
+          equipment_id: "POS-BAR-01",
+          location: "Main Bar Counter",
+          status: "operational",
+          type: "terminal",
+          manufacturer: "Square",
+          model: "Register Stand",
+          last_maintenance: "2025-01-07",
+          assigned_technician: "David Chen"
+        },
+        {
+          id: "terminal-2",
+          name: "Player Tracking Kiosk #5",
+          equipment_id: "PTK-005",
+          location: "Main Gaming Floor - Center",
+          status: "maintenance",
+          type: "terminal",
+          manufacturer: "Everi",
+          model: "CashClub Wallet",
+          last_maintenance: "2025-01-10",
+          assigned_technician: "David Chen"
+        },
+        {
+          id: "terminal-3", 
+          name: "ATM - Casino Entrance",
+          equipment_id: "ATM-ENT-01",
+          location: "Main Entrance Lobby",
+          status: "operational",
+          type: "terminal",
+          manufacturer: "NCR",
+          model: "SelfServ 84",
+          last_maintenance: "2025-01-01",
+          assigned_technician: "David Chen"
+        },
+        {
+          id: "terminal-4",
+          name: "Digital Display - Promotions",
+          equipment_id: "DISP-PROMO-01",
+          location: "Main Gaming Floor - Wall",
+          status: "out_of_order",
+          type: "terminal",
+          manufacturer: "Samsung",
+          model: "QM75R 4K Display",
+          last_maintenance: "2024-12-25",
+          assigned_technician: "Ahmed Hassan"
+        },
+        {
+          id: "terminal-5",
+          name: "Ticket Redemption Kiosk",
+          equipment_id: "TRK-001",
+          location: "Cashier Area",
+          status: "operational", 
+          type: "terminal",
+          manufacturer: "IGT",
+          model: "Resort Wallet",
+          last_maintenance: "2025-01-06",
+          assigned_technician: "David Chen"
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/maintenance/tickets')) {
+      return Promise.resolve([
+        {
+          id: "ticket-1",
+          title: "Slot Machine 247 - Not Accepting Coins",
+          description: "Machine is not accepting coin input. Display shows 'COIN JAM' error. Attempted to clear jam but issue persists. Requires technician inspection.",
+          category: "machine",
+          priority: "high",
+          status: "assigned",
+          location: "Main Gaming Floor - Row A",
+          equipment_id: "SLT-247",
+          assigned_to: "Lisa Perera - Gaming Tech",
+          created_at: "2025-01-11T09:30:00Z",
+          due_date: "2025-01-11T18:00:00Z"
+        },
+        {
+          id: "ticket-2",
+          title: "HVAC Temperature Control - VIP Area Too Warm",
+          description: "VIP gaming area temperature reading 28°C. Guests complaining. Thermostat appears functional but cooling not responding. May need refrigerant check.",
+          category: "facility", 
+          priority: "medium",
+          status: "in_progress",
+          location: "VIP Gaming Area",
+          equipment_id: "HVAC-VIP-02",
+          assigned_to: "Maria Santos - Facilities",
+          created_at: "2025-01-11T08:15:00Z",
+          due_date: "2025-01-12T12:00:00Z"
+        },
+        {
+          id: "ticket-3",
+          title: "POS System Crashing - Main Bar",
+          description: "Point of sale system at main bar keeps crashing during transaction processing. Error code POS-ERR-404. Affects customer service significantly.",
+          category: "terminal",
+          priority: "critical", 
+          status: "open",
+          location: "Main Bar Counter",
+          equipment_id: "POS-BAR-01",
+          assigned_to: "David Chen - IT Tech", 
+          created_at: "2025-01-11T14:20:00Z",
+          due_date: "2025-01-11T16:00:00Z"
+        },
+        {
+          id: "ticket-4",
+          title: "Emergency Lighting - Corridor B Not Working",
+          description: "Emergency lighting fixtures in corridor B (near restrooms) are not functioning. Affects emergency evacuation visibility. Safety concern.",
+          category: "facility",
+          priority: "high",
+          status: "assigned",
+          location: "Corridor B - Near Restrooms", 
+          equipment_id: "EMRG-LT-COR-B",
+          assigned_to: "Ahmed Hassan - Electrical",
+          created_at: "2025-01-11T07:45:00Z",
+          due_date: "2025-01-11T20:00:00Z"
+        },
+        {
+          id: "ticket-5",
+          title: "Blackjack Table #3 - Card Shuffler Malfunction",
+          description: "Automatic card shuffler making unusual grinding noise. Occasionally jams during shuffle cycle. Disrupts game flow. Recommend inspection.",
+          category: "machine",
+          priority: "medium",
+          status: "resolved",
+          location: "Table Games Area",
+          equipment_id: "BJ-003",
+          assigned_to: "John Silva - Senior Tech",
+          created_at: "2025-01-10T16:30:00Z",
+          due_date: "2025-01-11T12:00:00Z"
+        },
+        {
+          id: "ticket-6",
+          title: "Player Tracking Kiosk - Screen Flickering", 
+          description: "Touch screen on player tracking kiosk #5 has intermittent flickering. Sometimes unresponsive to touch. Affects player experience.",
+          category: "terminal",
+          priority: "low",
+          status: "scheduled",
+          location: "Main Gaming Floor - Center",
+          equipment_id: "PTK-005",
+          assigned_to: "David Chen - IT Tech",
+          created_at: "2025-01-11T11:00:00Z", 
+          due_date: "2025-01-13T10:00:00Z"
+        }
+      ]);
+    }
       return Promise.resolve({
         reports: [
           {
