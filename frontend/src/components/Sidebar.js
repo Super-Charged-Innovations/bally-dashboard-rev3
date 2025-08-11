@@ -63,6 +63,13 @@ const getFilteredNavigationItems = (user) => {
           requiredPermissions: ['members:read'],
         },
         {
+          name: 'Onboarding',
+          icon: UserPlusIcon,
+          href: '/onboarding',
+          current: false,
+          requiredRole: ['SuperAdmin', 'GeneralAdmin', 'Manager'], // Core operations
+        },
+        {
           name: 'Gaming',
           icon: PuzzlePieceIcon,
           href: '/gaming',
