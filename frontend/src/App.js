@@ -25,6 +25,7 @@ import EnterpriseDashboard from './components/EnterpriseDashboard';
 import NotificationsManagement from './components/NotificationsManagement';
 import ComplianceDashboard from './components/ComplianceDashboard';
 import SecurityMonitoring from './components/SecurityMonitoring';
+import CasinoFloor from './components/CasinoFloor';
 import Settings from './components/Settings';
 import EmergencyBroadcast from './components/EmergencyBroadcast';
 
