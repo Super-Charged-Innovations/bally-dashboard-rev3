@@ -1820,6 +1820,352 @@ class ApiService {
       ]);
     }
 
+    // Onboarding endpoints  
+    if (endpoint.startsWith('/api/onboarding/applications')) {
+      return Promise.resolve([
+        {
+          id: "app-1",
+          first_name: "James",
+          last_name: "Wilson",
+          email: "james.wilson@email.com",
+          phone: "+1-555-123-4567",
+          date_of_birth: "1985-03-15",
+          nationality: "American",
+          passport_number: "US123456789",
+          nic_number: null,
+          address: "1234 Main Street, New York, NY 10001, USA",
+          membership_type: "vip",
+          marketing_consent: true,
+          source: "referral",
+          status: "pending",
+          compliance_risk: "low",
+          marketing_campaigns: ["VIP Welcome Package", "High Roller Bonuses"],
+          compliance_notes: "Clean background check. Source of funds verified.",
+          referral_code: "REF-VIP-001",
+          created_at: "2025-01-11T09:30:00Z",
+          updated_at: "2025-01-11T09:30:00Z"
+        },
+        {
+          id: "app-2",
+          first_name: "Priya",
+          last_name: "Sharma",
+          email: "priya.sharma@email.com", 
+          phone: "+91-98765-43210",
+          date_of_birth: "1990-07-22",
+          nationality: "Indian",
+          passport_number: "IN987654321",
+          nic_number: null,
+          address: "Block 15, Sector 18, Noida, Uttar Pradesh, India",
+          membership_type: "premium",
+          marketing_consent: true,
+          source: "online",
+          status: "compliance_check",
+          compliance_risk: "medium",
+          marketing_campaigns: ["Premium Member Benefits", "Asian Market Promotions"],
+          compliance_notes: "Additional documentation required for source of funds verification.",
+          created_at: "2025-01-10T14:20:00Z",
+          updated_at: "2025-01-11T08:15:00Z"
+        },
+        {
+          id: "app-3",
+          first_name: "David",
+          last_name: "Chen",
+          email: "david.chen@email.com",
+          phone: "+65-9876-5432",
+          date_of_birth: "1978-12-08",
+          nationality: "British",
+          passport_number: "GB456789123",
+          nic_number: null,
+          address: "88 Marina Bay, Singapore 018962",
+          membership_type: "standard",
+          marketing_consent: false,
+          source: "walk_in",
+          status: "document_verification",
+          compliance_risk: "low",
+          compliance_notes: "Standard verification in progress. Documents uploaded successfully.",
+          created_at: "2025-01-10T16:45:00Z",
+          updated_at: "2025-01-11T10:20:00Z"
+        },
+        {
+          id: "app-4",
+          first_name: "Samantha",
+          last_name: "De Silva",
+          email: "samantha.desilva@email.com",
+          phone: "+94-77-123-4567",
+          date_of_birth: "1992-05-18",
+          nationality: "Sri Lankan",
+          passport_number: "N1234567",
+          nic_number: "199215610234",
+          address: "123 Galle Road, Colombo 3, Sri Lanka",
+          membership_type: "temporary",
+          marketing_consent: true,
+          source: "marketing_campaign",
+          status: "approved",
+          compliance_risk: "low",
+          marketing_campaigns: ["Local Resident Special", "Weekend Gaming Package"],
+          compliance_notes: "Approved for temporary membership. Local resident verification complete.",
+          created_at: "2025-01-09T11:30:00Z",
+          updated_at: "2025-01-10T15:45:00Z"
+        },
+        {
+          id: "app-5",
+          first_name: "Mohammed",
+          last_name: "Al-Rahman",
+          email: "mohammed.alrahman@email.com",
+          phone: "+971-50-123-4567",
+          date_of_birth: "1980-11-25",
+          nationality: "Emirati",
+          passport_number: "UAE789123456",
+          nic_number: null,
+          address: "Dubai Marina, Dubai, UAE",
+          membership_type: "vip",
+          marketing_consent: true,
+          source: "travel_partner",
+          status: "under_review",
+          compliance_risk: "high",
+          marketing_campaigns: ["Middle East VIP Program"],
+          compliance_notes: "High-value application. Enhanced due diligence required. Travel partner verification pending.",
+          created_at: "2025-01-11T07:15:00Z",
+          updated_at: "2025-01-11T07:15:00Z"
+        },
+        {
+          id: "app-6",
+          first_name: "Emma",
+          last_name: "Thompson",
+          email: "emma.thompson@email.com",
+          phone: "+61-4-1234-5678",
+          date_of_birth: "1987-09-12",
+          nationality: "Australian",
+          passport_number: "AU345678912",
+          nic_number: null,
+          address: "456 Collins Street, Melbourne, VIC 3000, Australia",
+          membership_type: "premium",
+          marketing_consent: true,
+          source: "referral",
+          status: "rejected",
+          compliance_risk: "high",
+          compliance_notes: "Rejected due to failed AML screening. Adverse media findings.",
+          referral_code: "REF-AUS-002",
+          created_at: "2025-01-08T13:20:00Z",
+          updated_at: "2025-01-09T16:30:00Z"
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/onboarding/documents')) {
+      return Promise.resolve([
+        {
+          id: "doc-1",
+          applicant_name: "James Wilson",
+          document_type: "Passport",
+          document_number: "US123456789",
+          uploaded_at: "2025-01-11T10:15:00Z",
+          expiry_date: "2030-03-15",
+          verification_status: "verified",
+          verification_notes: "Document verified successfully. High quality scan provided."
+        },
+        {
+          id: "doc-2",
+          applicant_name: "Priya Sharma",
+          document_type: "Passport",
+          document_number: "IN987654321",
+          uploaded_at: "2025-01-10T15:30:00Z",
+          expiry_date: "2028-07-22",
+          verification_status: "pending",
+          verification_notes: "Document under review. Additional verification required."
+        },
+        {
+          id: "doc-3",
+          applicant_name: "David Chen",
+          document_type: "Passport", 
+          document_number: "GB456789123",
+          uploaded_at: "2025-01-10T17:00:00Z",
+          expiry_date: "2029-12-08",
+          verification_status: "pending",
+          verification_notes: "Standard verification in progress."
+        },
+        {
+          id: "doc-4",
+          applicant_name: "Samantha De Silva",
+          document_type: "NIC",
+          document_number: "199215610234",
+          uploaded_at: "2025-01-09T12:00:00Z",
+          expiry_date: null,
+          verification_status: "verified",
+          verification_notes: "Sri Lankan NIC verified against government database."
+        },
+        {
+          id: "doc-5",
+          applicant_name: "Samantha De Silva",
+          document_type: "Passport",
+          document_number: "N1234567",
+          uploaded_at: "2025-01-09T12:05:00Z",
+          expiry_date: "2027-05-18",
+          verification_status: "verified",
+          verification_notes: "Sri Lankan passport verified successfully."
+        },
+        {
+          id: "doc-6",
+          applicant_name: "Mohammed Al-Rahman",
+          document_type: "Bank Statement",
+          document_number: "ADCB-2025-001",
+          uploaded_at: "2025-01-11T08:30:00Z",
+          expiry_date: null,
+          verification_status: "under_review",
+          verification_notes: "Source of funds documentation under enhanced review."
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/onboarding/compliance')) {
+      return Promise.resolve([
+        {
+          id: "comp-1",
+          applicant_name: "James Wilson",
+          risk_level: "low",
+          status: "completed",
+          aml_status: "clear",
+          pep_status: "negative",
+          sanctions_status: "clear",
+          kyc_score: 92,
+          source_of_funds: "Business Income",
+          background_check: "clean",
+          compliance_notes: "Comprehensive screening completed. No adverse findings. Source of funds verified through business documentation.",
+          checked_at: "2025-01-11T11:00:00Z",
+          compliance_officer: "Sarah Chen"
+        },
+        {
+          id: "comp-2",
+          applicant_name: "Priya Sharma",
+          risk_level: "medium",
+          status: "in_progress",
+          aml_status: "pending",
+          pep_status: "negative",
+          sanctions_status: "clear",
+          kyc_score: 78,
+          source_of_funds: "Employment",
+          background_check: "pending",
+          compliance_notes: "Enhanced due diligence in progress. Additional documentation requested for employment verification.",
+          checked_at: "2025-01-11T09:30:00Z",
+          compliance_officer: "David Rodriguez"
+        },
+        {
+          id: "comp-3",
+          applicant_name: "David Chen",
+          risk_level: "low",
+          status: "in_progress",
+          aml_status: "clear",
+          pep_status: "negative",
+          sanctions_status: "clear",
+          kyc_score: 85,
+          source_of_funds: "Investment Income",
+          background_check: "clear",
+          compliance_notes: "Standard KYC process ongoing. Investment portfolio verification in progress.",
+          checked_at: "2025-01-11T10:45:00Z",
+          compliance_officer: "Sarah Chen"
+        },
+        {
+          id: "comp-4",
+          applicant_name: "Mohammed Al-Rahman",
+          risk_level: "high",
+          status: "enhanced_review",
+          aml_status: "enhanced_review",
+          pep_status: "potential_match",
+          sanctions_status: "clear",
+          kyc_score: 65,
+          source_of_funds: "Business Ownership",
+          background_check: "enhanced_review",
+          compliance_notes: "Enhanced due diligence required. Potential PEP match identified. Business ownership structure under review.",
+          checked_at: "2025-01-11T08:00:00Z",
+          compliance_officer: "Marcus Johnson"
+        },
+        {
+          id: "comp-5",
+          applicant_name: "Emma Thompson",
+          risk_level: "high",
+          status: "rejected",
+          aml_status: "adverse_findings",
+          pep_status: "negative",
+          sanctions_status: "clear",
+          kyc_score: 35,
+          source_of_funds: "Unknown",
+          background_check: "adverse_findings",
+          compliance_notes: "Application rejected due to adverse media findings and inability to verify source of funds. Multiple red flags identified.",
+          checked_at: "2025-01-09T15:00:00Z",
+          compliance_officer: "Marcus Johnson"
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/onboarding/workflow')) {
+      return Promise.resolve([
+        {
+          id: "wf-1",
+          applicant_name: "James Wilson",
+          current_stage: "approved",
+          completion_percentage: 100,
+          estimated_completion: "Complete",
+          stages: [
+            { name: "Application Submitted", completed: true, active: false, completed_at: "2025-01-11T09:30:00Z" },
+            { name: "Document Upload", completed: true, active: false, completed_at: "2025-01-11T10:15:00Z" },
+            { name: "Document Verification", completed: true, active: false, completed_at: "2025-01-11T10:45:00Z" },
+            { name: "Compliance Screening", completed: true, active: false, completed_at: "2025-01-11T11:30:00Z" },
+            { name: "Risk Assessment", completed: true, active: false, completed_at: "2025-01-11T12:00:00Z" },
+            { name: "Final Approval", completed: true, active: false, completed_at: "2025-01-11T12:30:00Z" },
+            { name: "Member Setup", completed: true, active: false, completed_at: "2025-01-11T13:00:00Z" }
+          ]
+        },
+        {
+          id: "wf-2",
+          applicant_name: "Priya Sharma",
+          current_stage: "compliance_screening",
+          completion_percentage: 60,
+          estimated_completion: "2-3 business days",
+          stages: [
+            { name: "Application Submitted", completed: true, active: false, completed_at: "2025-01-10T14:20:00Z" },
+            { name: "Document Upload", completed: true, active: false, completed_at: "2025-01-10T15:30:00Z" },
+            { name: "Document Verification", completed: true, active: false, completed_at: "2025-01-11T08:00:00Z" },
+            { name: "Compliance Screening", completed: false, active: true, completed_at: null },
+            { name: "Risk Assessment", completed: false, active: false, completed_at: null },
+            { name: "Final Approval", completed: false, active: false, completed_at: null },
+            { name: "Member Setup", completed: false, active: false, completed_at: null }
+          ]
+        },
+        {
+          id: "wf-3",
+          applicant_name: "David Chen",
+          current_stage: "document_verification",
+          completion_percentage: 40,
+          estimated_completion: "1-2 business days",
+          stages: [
+            { name: "Application Submitted", completed: true, active: false, completed_at: "2025-01-10T16:45:00Z" },
+            { name: "Document Upload", completed: true, active: false, completed_at: "2025-01-10T17:00:00Z" },
+            { name: "Document Verification", completed: false, active: true, completed_at: null },
+            { name: "Compliance Screening", completed: false, active: false, completed_at: null },
+            { name: "Risk Assessment", completed: false, active: false, completed_at: null },
+            { name: "Final Approval", completed: false, active: false, completed_at: null },
+            { name: "Member Setup", completed: false, active: false, completed_at: null }
+          ]
+        },
+        {
+          id: "wf-4",
+          applicant_name: "Mohammed Al-Rahman",
+          current_stage: "enhanced_review",
+          completion_percentage: 30,
+          estimated_completion: "5-7 business days",
+          stages: [
+            { name: "Application Submitted", completed: true, active: false, completed_at: "2025-01-11T07:15:00Z" },
+            { name: "Document Upload", completed: true, active: false, completed_at: "2025-01-11T08:30:00Z" },
+            { name: "Document Verification", completed: false, active: false, completed_at: null },
+            { name: "Enhanced Due Diligence", completed: false, active: true, completed_at: null },
+            { name: "Senior Management Review", completed: false, active: false, completed_at: null },
+            { name: "Final Decision", completed: false, active: false, completed_at: null },
+            { name: "Member Setup", completed: false, active: false, completed_at: null }
+          ]
+        }
+      ]);
+    }
+
     // Compliance data  
     if (endpoint.startsWith('/api/compliance')) {
       return Promise.resolve({
