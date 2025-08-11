@@ -1991,5 +1991,47 @@ def main():
         print(f"\n⚠️  {failed} test(s) failed. Check issues above.")
         return 1
 
+def test_casino_floor_backend_support():
+    """Test Casino Floor system backend support specifically"""
+    print("🎰 CASINO FLOOR BACKEND SUPPORT TESTING")
+    print("=" * 60)
+    
+    tester = BallyCasinoAPITester()
+    
+    # Initialize sample data
+    if not tester.test_initialize_sample_data():
+        print("❌ Failed to initialize sample data")
+        return 1
+    
+    # Login as SuperAdmin
+    if not tester.test_login("superadmin", "admin123"):
+        print("❌ SuperAdmin login failed")
+        return 1
+    
+    # Run Casino Floor specific tests
+    success = tester.test_casino_floor_backend_support()
+    
+    print(f"\n📊 Casino Floor Backend Support Test Results:")
+    print(f"Tests Run: {tester.tests_run}")
+    print(f"Tests Passed: {tester.tests_passed}")
+    print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
+    
+    if success:
+        print("\n🎉 CASINO FLOOR BACKEND SUPPORT: ALL TESTS PASSED!")
+        print("✅ Gaming endpoints working correctly after Casino Floor implementation")
+        print("✅ Authentication and permissions properly configured")
+        print("✅ Data consistency maintained across systems")
+        print("✅ Mock data structures compatible")
+        print("✅ No regressions in existing gaming functionality")
+        return 0
+    else:
+        print("\n⚠️  CASINO FLOOR BACKEND SUPPORT: SOME ISSUES DETECTED")
+        print("Please review the issues above")
+        return 1
+
 if __name__ == "__main__":
-    sys.exit(main())
+    # Check if we should run Casino Floor specific tests
+    if len(sys.argv) > 1 and sys.argv[1] == "casino_floor":
+        sys.exit(test_casino_floor_backend_support())
+    else:
+        sys.exit(main())
