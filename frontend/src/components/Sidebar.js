@@ -277,14 +277,6 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
           </div>
         ))}
       </nav>
-              title={!isOpen ? item.name : ''}
-            >
-              <Icon className={`flex-shrink-0 h-5 w-5 ${isOpen ? 'mr-3' : ''}`} />
-              {isOpen && item.name}
-            </NavLink>
-          );
-        })}
-      </nav>
 
       {/* User Info (when expanded) */}
       {isOpen && user && (
