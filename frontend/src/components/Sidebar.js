@@ -15,7 +15,8 @@ import {
   ChartPieIcon,
   BuildingOfficeIcon,
   BellIcon,
-  ShieldCheckIcon
+  ShieldCheckIcon,
+  ShieldExclamationIcon
 } from '@heroicons/react/24/outline';
 
 // Permission checking utility
