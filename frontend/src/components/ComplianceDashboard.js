@@ -149,8 +149,13 @@ const ComplianceDashboard = ({ user }) => {
         <button
           onClick={() => setShowGenerateModal(true)}
           className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 flex items-center space-x-2"
+          disabled={generating}
         >
-          <PlusIcon className="h-5 w-5" />
+          {generating ? (
+            <div className="spinner w-4 h-4"></div>
+          ) : (
+            <PlusIcon className="h-5 w-5" />
+          )}
           <span>Generate Report</span>
         </button>
       </div>
