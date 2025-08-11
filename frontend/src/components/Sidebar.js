@@ -299,21 +299,20 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
         </div>
       )}
 
-      {/* Bottom Navigation */}
-      <div className="border-t border-gray-200 px-2 py-4 space-y-2">
+      {/* Bottom items */}
+      <div className="border-t border-gray-200 p-2 space-y-1">
         {bottomItems.map((item) => {
           const Icon = item.icon;
           return (
-            <button
+            <NavLink
               key={item.name}
-              className={`group flex items-center w-full px-2 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 ${
-                !isOpen ? 'justify-center' : ''
-              }`}
-              title={!isOpen ? item.name : ''}
+              to={item.href}
+              className="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
+              title={!isOpen ? item.name : undefined}
             >
               <Icon className={`flex-shrink-0 h-5 w-5 ${isOpen ? 'mr-3' : ''}`} />
               {isOpen && item.name}
-            </button>
+            </NavLink>
           );
         })}
       </div>
