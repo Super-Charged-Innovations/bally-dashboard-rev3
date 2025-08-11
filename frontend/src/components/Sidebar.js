@@ -95,6 +95,13 @@ const getFilteredNavigationItems = (user) => {
           requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Transportation management
         },
         {
+          name: 'Maintenance',
+          icon: WrenchScrewdriverIcon,
+          href: '/maintenance',
+          current: false,
+          requiredRole: ['SuperAdmin', 'GeneralAdmin'], // Facility management
+        },
+        {
           name: 'Travel & VIP',
           icon: CalendarDaysIcon,
           href: '/travel',
