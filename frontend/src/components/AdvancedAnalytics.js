@@ -844,57 +844,59 @@ const AdvancedAnalytics = ({ user }) => {
               </div>
 
               {/* Customer Segments Analysis */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Customer Segments Analysis</h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Segment</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Count</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Revenue</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">LTV</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Retention</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Growth Potential</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {generatedReport.detailed_analysis.customer_segments.map((segment, index) => (
-                        <tr key={index} className="hover:bg-gray-50">
-                          <td className="px-4 py-4 whitespace-nowrap font-medium text-gray-900">{segment.segment}</td>
-                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600">{segment.count.toLocaleString()}</td>
-                          <td className="px-4 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
-                            ${(segment.revenue / 1000000).toFixed(1)}M
-                          </td>
-                          <td className="px-4 py-4 whitespace-nowrap text-sm text-purple-600 font-medium">
-                            ${segment.ltv.toLocaleString()}
-                          </td>
-                          <td className="px-4 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                <div 
-                                  className="bg-blue-600 h-2 rounded-full" 
-                                  style={{width: `${segment.retention * 100}%`}}
-                                ></div>
-                              </div>
-                              <span className="text-sm text-gray-600">{(segment.retention * 100).toFixed(1)}%</span>
-                            </div>
-                          </td>
-                          <td className="px-4 py-4 whitespace-nowrap">
-                            <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                              segment.growth_potential === 'High' ? 'text-green-800 bg-green-100' :
-                              segment.growth_potential === 'Medium' ? 'text-yellow-800 bg-yellow-100' :
-                              'text-gray-800 bg-gray-100'
-                            }`}>
-                              {segment.growth_potential}
-                            </span>
-                          </td>
+              {generatedReport.detailed_analysis?.customer_segments && (
+                <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">Customer Segments Analysis</h3>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Segment</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Count</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Revenue</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">LTV</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Retention</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Growth Potential</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {generatedReport.detailed_analysis.customer_segments.map((segment, index) => (
+                          <tr key={index} className="hover:bg-gray-50">
+                            <td className="px-4 py-4 whitespace-nowrap font-medium text-gray-900">{segment.segment}</td>
+                            <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600">{segment.count.toLocaleString()}</td>
+                            <td className="px-4 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
+                              ${(segment.revenue / 1000000).toFixed(1)}M
+                            </td>
+                            <td className="px-4 py-4 whitespace-nowrap text-sm text-purple-600 font-medium">
+                              ${segment.ltv.toLocaleString()}
+                            </td>
+                            <td className="px-4 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                  <div 
+                                    className="bg-blue-600 h-2 rounded-full" 
+                                    style={{width: `${segment.retention * 100}%`}}
+                                  ></div>
+                                </div>
+                                <span className="text-sm text-gray-600">{(segment.retention * 100).toFixed(1)}%</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-4 whitespace-nowrap">
+                              <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                                segment.growth_potential === 'High' ? 'text-green-800 bg-green-100' :
+                                segment.growth_potential === 'Medium' ? 'text-yellow-800 bg-yellow-100' :
+                                'text-gray-800 bg-gray-100'
+                              }`}>
+                                {segment.growth_potential}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Revenue Breakdown */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
