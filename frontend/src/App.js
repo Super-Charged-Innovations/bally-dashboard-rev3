@@ -156,6 +156,7 @@ function App() {
                       <Route path="/marketing" element={<MarketingIntelligence user={user} />} />
                       <Route path="/travel" element={<TravelManagement user={user} />} />
                       <Route path="/drivers" element={<DriversManagement user={user} />} />
+                      <Route path="/maintenance" element={<MaintenanceManagement user={user} />} />
                       <Route path="/staff" element={<StaffManagement user={user} />} />
                       <Route path="/advanced-analytics" element={<AdvancedAnalytics user={user} />} />
                       <Route path="/analytics" element={<Analytics user={user} />} />
