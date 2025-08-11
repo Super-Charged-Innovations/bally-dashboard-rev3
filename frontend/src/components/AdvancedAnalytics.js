@@ -22,6 +22,7 @@ const AdvancedAnalytics = ({ user }) => {
   const [predictiveModels, setPredictiveModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('analytics');
+  const [generating, setGenerating] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [configuring, setConfiguring] = useState(false);
   const [modelConfig, setModelConfig] = useState({
