@@ -87,13 +87,13 @@ function App() {
         username: 'superadmin',
         full_name: 'Super Administrator',
         role: 'SuperAdmin',
-        permissions: ['*']
+        permissions: ['*', 'casino_floor_access', 'view_full_player_data']
       } : {
         id: 'temp-manager-id',
         username: 'manager',
         full_name: 'Casino Manager',
         role: 'GeneralAdmin',
-        permissions: ['members:read', 'members:write', 'gaming:read', 'gaming:write', 'reports:read']
+        permissions: ['members:read', 'members:write', 'gaming:read', 'gaming:write', 'reports:read', 'casino_floor_access']
       };
       
       setUser(mockUser);
