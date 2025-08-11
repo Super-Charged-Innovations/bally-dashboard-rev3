@@ -152,6 +152,7 @@ function App() {
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard user={user} />} />
                       <Route path="/members" element={<MemberManagement user={user} />} />
+                      <Route path="/onboarding" element={<OnboardingManagement user={user} />} />
                       <Route path="/gaming" element={<GamingManagement user={user} />} />
                       <Route path="/rewards" element={<RewardsManagement user={user} />} />
                       <Route path="/marketing" element={<MarketingIntelligence user={user} />} />
