@@ -28,7 +28,7 @@ const MobileLogin = ({ onLogin }) => {
       }
 
       // Check if biometrics are available
-      const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+      const available = await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
       setBiometricSupported(true);
       setBiometricAvailable(available);
       
