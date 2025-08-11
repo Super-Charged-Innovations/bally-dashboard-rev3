@@ -192,8 +192,8 @@ const getFilteredNavigationItems = (user) => {
 };
 
 const Sidebar = ({ isOpen, onToggle, user }) => {
-  // Get filtered navigation items based on user role and permissions
-  const navigationItems = getFilteredNavigationItems(user);
+  // Get filtered navigation sections based on user role and permissions
+  const navigationSections = getFilteredNavigationItems(user);
 
   const bottomItems = [
     {
@@ -234,20 +234,49 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-2 py-4 space-y-2">
-        {navigationItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.name}
-              to={item.href}
-              className={({ isActive }) =>
-                `group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-                  isActive
-                    ? 'bg-primary-950 text-white'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                } ${!isOpen ? 'justify-center' : ''}`
-              }
+      <nav className="flex-1 px-2 py-4 space-y-4 overflow-y-auto">
+        {navigationSections.map((section) => (
+          <div key={section.title} className="space-y-1">
+            {/* Section Header */}
+            {isOpen && (
+              <h3 className="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                {section.title}
+              </h3>
+            )}
+            
+            {/* Section Items */}
+            <div className="space-y-1">
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <NavLink
+                    key={item.name}
+                    to={item.href}
+                    className={({ isActive }) =>
+                      `group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                        isActive
+                          ? 'bg-primary-950 text-white'
+                          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      } ${!isOpen ? 'justify-center' : ''}`
+                    }
+                    title={!isOpen ? item.name : undefined}
+                  >
+                    <Icon
+                      className={`${
+                        isOpen ? 'mr-3' : ''
+                      } h-5 w-5 flex-shrink-0 transition-colors duration-200`}
+                      aria-hidden="true"
+                    />
+                    {isOpen && (
+                      <span className="truncate">{item.name}</span>
+                    )}
+                  </NavLink>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </nav>
               title={!isOpen ? item.name : ''}
             >
               <Icon className={`flex-shrink-0 h-5 w-5 ${isOpen ? 'mr-3' : ''}`} />
