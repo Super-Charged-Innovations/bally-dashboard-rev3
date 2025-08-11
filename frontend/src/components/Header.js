@@ -7,7 +7,9 @@ import {
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   SunIcon,
-  MoonIcon
+  MoonIcon,
+  MagnifyingGlassIcon,
+  QuestionMarkCircleIcon
 } from '@heroicons/react/24/outline';
 import { useTheme } from '../contexts/ThemeContext';
 import { Link } from 'react-router-dom';
