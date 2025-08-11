@@ -5,7 +5,7 @@ import './App.css';
 // Context
 import { ThemeProvider } from './contexts/ThemeContext';
 
-// Components
+// Desktop Components
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
@@ -28,6 +28,12 @@ import SecurityMonitoring from './components/SecurityMonitoring';
 import CasinoFloor from './components/CasinoFloor';
 import Settings from './components/Settings';
 import EmergencyBroadcast from './components/EmergencyBroadcast';
+
+// Mobile App
+import MobileApp from './MobileApp';
+
+// Utils
+import { isMobileDevice, shouldRedirectToMobile } from './utils/mobileUtils';
 
 // Services
 import authService from './services/authService';
