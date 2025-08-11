@@ -6,7 +6,6 @@ import {
   PuzzlePieceIcon,
   GiftIcon,
   ChartBarIcon,
-  Cog6ToothIcon,
   QuestionMarkCircleIcon,
   MagnifyingGlassIcon,
   MegaphoneIcon,
