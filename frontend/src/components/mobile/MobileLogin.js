@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  FingerprintIcon,
   DevicePhoneMobileIcon,
   EyeIcon,
   ShieldCheckIcon,
   ExclamationTriangleIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
 
