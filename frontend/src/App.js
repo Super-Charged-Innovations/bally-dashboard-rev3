@@ -26,6 +26,7 @@ import NotificationsManagement from './components/NotificationsManagement';
 import ComplianceDashboard from './components/ComplianceDashboard';
 import SecurityMonitoring from './components/SecurityMonitoring';
 import Settings from './components/Settings';
+import EmergencyBroadcast from './components/EmergencyBroadcast';
 
 // Services
 import authService from './services/authService';
