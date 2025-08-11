@@ -2205,6 +2205,9 @@ class ApiService {
           { feature: "Member Management", usage: 45 },
           { feature: "Analytics", usage: 32 }
         ]
+      });
+    }
+
     // Default fallback
     return Promise.reject(new Error('Endpoint not found'));
   }
