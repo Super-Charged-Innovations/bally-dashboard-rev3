@@ -25,6 +25,7 @@ const ComplianceDashboard = ({ user }) => {
     end_date: ''
   });
   const [auditSummary, setAuditSummary] = useState({});
+  const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
     loadData();
