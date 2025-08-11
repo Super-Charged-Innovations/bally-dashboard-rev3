@@ -1865,6 +1865,219 @@ class BallyCasinoAPITester:
                     all_tests_passed = False
         
         return all_tests_passed
+    
+    def test_casino_floor_backend_support(self):
+        """Test Casino Floor system backend support and compatibility"""
+        print("\n🎰 CASINO FLOOR BACKEND SUPPORT TESTING")
+        print("=" * 60)
+        
+        all_tests_passed = True
+        
+        # 1. Verify existing gaming endpoints still work
+        print("\n1️⃣ Testing existing gaming endpoints after Casino Floor implementation...")
+        
+        # Test gaming sessions endpoint
+        success, response = self.run_test(
+            "Gaming Sessions API (Post Casino Floor)",
+            "GET",
+            "api/gaming/sessions?limit=10",
+            200
+        )
+        if success and 'sessions' in response:
+            print(f"   ✅ Gaming sessions API working - {response['total']} sessions found")
+            # Validate data structure compatibility
+            if response['sessions']:
+                session = response['sessions'][0]
+                required_fields = ['id', 'member_id', 'game_type', 'buy_in_amount', 'status']
+                missing_fields = [field for field in required_fields if field not in session]
+                if missing_fields:
+                    print(f"   ⚠️  Gaming session missing fields: {missing_fields}")
+                    all_tests_passed = False
+                else:
+                    print("   ✅ Gaming session data structure compatible")
+        else:
+            all_tests_passed = False
+        
+        # Test gaming packages endpoint
+        success, response = self.run_test(
+            "Gaming Packages API (Post Casino Floor)",
+            "GET",
+            "api/gaming/packages",
+            200
+        )
+        if success and isinstance(response, list):
+            print(f"   ✅ Gaming packages API working - {len(response)} packages found")
+            # Validate data structure compatibility
+            if response:
+                package = response[0]
+                required_fields = ['id', 'name', 'price', 'credits', 'validity_hours', 'tier_access']
+                missing_fields = [field for field in required_fields if field not in package]
+                if missing_fields:
+                    print(f"   ⚠️  Gaming package missing fields: {missing_fields}")
+                    all_tests_passed = False
+                else:
+                    print("   ✅ Gaming package data structure compatible")
+        else:
+            all_tests_passed = False
+        
+        # 2. Check authentication and permissions for casino floor access
+        print("\n2️⃣ Testing authentication and permissions for casino floor access...")
+        
+        # Test SuperAdmin access (should have casino_floor_access)
+        if self.user_info and self.user_info.get('role') == 'SuperAdmin':
+            permissions = self.user_info.get('permissions', [])
+            if 'casino_floor_access' in permissions or '*' in permissions:
+                print("   ✅ SuperAdmin has casino floor access permissions")
+            else:
+                print("   ⚠️  SuperAdmin missing casino_floor_access permission")
+                all_tests_passed = False
+        
+        # Test Manager login and permissions
+        success = self.test_login("manager", "manager123")
+        if success:
+            manager_permissions = self.user_info.get('permissions', [])
+            if 'casino_floor_access' in manager_permissions:
+                print("   ✅ Manager has casino floor access permissions")
+            else:
+                print("   ⚠️  Manager missing casino_floor_access permission")
+                all_tests_passed = False
+        
+        # Switch back to SuperAdmin for remaining tests
+        self.test_login("superadmin", "admin123")
+        
+        # 3. Test data consistency across Gaming Management and Casino Floor systems
+        print("\n3️⃣ Testing data consistency across Gaming Management and Casino Floor...")
+        
+        # Get gaming sessions data
+        success, gaming_data = self.run_test(
+            "Gaming Data for Consistency Check",
+            "GET",
+            "api/gaming/sessions?limit=50",
+            200
+        )
+        
+        if success and 'sessions' in gaming_data:
+            sessions = gaming_data['sessions']
+            print(f"   ✅ Retrieved {len(sessions)} gaming sessions for consistency check")
+            
+            # Check for data consistency requirements
+            member_ids = set()
+            game_types = set()
+            statuses = set()
+            
+            for session in sessions:
+                if 'member_id' in session:
+                    member_ids.add(session['member_id'])
+                if 'game_type' in session:
+                    game_types.add(session['game_type'])
+                if 'status' in session:
+                    statuses.add(session['status'])
+            
+            print(f"   ✅ Data consistency check: {len(member_ids)} unique members, {len(game_types)} game types, {len(statuses)} statuses")
+            
+            # Verify member data exists for gaming sessions
+            if member_ids:
+                sample_member_id = list(member_ids)[0]
+                success, member_data = self.run_test(
+                    "Member Data Consistency Check",
+                    "GET",
+                    f"api/members/{sample_member_id}",
+                    200
+                )
+                if success:
+                    print("   ✅ Member data consistency verified")
+                else:
+                    print("   ⚠️  Member data consistency issue detected")
+                    all_tests_passed = False
+        else:
+            all_tests_passed = False
+        
+        # 4. Validate mock data structures compatibility
+        print("\n4️⃣ Validating mock data structures for Casino Floor compatibility...")
+        
+        # The Casino Floor component uses mock data, but we need to ensure it's compatible
+        # with the backend gaming data structures. Since it's frontend-only, we validate
+        # that the backend data can support the Casino Floor requirements.
+        
+        # Check if gaming sessions have required fields for Casino Floor
+        if success and sessions:
+            casino_floor_required_fields = ['member_id', 'game_type', 'buy_in_amount', 'status', 'session_start']
+            for session in sessions[:3]:  # Check first 3 sessions
+                missing_fields = [field for field in casino_floor_required_fields if field not in session]
+                if missing_fields:
+                    print(f"   ⚠️  Session {session.get('id', 'unknown')} missing Casino Floor fields: {missing_fields}")
+                    all_tests_passed = False
+            
+            if all_tests_passed:
+                print("   ✅ Gaming session data structure compatible with Casino Floor requirements")
+        
+        # 5. Ensure no regressions in existing gaming functionality
+        print("\n5️⃣ Testing for regressions in existing gaming functionality...")
+        
+        # Test all core gaming endpoints
+        gaming_tests = [
+            ("Gaming Sessions Pagination", "api/gaming/sessions?skip=0&limit=5"),
+            ("Gaming Sessions Status Filter", "api/gaming/sessions?status=active"),
+            ("Gaming Sessions Status Filter - Completed", "api/gaming/sessions?status=completed"),
+            ("Gaming Packages List", "api/gaming/packages"),
+        ]
+        
+        regression_found = False
+        for test_name, endpoint in gaming_tests:
+            success, response = self.run_test(
+                test_name,
+                "GET",
+                endpoint,
+                200
+            )
+            if not success:
+                print(f"   ❌ REGRESSION: {test_name} failed")
+                regression_found = True
+                all_tests_passed = False
+            else:
+                print(f"   ✅ {test_name} working correctly")
+        
+        if not regression_found:
+            print("   ✅ No regressions detected in gaming functionality")
+        
+        # Test gaming package creation (if user has permissions)
+        if self.user_info and self.user_info.get('role') in ['SuperAdmin', 'GeneralAdmin', 'Manager']:
+            test_package = {
+                "name": "Casino Floor Test Package",
+                "description": "Test package for Casino Floor compatibility",
+                "price": 500.0,
+                "credits": 600.0,
+                "validity_hours": 4,
+                "tier_access": ["Ruby", "Sapphire"],
+                "is_active": True
+            }
+            
+            success, response = self.run_test(
+                "Gaming Package Creation (Regression Test)",
+                "POST",
+                "api/gaming/packages",
+                200,
+                data=test_package
+            )
+            if success:
+                print("   ✅ Gaming package creation working correctly")
+            else:
+                print("   ❌ REGRESSION: Gaming package creation failed")
+                all_tests_passed = False
+        
+        print("\n" + "=" * 60)
+        if all_tests_passed:
+            print("🎉 CASINO FLOOR BACKEND SUPPORT: ALL TESTS PASSED")
+            print("✅ Existing gaming endpoints working correctly")
+            print("✅ Authentication and permissions properly configured")
+            print("✅ Data consistency maintained")
+            print("✅ Mock data structures compatible")
+            print("✅ No regressions in gaming functionality")
+        else:
+            print("⚠️  CASINO FLOOR BACKEND SUPPORT: SOME ISSUES DETECTED")
+            print("Please review the issues above")
+        
+        return all_tests_passed
 
 def main():
     print("🎰 COMPREHENSIVE RUNTIME ERROR AUDIT & FUNCTIONALITY TESTING")
