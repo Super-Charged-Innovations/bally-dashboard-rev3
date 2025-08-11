@@ -222,13 +222,22 @@ const AdvancedAnalytics = ({ user }) => {
           <p className="text-gray-600">AI-powered insights, predictions, and optimization recommendations</p>
         </div>
         <div className="flex space-x-2">
-          <button className="btn-secondary flex items-center space-x-2">
-            <CogIcon className="h-4 w-4" />
+          <button 
+            onClick={() => setShowConfigModal(true)}
+            className="btn-secondary flex items-center space-x-2"
+            disabled={configuring}
+          >
+            {configuring ? (
+              <div className="spinner w-4 h-4"></div>
+            ) : (
+              <CogIcon className="h-4 w-4" />
+            )}
             <span>Configure Models</span>
           </button>
           <button 
             className="btn-primary flex items-center space-x-2"
             disabled={generating}
+            onClick={() => generateReport('comprehensive_analysis')}
           >
             {generating ? (
               <div className="spinner w-4 h-4"></div>
