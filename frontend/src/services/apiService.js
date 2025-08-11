@@ -2336,68 +2336,132 @@ class ApiService {
       ]);
     }
 
-    // Advanced Analytics endpoints
+    // Advanced Analytics - EXTENSIVE MOCK DATA
     if (endpoint.startsWith('/api/analytics/advanced')) {
       return Promise.resolve([
         {
-          id: "analytics-1",
+          id: "analytics-001",
           analysis_type: "customer_ltv",
-          analysis_date: "2025-01-09T10:00:00Z",
+          analysis_date: "2025-01-11T10:00:00Z",
           time_period: "quarterly",
-          confidence_score: 94.8,
+          confidence_score: 96.8,
           data_points: {
-            avg_ltv: 4250.75,
-            high_value_customers: 156,
-            churn_risk_reduction: 0.23,
-            revenue_increase: 0.15
+            avg_ltv: 4850.75,
+            total_ltv: 12150000,
+            high_value_customers: 247,
+            medium_value_customers: 893,
+            low_value_customers: 1456,
+            churn_risk_reduction: 0.28,
+            revenue_increase: 0.22,
+            growth_rate: 0.185
+          },
+          segment_analysis: {
+            vip: { count: 89, avg_ltv: 15420.50, revenue_contribution: 0.45 },
+            diamond: { count: 158, avg_ltv: 8750.25, revenue_contribution: 0.35 },
+            sapphire: { count: 421, avg_ltv: 3240.75, revenue_contribution: 0.15 },
+            ruby: { count: 928, avg_ltv: 1250.30, revenue_contribution: 0.05 }
           },
           insights: [
-            "VIP members show 340% higher lifetime value compared to regular members",
-            "Customers who engage with loyalty programs stay 2.5x longer",
-            "Mobile gaming sessions predict higher spending with 87% accuracy"
+            "VIP members show 420% higher lifetime value compared to regular members",
+            "Diamond tier customers have highest retention rate at 94.2%",
+            "Customers who engage with loyalty programs stay 3.2x longer",
+            "Mobile gaming sessions predict higher spending with 91% accuracy",
+            "Weekend players spend 65% more than weekday-only players",
+            "Live dealer games correlate with 2.8x higher customer lifetime value"
           ],
           recommended_actions: [
-            "Implement targeted VIP retention campaigns",
-            "Expand mobile gaming offerings"
-          ]
+            "Implement targeted VIP retention campaigns with personalized experiences",
+            "Expand mobile gaming offerings to capture high-value segments",
+            "Develop weekend-specific promotions to maximize player engagement",
+            "Introduce live dealer games to increase customer lifetime value"
+          ],
+          charts_data: {
+            ltv_by_tier: [
+              { tier: "VIP", value: 15420.50, count: 89 },
+              { tier: "Diamond", value: 8750.25, count: 158 },
+              { tier: "Sapphire", value: 3240.75, count: 421 },
+              { tier: "Ruby", value: 1250.30, count: 928 }
+            ],
+            monthly_trend: [
+              { month: "Oct 2024", ltv: 3850.25 },
+              { month: "Nov 2024", ltv: 4120.50 },
+              { month: "Dec 2024", ltv: 4580.75 },
+              { month: "Jan 2025", ltv: 4850.75 }
+            ]
+          }
         },
         {
-          id: "analytics-2", 
+          id: "analytics-002", 
           analysis_type: "churn_prediction",
-          analysis_date: "2025-01-08T15:30:00Z",
+          analysis_date: "2025-01-10T15:30:00Z",
           time_period: "monthly",
-          confidence_score: 91.2,
+          confidence_score: 93.4,
           data_points: {
-            at_risk_customers: 87,
-            churn_probability: 0.18,
-            retention_potential: 0.74,
-            intervention_roi: 3.2
+            at_risk_customers: 127,
+            high_risk: 34,
+            medium_risk: 58,
+            low_risk: 35,
+            churn_probability: 0.16,
+            retention_potential: 0.81,
+            intervention_roi: 4.7,
+            predicted_revenue_loss: 285000
           },
+          risk_factors: [
+            { factor: "Inactive for 14+ days", weight: 0.35, affected_customers: 67 },
+            { factor: "Declining session frequency", weight: 0.28, affected_customers: 89 },
+            { factor: "Reduced average bet size", weight: 0.22, affected_customers: 45 },
+            { factor: "No loyalty program engagement", weight: 0.15, affected_customers: 156 }
+          ],
           insights: [
-            "Customers inactive for 14+ days have 67% churn probability",
-            "Personalized offers reduce churn by 45% within first week",
-            "Gaming preference changes indicate early churn signals"
+            "Customers inactive for 14+ days have 72% churn probability",
+            "Personalized offers reduce churn by 52% within first week",
+            "Gaming preference changes indicate early churn signals with 89% accuracy",
+            "VIP customers who haven't visited in 7 days have 45% higher churn risk",
+            "Mobile app engagement drops precede churn by 21 days on average"
           ],
           recommended_actions: [
-            "Deploy automated re-engagement campaigns",
-            "Offer personalized gaming experiences"
-          ]
+            "Deploy automated re-engagement campaigns for inactive players",
+            "Offer personalized gaming experiences based on historical preferences",
+            "Implement VIP concierge outreach for high-value at-risk customers",
+            "Create mobile push notification campaigns for app re-engagement"
+          ],
+          charts_data: {
+            risk_distribution: [
+              { risk: "High Risk", count: 34, potential_loss: 125000 },
+              { risk: "Medium Risk", count: 58, potential_loss: 98000 },
+              { risk: "Low Risk", count: 35, potential_loss: 62000 }
+            ],
+            churn_timeline: [
+              { week: "Week 1", predicted_churn: 12 },
+              { week: "Week 2", predicted_churn: 18 },
+              { week: "Week 3", predicted_churn: 25 },
+              { week: "Week 4", predicted_churn: 34 }
+            ]
+          }
         },
         {
-          id: "analytics-3",
+          id: "analytics-003",
           analysis_type: "operational_efficiency",
-          analysis_date: "2025-01-07T09:15:00Z",
+          analysis_date: "2025-01-09T09:15:00Z",
           time_period: "weekly",
-          confidence_score: 89.5,
+          confidence_score: 91.7,
           data_points: {
-            efficiency_score: 0.82,
-            cost_reduction: 125000,
-            time_saved_hours: 340,
-            automation_potential: 0.65
+            efficiency_score: 0.87,
+            cost_reduction: 185000,
+            time_saved_hours: 520,
+            automation_potential: 0.72,
+            staff_utilization: 0.84,
+            peak_efficiency_hours: "8PM-11PM"
           },
+          efficiency_areas: [
+            { area: "Staff Scheduling", current: 0.78, potential: 0.93, savings: 65000 },
+            { area: "Table Management", current: 0.82, potential: 0.91, savings: 42000 },
+            { area: "Customer Service", current: 0.89, potential: 0.96, savings: 38000 },
+            { area: "Inventory Management", current: 0.75, potential: 0.88, savings: 40000 }
+          ],
           insights: [
-            "Staff scheduling optimization can reduce costs by 15%",
-            "Automated KYC processes save 120 hours weekly",
+            "Staff scheduling optimization can reduce costs by 18% while maintaining service quality",
+            "Automated KYC processes save 165 hours weekly and improve accuracy by 23%",
             "Peak hour analysis reveals 23% improvement opportunity"
           ],
           recommended_actions: [
