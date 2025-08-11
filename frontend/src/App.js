@@ -168,6 +168,7 @@ function App() {
                       <Route path="/notifications" element={<NotificationsManagement user={user} />} />
                       <Route path="/compliance" element={<ComplianceDashboard user={user} />} />
                       <Route path="/security" element={<SecurityMonitoring user={user} />} />
+                      <Route path="/casino-floor" element={<CasinoFloor user={user} />} />
                       <Route path="/settings" element={<Settings user={user} />} />
                       <Route path="/" element={<Navigate to="/dashboard" />} />
                     </Routes>
