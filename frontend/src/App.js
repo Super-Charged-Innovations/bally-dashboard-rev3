@@ -11,6 +11,7 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import MemberManagement from './components/MemberManagement';
+import OnboardingManagement from './components/OnboardingManagement';
 import GamingManagement from './components/GamingManagement';
 import RewardsManagement from './components/RewardsManagement';
 import MarketingIntelligence from './components/MarketingIntelligence';
