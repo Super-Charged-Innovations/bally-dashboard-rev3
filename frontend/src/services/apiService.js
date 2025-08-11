@@ -980,6 +980,252 @@ class ApiService {
       });
     }
 
+    // Security endpoints
+    if (endpoint.startsWith('/api/security/alerts')) {
+      return Promise.resolve([
+        {
+          id: "alert-1",
+          title: "Suspicious Activity Detected - High Roller Area",
+          description: "Multiple large cash transactions detected from unverified guest. Pattern analysis suggests potential money laundering activity.",
+          severity: "critical",
+          status: "active",
+          location: "VIP Gaming Floor - Table 7",
+          timestamp: "2025-01-11T14:30:00Z",
+          recommendations: [
+            "Immediately alert security personnel on VIP floor",
+            "Initiate discrete surveillance protocol",
+            "Prepare AML documentation for regulatory reporting"
+          ]
+        },
+        {
+          id: "alert-2", 
+          title: "Unauthorized Access Attempt - Staff Area",
+          description: "Failed keycard access attempts detected at secured staff entrance. Security footage shows unidentified individual.",
+          severity: "high",
+          status: "investigating",
+          location: "Staff Entrance B - Floor 2",
+          timestamp: "2025-01-11T13:15:00Z",
+          recommendations: [
+            "Secure staff entrance immediately",
+            "Review CCTV footage with security team",
+            "Notify all staff of security protocol"
+          ]
+        },
+        {
+          id: "alert-3",
+          title: "Equipment Tampering - Slot Machine Area",
+          description: "Physical inspection revealed signs of tampering on Slot Bank C. Device integrity compromised.",
+          severity: "high", 
+          status: "resolved",
+          location: "Main Gaming Floor - Slot Bank C",
+          timestamp: "2025-01-11T11:45:00Z",
+          recommendations: [
+            "Machine taken offline for forensic analysis",
+            "Enhanced monitoring of surrounding machines",
+            "Staff briefing on tampering indicators"
+          ]
+        },
+        {
+          id: "alert-4",
+          title: "Network Security Breach Attempt",
+          description: "Firewall detected attempted intrusion from external IP. Multiple failed authentication attempts on gaming systems.",
+          severity: "medium",
+          status: "resolved",
+          location: "IT Infrastructure - Network Layer",
+          timestamp: "2025-01-11T09:20:00Z",
+          recommendations: [
+            "IP address blocked and reported to authorities",
+            "Security patches applied to vulnerable systems",
+            "Increased monitoring of network traffic"
+          ]
+        },
+        {
+          id: "alert-5",
+          title: "Customer Behavioral Anomaly",
+          description: "Guest exhibiting erratic behavior and making threats toward staff. Security intervention requested.",
+          severity: "medium",
+          status: "active",
+          location: "Main Bar Area",
+          timestamp: "2025-01-11T16:10:00Z",
+          recommendations: [
+            "Security personnel dispatched to location",
+            "Manager notified for guest service intervention",
+            "Prepare incident report for legal compliance"
+          ]
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/security/briefs')) {
+      return Promise.resolve([
+        {
+          id: "brief-1",
+          title: "Daily Security Briefing - January 11, 2025",
+          description: "Comprehensive overview of security status, incidents, and operational protocols for the day shift.",
+          date: "2025-01-11T07:00:00Z",
+          author: "Marcus Johnson, Head of Security",
+          severity: "medium",
+          content: "Current threat level: MODERATE. Three active investigations ongoing. VIP gaming area requires enhanced surveillance. New staff security training scheduled for next week."
+        },
+        {
+          id: "brief-2",
+          title: "Weekly Security Assessment Report",
+          description: "Analysis of security incidents, trends, and preventive measures implemented during the past week.",
+          date: "2025-01-10T09:00:00Z",
+          author: "Sarah Chen, Security Analyst", 
+          severity: "low",
+          content: "Overall security posture improved by 15% this week. Key achievements include successful deployment of new surveillance system and completion of staff emergency drills."
+        },
+        {
+          id: "brief-3",
+          title: "Regulatory Compliance Update",
+          description: "Updates on compliance requirements, upcoming audits, and necessary security adjustments.",
+          date: "2025-01-09T14:30:00Z",
+          author: "David Rodriguez, Compliance Officer",
+          severity: "high",
+          content: "New Sri Lankan gaming regulations effective February 1st. Security protocols must be updated to meet enhanced customer identification requirements."
+        },
+        {
+          id: "brief-4",
+          title: "Emergency Response Protocol Review",
+          description: "Quarterly review of emergency response procedures and security team performance metrics.",
+          date: "2025-01-08T11:00:00Z",
+          author: "Lisa Thompson, Security Training Coordinator",
+          severity: "medium",
+          content: "Emergency response times improved by 23% this quarter. All security personnel completed updated crisis management training."
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/security/advisories')) {
+      return Promise.resolve([
+        {
+          id: "advisory-1",
+          title: "Enhanced Surveillance During Peak Hours",
+          description: "Intelligence suggests increased risk of organized fraud attempts during weekend peak hours. Heightened vigilance recommended.",
+          severity: "high",
+          date: "2025-01-11T08:00:00Z",
+          author: "Intelligence Unit",
+          recommendations: [
+            "Increase surveillance personnel by 30% during peak hours",
+            "Activate advanced pattern recognition systems",
+            "Brief all floor managers on fraud indicators"
+          ]
+        },
+        {
+          id: "advisory-2",
+          title: "New Counterfeit Currency Detected",
+          description: "Regional law enforcement reports circulation of sophisticated counterfeit notes. Enhanced cash handling protocols activated.",
+          severity: "medium",
+          date: "2025-01-10T15:20:00Z",
+          author: "Financial Crimes Unit",
+          recommendations: [
+            "Update all cash handling staff on new counterfeit indicators",
+            "Increase frequency of currency verification checks",
+            "Coordinate with local law enforcement on suspicious transactions"
+          ]
+        },
+        {
+          id: "advisory-3",
+          title: "Seasonal Security Considerations",
+          description: "Tourist season approaches with increased foot traffic. Security protocols adjusted for higher capacity operations.",
+          severity: "low",
+          date: "2025-01-09T10:15:00Z",
+          author: "Operations Security Team",
+          recommendations: [
+            "Additional security personnel scheduled for deployment",
+            "Crowd control measures reviewed and updated",
+            "Emergency evacuation procedures tested and validated"
+          ]
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/security/staff')) {
+      return Promise.resolve([
+        {
+          id: "staff-1",
+          name: "Marcus Johnson",
+          position: "Head of Security",
+          phone: "+94-77-123-4567",
+          email: "m.johnson@ballyscolombo.lk",
+          status: "on_duty",
+          shift: "Day Shift (06:00-14:00)",
+          location: "Security Command Center"
+        },
+        {
+          id: "staff-2",
+          name: "Sarah Chen",
+          position: "Security Analyst",
+          phone: "+94-77-234-5678",
+          email: "s.chen@ballyscolombo.lk",
+          status: "on_duty",
+          shift: "Day Shift (08:00-16:00)",
+          location: "Surveillance Room A"
+        },
+        {
+          id: "staff-3",
+          name: "David Rodriguez",
+          position: "Floor Security Officer",
+          phone: "+94-77-345-6789",
+          email: "d.rodriguez@ballyscolombo.lk",
+          status: "on_duty",
+          shift: "Day Shift (10:00-18:00)",
+          location: "Main Gaming Floor"
+        },
+        {
+          id: "staff-4",
+          name: "Lisa Thompson",
+          position: "VIP Security Specialist",
+          phone: "+94-77-456-7890",
+          email: "l.thompson@ballyscolombo.lk",
+          status: "on_duty",
+          shift: "Day Shift (12:00-20:00)",
+          location: "VIP Gaming Area"
+        },
+        {
+          id: "staff-5",
+          name: "Ahmed Hassan",
+          position: "Entrance Security",
+          phone: "+94-77-567-8901",
+          email: "a.hassan@ballyscolombo.lk",
+          status: "on_duty",
+          shift: "Day Shift (06:00-14:00)",
+          location: "Main Entrance"
+        },
+        {
+          id: "staff-6",
+          name: "Jennifer Wong",
+          position: "IT Security Officer",
+          phone: "+94-77-678-9012",
+          email: "j.wong@ballyscolombo.lk",
+          status: "on_duty",
+          shift: "Day Shift (09:00-17:00)",
+          location: "IT Security Center"
+        },
+        {
+          id: "staff-7",
+          name: "Michael O'Connor",
+          position: "Night Security Supervisor",
+          phone: "+94-77-789-0123",
+          email: "m.oconnor@ballyscolombo.lk",
+          status: "off_duty",
+          shift: "Night Shift (22:00-06:00)",
+          location: "Off Duty"
+        },
+        {
+          id: "staff-8",
+          name: "Priya Patel",
+          position: "Compliance Security Officer",
+          phone: "+94-77-890-1234",
+          email: "p.patel@ballyscolombo.lk",
+          status: "on_duty",
+          shift: "Day Shift (07:00-15:00)",
+          location: "Compliance Office"
+        }
+      ]);
+    }
+
     // Compliance data
     if (endpoint.startsWith('/api/compliance')) {
       return Promise.resolve({
