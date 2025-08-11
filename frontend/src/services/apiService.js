@@ -817,29 +817,164 @@ class ApiService {
     }
 
     // Notifications
+    if (endpoint.startsWith('/api/notifications/templates')) {
+      return Promise.resolve([
+        {
+          id: "template-1",
+          name: "High-Value Transaction Alert Template",
+          title: "High-Value Transaction Alert",
+          content: "A high-value transaction of ${amount} has been placed by ${member_name} (${tier} member)",
+          category: "security",
+          priority: "high",
+          channels: ['in_app', 'email', 'sms'],
+          variables: ['amount', 'member_name', 'tier'],
+          is_active: true,
+          created_at: "2025-01-01T10:00:00Z"
+        },
+        {
+          id: "template-2",
+          name: "Staff Training Reminder",
+          title: "Training Due Reminder",
+          content: "You have ${course_count} mandatory training course(s) due by ${due_date}. Please complete them to maintain compliance.",
+          category: "system",
+          priority: "normal",
+          channels: ['in_app', 'email'],
+          variables: ['course_count', 'due_date'],
+          is_active: true,
+          created_at: "2025-01-01T10:00:00Z"
+        },
+        {
+          id: "template-3",
+          name: "VIP Welcome Message",
+          title: "Welcome to VIP Status",
+          content: "Congratulations ${member_name}! You have been upgraded to ${tier} status. Enjoy exclusive benefits and privileges.",
+          category: "marketing",
+          priority: "normal",
+          channels: ['in_app', 'email'],
+          variables: ['member_name', 'tier'],
+          is_active: true,
+          created_at: "2025-01-01T10:00:00Z"
+        },
+        {
+          id: "template-4",
+          name: "Compliance Violation Alert",
+          title: "Compliance Issue Detected",
+          content: "A ${severity} compliance issue has been detected in ${area}. Immediate attention required: ${description}",
+          category: "compliance",
+          priority: "critical",
+          channels: ['in_app', 'email', 'sms'],
+          variables: ['severity', 'area', 'description'],
+          is_active: true,
+          created_at: "2025-01-01T10:00:00Z"
+        },
+        {
+          id: "template-5",
+          name: "System Maintenance Notice",
+          title: "Scheduled System Maintenance",
+          content: "System maintenance is scheduled for ${date} from ${start_time} to ${end_time}. Some services may be unavailable during this period.",
+          category: "system",
+          priority: "normal",
+          channels: ['in_app', 'email'],
+          variables: ['date', 'start_time', 'end_time'],
+          is_active: false,
+          created_at: "2025-01-01T10:00:00Z"
+        }
+      ]);
+    }
+
     if (endpoint.startsWith('/api/notifications')) {
       return Promise.resolve({
         notifications: [
           {
             id: "notif-1",
             title: "High-Value Transaction Alert",
-            message: "VIP member Jane Smith has placed a $50,000 bet",
-            category: "gaming",
+            content: "VIP member Jane Smith has placed a $50,000 bet at Table VIP-01. Transaction ID: TX-2025-001",
+            category: "security",
             priority: "high",
             status: "unread",
+            recipient_type: "admin",
+            channels: ['in_app', 'email'],
             created_at: "2025-01-09T15:30:00Z"
           },
           {
             id: "notif-2",
             title: "Staff Training Due",
-            message: "5 staff members have mandatory training due this week",
-            category: "staff",
-            priority: "medium",
+            content: "5 staff members have mandatory training due this week. Departments affected: Gaming (3), Security (2).",
+            category: "system",
+            priority: "normal",
             status: "unread",
+            recipient_type: "manager",
+            channels: ['in_app'],
             created_at: "2025-01-09T09:15:00Z"
+          },
+          {
+            id: "notif-3",
+            title: "New VIP Member Registration",
+            content: "David Chen has been upgraded to VIP status. Lifetime spend: $125,000. Welcome package sent.",
+            category: "marketing",
+            priority: "normal",
+            status: "read",
+            recipient_type: "admin",
+            channels: ['in_app', 'email'],
+            created_at: "2025-01-09T08:45:00Z"
+          },
+          {
+            id: "notif-4",
+            title: "Compliance Report Generated",
+            content: "Monthly PDPA compliance report has been generated successfully. 2 minor issues identified and resolved.",
+            category: "compliance",
+            priority: "normal",
+            status: "delivered",
+            recipient_type: "compliance_officer",
+            channels: ['in_app', 'email'],
+            created_at: "2025-01-09T07:00:00Z"
+          },
+          {
+            id: "notif-5",
+            title: "System Performance Alert",
+            content: "Database query response time has increased by 15% in the last hour. Auto-optimization triggered.",
+            category: "system",
+            priority: "high",
+            status: "sent",
+            recipient_type: "admin",
+            channels: ['in_app', 'sms'],
+            created_at: "2025-01-09T14:20:00Z"
+          },
+          {
+            id: "notif-6",
+            title: "Security Login Attempt",
+            content: "Multiple failed login attempts detected from IP 192.168.1.50. Account temporarily locked for security.",
+            category: "security",
+            priority: "critical",
+            status: "delivered",
+            recipient_type: "security_team",
+            channels: ['in_app', 'email', 'sms'],
+            created_at: "2025-01-09T13:10:00Z"
+          },
+          {
+            id: "notif-7",
+            title: "Birthday Campaign Reminder",
+            content: "15 VIP members have birthdays this week. Birthday bonus campaigns are ready to be activated.",
+            category: "marketing",
+            priority: "low",
+            status: "pending",
+            recipient_type: "marketing_team",
+            channels: ['in_app'],
+            created_at: "2025-01-09T06:30:00Z"
+          },
+          {
+            id: "notif-8",
+            title: "Inventory Stock Alert",
+            content: "Luxury Suite Upgrade rewards are running low (3 remaining). Consider restocking or pausing the offer.",
+            category: "system",
+            priority: "normal",
+            status: "read",
+            recipient_type: "manager",
+            channels: ['in_app', 'email'],
+            created_at: "2025-01-08T16:45:00Z"
           }
         ],
-        total: 12,
+        total: 24,
         page: 1,
         pages: 3
       });
