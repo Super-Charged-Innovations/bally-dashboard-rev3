@@ -153,7 +153,25 @@ const Header = ({ user, onLogout, onMenuToggle }) => {
                   onClick={() => setDropdownOpen(false)}
                 >
                   <Cog6ToothIcon className="h-4 w-4 mr-3 group-hover:rotate-90 transition-transform duration-300" />
-                  Account Settings
+                  Settings
+                </Link>
+
+                <Link
+                  to="/search"
+                  className="flex items-center w-full px-4 py-3 text-sm text-adaptive-text-muted hover:bg-adaptive-text-accent/10 hover:text-adaptive-text-accent transition-all duration-200 group"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  <MagnifyingGlassIcon className="h-4 w-4 mr-3 group-hover:scale-110 transition-transform duration-300" />
+                  Search
+                </Link>
+
+                <Link
+                  to="/help"
+                  className="flex items-center w-full px-4 py-3 text-sm text-adaptive-text-muted hover:bg-adaptive-text-accent/10 hover:text-adaptive-text-accent transition-all duration-200 group"
+                  onClick={() => setDropdownDown(false)}
+                >
+                  <QuestionMarkCircleIcon className="h-4 w-4 mr-3 group-hover:scale-110 transition-transform duration-300" />
+                  Help & Support
                 </Link>
                 
                 <div className="border-t border-adaptive-border my-2"></div>
