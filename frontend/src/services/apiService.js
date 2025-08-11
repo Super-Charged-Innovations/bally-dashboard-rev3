@@ -1227,6 +1227,309 @@ class ApiService {
     }
 
     // Compliance data
+    // Drivers endpoints
+    if (endpoint.startsWith('/api/drivers/schedules')) {
+      return Promise.resolve([
+        {
+          id: "schedule-1",
+          driver_name: "Marcus Silva",
+          driver_id: "driver-1",
+          date: "2025-01-11",
+          shift_type: "Day Shift",
+          shift_start: "06:00",
+          shift_end: "14:00",
+          vehicle_assigned: "BC-7890",
+          route_assignment: "Airport Shuttle",
+          status: "active"
+        },
+        {
+          id: "schedule-2",
+          driver_name: "Sarah Fernando",
+          driver_id: "driver-2", 
+          date: "2025-01-11",
+          shift_type: "Afternoon Shift",
+          shift_start: "14:00",
+          shift_end: "22:00",
+          vehicle_assigned: "BC-4567",
+          route_assignment: "VIP Transport",
+          status: "active"
+        },
+        {
+          id: "schedule-3",
+          driver_name: "David Perera",
+          driver_id: "driver-3",
+          date: "2025-01-11",
+          shift_type: "Night Shift", 
+          shift_start: "22:00",
+          shift_end: "06:00",
+          vehicle_assigned: "BC-2345",
+          route_assignment: "Hotel Circuit",
+          status: "scheduled"
+        },
+        {
+          id: "schedule-4",
+          driver_name: "Lisa Mendis",
+          driver_id: "driver-4",
+          date: "2025-01-12",
+          shift_type: "Day Shift",
+          shift_start: "06:00", 
+          shift_end: "14:00",
+          vehicle_assigned: "BC-6789",
+          route_assignment: "City Tour",
+          status: "pending"
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/drivers/bookings')) {
+      return Promise.resolve([
+        {
+          id: "booking-1",
+          passenger_name: "Mr. James Wilson (VIP)",
+          pickup_location: "Bandaranaike International Airport",
+          destination: "Bally's Casino Colombo",
+          pickup_time: "15:30",
+          eta: "16:45",
+          driver_name: "Marcus Silva",
+          vehicle_number: "BC-7890",
+          status: "in_progress",
+          direction: "inbound",
+          booking_type: "airport_transfer",
+          passenger_phone: "+1-555-123-4567"
+        },
+        {
+          id: "booking-2",
+          passenger_name: "Mrs. Chen Wei (Diamond)",
+          pickup_location: "Bally's Casino Colombo",
+          destination: "Galle Face Hotel",
+          pickup_time: "18:00", 
+          eta: "18:25",
+          driver_name: "Sarah Fernando",
+          vehicle_number: "BC-4567",
+          status: "confirmed",
+          direction: "outbound",
+          booking_type: "hotel_transfer",
+          passenger_phone: "+65-9876-5432"
+        },
+        {
+          id: "booking-3",
+          passenger_name: "Mr. David Kumar (Platinum)",
+          pickup_location: "Shangri-La Hotel",
+          destination: "Bally's Casino Colombo",
+          pickup_time: "19:15",
+          eta: "19:40",
+          driver_name: "Lisa Mendis",
+          vehicle_number: "BC-6789",
+          status: "assigned",
+          direction: "inbound", 
+          booking_type: "vip_pickup",
+          passenger_phone: "+91-98765-43210"
+        },
+        {
+          id: "booking-4",
+          passenger_name: "Party of 6 - Corporate Event",
+          pickup_location: "Bally's Casino Colombo",
+          destination: "Colombo Port City",
+          pickup_time: "20:30",
+          eta: "21:00",
+          driver_name: "David Perera", 
+          vehicle_number: "BC-2345",
+          status: "scheduled",
+          direction: "outbound",
+          booking_type: "group_transfer",
+          passenger_phone: "+94-77-555-0123"
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/drivers/locations')) {
+      return Promise.resolve([
+        {
+          id: "location-1",
+          driver_name: "Marcus Silva",
+          vehicle_number: "BC-7890",
+          current_location: "Galle Road, Colombo 3",
+          destination: "Bally's Casino Colombo",
+          direction: "inbound",
+          status: "occupied",
+          speed: "45",
+          last_update: "2 minutes ago",
+          eta: "12 minutes",
+          passenger: "Mr. James Wilson"
+        },
+        {
+          id: "location-2", 
+          driver_name: "Sarah Fernando",
+          vehicle_number: "BC-4567",
+          current_location: "Bally's Casino Colombo - Main Entrance",
+          destination: "Waiting for Assignment",
+          direction: "stationary",
+          status: "available", 
+          speed: "0",
+          last_update: "30 seconds ago",
+          eta: "Ready",
+          passenger: null
+        },
+        {
+          id: "location-3",
+          driver_name: "David Perera",
+          vehicle_number: "BC-2345",
+          current_location: "Negombo Road - Airport Vicinity",
+          destination: "Bandaranaike International Airport",
+          direction: "outbound",
+          status: "available",
+          speed: "65",
+          last_update: "1 minute ago", 
+          eta: "8 minutes",
+          passenger: null
+        },
+        {
+          id: "location-4",
+          driver_name: "Lisa Mendis", 
+          vehicle_number: "BC-6789",
+          current_location: "Marine Drive, Colombo 3",
+          destination: "Shangri-La Hotel",
+          direction: "outbound",
+          status: "occupied",
+          speed: "35",
+          last_update: "45 seconds ago",
+          eta: "6 minutes",
+          passenger: "Mrs. Amanda Foster"
+        },
+        {
+          id: "location-5",
+          driver_name: "Ahmed Hassan",
+          vehicle_number: "BC-1234", 
+          current_location: "Service Station - Fuel Stop",
+          destination: "Maintenance Break",
+          direction: "stationary",
+          status: "maintenance",
+          speed: "0",
+          last_update: "5 minutes ago",
+          eta: "15 minutes",
+          passenger: null
+        }
+      ]);
+    }
+
+    if (endpoint.startsWith('/api/drivers') && !endpoint.includes('/')) {
+      return Promise.resolve([
+        {
+          id: "driver-1",
+          name: "Marcus Silva",
+          phone: "+94-77-123-4567",
+          email: "m.silva@ballyscolombo.lk",
+          license_number: "B1234567",
+          vehicle_number: "BC-7890",
+          vehicle_type: "Luxury Sedan",
+          status: "occupied",
+          shift_start: "06:00",
+          shift_end: "14:00",
+          current_passenger: "Mr. James Wilson",
+          rating: 4.8,
+          total_rides: 1247,
+          years_experience: 8
+        },
+        {
+          id: "driver-2", 
+          name: "Sarah Fernando",
+          phone: "+94-77-234-5678",
+          email: "s.fernando@ballyscolombo.lk",
+          license_number: "B2345678", 
+          vehicle_number: "BC-4567",
+          vehicle_type: "SUV",
+          status: "available",
+          shift_start: "14:00",
+          shift_end: "22:00",
+          current_passenger: null,
+          rating: 4.9,
+          total_rides: 892,
+          years_experience: 5
+        },
+        {
+          id: "driver-3",
+          name: "David Perera", 
+          phone: "+94-77-345-6789",
+          email: "d.perera@ballyscolombo.lk",
+          license_number: "B3456789",
+          vehicle_number: "BC-2345",
+          vehicle_type: "Van",
+          status: "available", 
+          shift_start: "22:00",
+          shift_end: "06:00",
+          current_passenger: null,
+          rating: 4.7,
+          total_rides: 654,
+          years_experience: 6
+        },
+        {
+          id: "driver-4",
+          name: "Lisa Mendis",
+          phone: "+94-77-456-7890",
+          email: "l.mendis@ballyscolombo.lk",
+          license_number: "B4567890",
+          vehicle_number: "BC-6789",
+          vehicle_type: "Luxury Sedan",
+          status: "occupied",
+          shift_start: "06:00",
+          shift_end: "14:00",
+          current_passenger: "Mrs. Amanda Foster",
+          rating: 4.9,
+          total_rides: 1089,
+          years_experience: 7
+        },
+        {
+          id: "driver-5",
+          name: "Ahmed Hassan",
+          phone: "+94-77-567-8901", 
+          email: "a.hassan@ballyscolombo.lk",
+          license_number: "B5678901",
+          vehicle_number: "BC-1234",
+          vehicle_type: "Sedan",
+          status: "maintenance",
+          shift_start: "14:00",
+          shift_end: "22:00",
+          current_passenger: null,
+          rating: 4.6,
+          total_rides: 543,
+          years_experience: 4
+        },
+        {
+          id: "driver-6",
+          name: "Priya Jayawardena",
+          phone: "+94-77-678-9012",
+          email: "p.jayawardena@ballyscolombo.lk", 
+          license_number: "B6789012",
+          vehicle_number: "BC-5678",
+          vehicle_type: "Limousine",
+          status: "on_duty",
+          shift_start: "18:00",
+          shift_end: "02:00",
+          current_passenger: null,
+          rating: 5.0,
+          total_rides: 234,
+          years_experience: 3
+        },
+        {
+          id: "driver-7", 
+          name: "Ravi Wickramasinghe",
+          phone: "+94-77-789-0123",
+          email: "r.wickramasinghe@ballyscolombo.lk",
+          license_number: "B7890123",
+          vehicle_number: "BC-9012",
+          vehicle_type: "SUV",
+          status: "off_duty",
+          shift_start: "06:00",
+          shift_end: "14:00", 
+          current_passenger: null,
+          rating: 4.4,
+          total_rides: 445,
+          years_experience: 2
+        }
+      ]);
+    }
+
+    // Compliance data
     if (endpoint.startsWith('/api/compliance')) {
       return Promise.resolve({
         reports: [
