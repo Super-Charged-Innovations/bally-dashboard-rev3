@@ -663,21 +663,75 @@ class ApiService {
       return Promise.resolve([
         {
           id: "reward-1",
-          name: "Welcome Bonus",
-          type: "points",
-          value: 1000,
-          description: "New member welcome bonus",
+          name: "Welcome Bonus Points",
+          description: "New member welcome bonus to get started",
+          category: "gaming",
+          points_required: 0,
+          cash_value: 25.00,
+          stock_quantity: null,
           is_active: true,
+          tier_access: ["Ruby", "Sapphire", "Diamond", "VIP"],
           requirements: "First visit"
         },
         {
           id: "reward-2",
           name: "VIP Dining Voucher",
-          type: "voucher",
-          value: 5000,
           description: "Complimentary dining at premium restaurants",
+          category: "dining",
+          points_required: 2500,
+          cash_value: 100.00,
+          stock_quantity: 50,
           is_active: true,
+          tier_access: ["Diamond", "VIP"],
           requirements: "Diamond tier or above"
+        },
+        {
+          id: "reward-3",
+          name: "Luxury Suite Upgrade",
+          description: "One night luxury suite accommodation upgrade",
+          category: "accommodation",
+          points_required: 5000,
+          cash_value: 300.00,
+          stock_quantity: 10,
+          is_active: true,
+          tier_access: ["VIP"],
+          requirements: "VIP tier membership"
+        },
+        {
+          id: "reward-4",
+          name: "Casino Branded Watch",
+          description: "Exclusive Bally's branded luxury timepiece",
+          category: "merchandise",
+          points_required: 7500,
+          cash_value: 450.00,
+          stock_quantity: 25,
+          is_active: true,
+          tier_access: ["Sapphire", "Diamond", "VIP"],
+          requirements: "Minimum 6 months membership"
+        },
+        {
+          id: "reward-5",
+          name: "High Roller Bonus",
+          description: "Special gaming bonus for high-value players",
+          category: "gaming",
+          points_required: 10000,
+          cash_value: 1000.00,
+          stock_quantity: null,
+          is_active: true,
+          tier_access: ["VIP"],
+          requirements: "VIP tier and minimum $50K lifetime spend"
+        },
+        {
+          id: "reward-6",
+          name: "Weekend Getaway Package",
+          description: "Two nights accommodation with dining credits",
+          category: "accommodation",
+          points_required: 15000,
+          cash_value: 800.00,
+          stock_quantity: 5,
+          is_active: false,
+          tier_access: ["Diamond", "VIP"],
+          requirements: "Currently unavailable - seasonal offer"
         }
       ]);
     }
