@@ -1864,8 +1864,8 @@ class ApiService {
       });
     }
 
-    // Enhanced Audit Logs
-    if (endpoint.startsWith('/api/audit/enhanced')) {
+    // Compliance data  
+    if (endpoint.startsWith('/api/compliance')) {
       return Promise.resolve({
         audit_logs: [
           {
