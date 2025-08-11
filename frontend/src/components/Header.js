@@ -168,7 +168,7 @@ const Header = ({ user, onLogout, onMenuToggle }) => {
                 <Link
                   to="/help"
                   className="flex items-center w-full px-4 py-3 text-sm text-adaptive-text-muted hover:bg-adaptive-text-accent/10 hover:text-adaptive-text-accent transition-all duration-200 group"
-                  onClick={() => setDropdownDown(false)}
+                  onClick={() => setDropdownOpen(false)}
                 >
                   <QuestionMarkCircleIcon className="h-4 w-4 mr-3 group-hover:scale-110 transition-transform duration-300" />
                   Help & Support
