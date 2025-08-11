@@ -113,9 +113,11 @@ const AdvancedAnalytics = ({ user }) => {
     }
   };
 
-  const generateReport = async (analysisType) => {
+  const generateReport = async (analysisType = 'comprehensive_analysis') => {
     try {
       setGenerating(true);
+      console.log('🚀 Starting report generation...');
+      
       // Demo progress simulation with real steps
       toast.loading('🔍 Initializing AI analysis engine...', { duration: 1000 });
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -132,21 +134,33 @@ const AdvancedAnalytics = ({ user }) => {
       toast.loading('✨ Compiling executive insights...', { duration: 600 });
       await new Promise(resolve => setTimeout(resolve, 600));
       
+      console.log('📡 Calling API for report generation...');
       const response = await apiService.generateAnalyticsReport(analysisType, 'monthly');
-      setGeneratedReport(response);
+      console.log('📋 Report response received:', response);
       
-      toast.success(`🎯 ${analysisType.replace('_', ' ').toUpperCase()} report generated with ${response.confidence_score}% confidence!`, {
-        duration: 4000,
-        icon: '🚀'
-      });
-      
-      // Auto-open the report modal
-      setShowReportModal(true);
-      
-      fetchAdvancedData(); // Refresh data
+      if (response) {
+        setGeneratedReport(response);
+        console.log('✅ Report stored in state');
+        
+        toast.success(`🎯 ${analysisType.replace('_', ' ').toUpperCase()} report generated with ${response.confidence_score}% confidence!`, {
+          duration: 4000,
+          icon: '🚀'
+        });
+        
+        // Auto-open the report modal
+        setTimeout(() => {
+          console.log('🔍 Opening report modal...');
+          setShowReportModal(true);
+        }, 500);
+        
+        fetchAdvancedData(); // Refresh data
+      } else {
+        console.error('❌ No response received');
+        toast.error('Failed to generate report - no data received');
+      }
     } catch (error) {
-      console.error('Failed to generate report:', error);
-      toast.error('Failed to generate report');
+      console.error('❌ Failed to generate report:', error);
+      toast.error(`Failed to generate report: ${error.message}`);
     } finally {
       setGenerating(false);
     }
