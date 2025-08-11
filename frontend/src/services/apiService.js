@@ -1819,6 +1819,9 @@ class ApiService {
         }
       ]);
     }
+
+    // Compliance data  
+    if (endpoint.startsWith('/api/compliance')) {
       return Promise.resolve({
         reports: [
           {
