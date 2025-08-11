@@ -166,7 +166,7 @@ const MobileLogin = ({ onLogin }) => {
                     </>
                   ) : (
                     <>
-                      <FingerprintIcon className="h-5 w-5" />
+                      <UserIcon className="h-5 w-5" />
                       <span>Login with Biometrics</span>
                     </>
                   )}
