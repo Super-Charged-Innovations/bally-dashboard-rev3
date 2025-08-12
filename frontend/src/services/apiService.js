@@ -814,35 +814,270 @@ class ApiService {
       });
     }
 
-    // Staff data
-    if (endpoint.startsWith('/api/staff')) {
+    // Staff Management APIs
+    if (endpoint.includes('/api/staff/dashboard')) {
       return Promise.resolve({
-        staff_members: [
-          {
-            id: "staff-1",
-            first_name: "Maria",
-            last_name: "Rodriguez",
-            department: "Gaming",
-            position: "Dealer",
-            employee_id: "EMP001",
-            performance_score: 4.8,
-            employment_status: "active"
-          },
-          {
-            id: "staff-2",
-            first_name: "James",
-            last_name: "Chen",
-            department: "Security",
-            position: "Security Officer",
-            employee_id: "EMP002", 
-            performance_score: 4.6,
-            employment_status: "active"
-          }
-        ],
-        total_staff: 45,
-        staff_by_department: { Gaming: 15, Security: 8, "F&B": 12, Management: 5, Maintenance: 5 },
-        training_completion_rate: 87.5,
-        average_performance_score: 4.7
+        total_staff: 143,
+        active_employees: 143,
+        staff_by_department: {
+          Gaming: 45,
+          Security: 25,
+          "F&B": 38,
+          Management: 15,
+          Maintenance: 20
+        },
+        training_completion_rate: 78.5,
+        average_performance_score: 4.2,
+        recent_training_enrollments: 12,
+        reviews_due_count: 8,
+        training_stats: {
+          total_courses: 15,
+          total_enrollments: 285,
+          completed_this_month: 45,
+          completion_rate: 78.5
+        }
+      });
+    }
+
+    if (endpoint.includes('/api/staff/members')) {
+      const staffMembers = [
+        {
+          id: "staff-001",
+          employee_id: "EMP001",
+          first_name: "Maria",
+          last_name: "Rodriguez",
+          department: "Gaming",
+          position: "Senior Dealer",
+          hire_date: "2022-03-15",
+          performance_score: 92,
+          training_completion_rate: 95,
+          employment_status: "active",
+          skills: ["Blackjack", "Poker", "Customer Service", "Cash Handling", "Problem Solving"],
+          email: "maria.rodriguez@ballyscasino.lk"
+        },
+        {
+          id: "staff-002", 
+          employee_id: "EMP002",
+          first_name: "James",
+          last_name: "Chen",
+          department: "Security",
+          position: "Security Supervisor",
+          hire_date: "2021-08-20",
+          performance_score: 88,
+          training_completion_rate: 100,
+          employment_status: "active",
+          skills: ["Surveillance", "Crowd Control", "Emergency Response", "Report Writing"],
+          email: "james.chen@ballyscasino.lk"
+        },
+        {
+          id: "staff-003",
+          employee_id: "EMP003", 
+          first_name: "Sarah",
+          last_name: "Johnson",
+          department: "F&B",
+          position: "Restaurant Manager",
+          hire_date: "2020-11-10",
+          performance_score: 95,
+          training_completion_rate: 92,
+          employment_status: "active",
+          skills: ["Food Service", "Inventory Management", "Staff Training", "Customer Relations"],
+          email: "sarah.johnson@ballyscasino.lk"
+        },
+        {
+          id: "staff-004",
+          employee_id: "EMP004",
+          first_name: "Michael",
+          last_name: "Patel",
+          department: "Management",
+          position: "Floor Manager",
+          hire_date: "2019-05-14",
+          performance_score: 89,
+          training_completion_rate: 88,
+          employment_status: "active",
+          skills: ["Leadership", "Operations Management", "Staff Supervision", "Customer Service"],
+          email: "michael.patel@ballyscasino.lk"
+        },
+        {
+          id: "staff-005",
+          employee_id: "EMP005",
+          first_name: "Lisa",
+          last_name: "Wang",
+          department: "Gaming",
+          position: "Pit Boss",
+          hire_date: "2021-01-22",
+          performance_score: 91,
+          training_completion_rate: 96,
+          employment_status: "active",
+          skills: ["Game Supervision", "Dealer Management", "Risk Assessment", "Customer Relations"],
+          email: "lisa.wang@ballyscasino.lk"
+        },
+        {
+          id: "staff-006",
+          employee_id: "EMP006",
+          first_name: "David",
+          last_name: "Kumar",
+          department: "Maintenance",
+          position: "Technical Specialist",
+          hire_date: "2022-09-08",
+          performance_score: 85,
+          training_completion_rate: 82,
+          employment_status: "active",
+          skills: ["Equipment Repair", "Preventive Maintenance", "Electrical Systems", "HVAC"],
+          email: "david.kumar@ballyscasino.lk"
+        }
+      ];
+      
+      return Promise.resolve({
+        staff_members: staffMembers,
+        total_staff: 143,
+        filtered_count: staffMembers.length
+      });
+    }
+
+    if (endpoint.includes('/api/staff/training/courses')) {
+      const trainingCourses = [
+        {
+          id: "course-001",
+          course_name: "Responsible Gaming Certification",
+          description: "Comprehensive training on responsible gaming practices, problem gambling identification, and customer intervention techniques.",
+          category: "Compliance",
+          duration_hours: 8,
+          difficulty_level: "intermediate",
+          passing_score: 80,
+          is_mandatory: true,
+          is_active: true,
+          required_for_positions: ["Dealer", "Pit Boss", "Floor Manager"],
+          created_date: "2024-01-15"
+        },
+        {
+          id: "course-002",
+          course_name: "Anti-Money Laundering (AML) Training",
+          description: "Training on AML regulations, suspicious transaction identification, and reporting requirements for casino operations.",
+          category: "Compliance",
+          duration_hours: 6,
+          difficulty_level: "intermediate", 
+          passing_score: 85,
+          is_mandatory: true,
+          is_active: true,
+          required_for_positions: ["All Positions"],
+          created_date: "2024-01-10"
+        },
+        {
+          id: "course-003",
+          course_name: "Customer Service Excellence",
+          description: "Advanced customer service techniques, conflict resolution, and VIP guest management for luxury gaming environments.",
+          category: "Customer Service",
+          duration_hours: 4,
+          difficulty_level: "beginner",
+          passing_score: 75,
+          is_mandatory: false,
+          is_active: true,
+          required_for_positions: ["Dealer", "Host", "Manager"],
+          created_date: "2024-02-01"
+        },
+        {
+          id: "course-004",
+          course_name: "Security Protocols & Emergency Response",
+          description: "Comprehensive security training covering threat assessment, emergency procedures, and incident response protocols.",
+          category: "Security",
+          duration_hours: 12,
+          difficulty_level: "advanced",
+          passing_score: 90,
+          is_mandatory: true,
+          is_active: true,
+          required_for_positions: ["Security Officer", "Security Supervisor"],
+          created_date: "2024-01-20"
+        }
+      ];
+      
+      return Promise.resolve(trainingCourses);
+    }
+
+    if (endpoint.includes('/api/staff/training/records')) {
+      const trainingRecords = [
+        {
+          id: "record-001",
+          staff_id: "staff-001",
+          staff_name: "Maria Rodriguez",
+          course_id: "course-001", 
+          course_name: "Responsible Gaming Certification",
+          enrollment_date: "2024-01-20",
+          completion_date: "2024-01-25",
+          status: "completed",
+          score: 92,
+          time_spent_minutes: 480,
+          attempts: 1
+        },
+        {
+          id: "record-002",
+          staff_id: "staff-001",
+          staff_name: "Maria Rodriguez", 
+          course_id: "course-002",
+          course_name: "Anti-Money Laundering (AML) Training",
+          enrollment_date: "2024-02-01",
+          completion_date: "2024-02-03",
+          status: "completed",
+          score: 88,
+          time_spent_minutes: 360,
+          attempts: 1
+        },
+        {
+          id: "record-003",
+          staff_id: "staff-002",
+          staff_name: "James Chen",
+          course_id: "course-004",
+          course_name: "Security Protocols & Emergency Response", 
+          enrollment_date: "2024-01-15",
+          completion_date: "2024-01-20",
+          status: "completed",
+          score: 95,
+          time_spent_minutes: 720,
+          attempts: 1
+        },
+        {
+          id: "record-004",
+          staff_id: "staff-003",
+          staff_name: "Sarah Johnson",
+          course_id: "course-003",
+          course_name: "Customer Service Excellence",
+          enrollment_date: "2024-02-10",
+          completion_date: null,
+          status: "in_progress", 
+          score: null,
+          time_spent_minutes: 180,
+          attempts: 0
+        },
+        {
+          id: "record-005",
+          staff_id: "staff-004", 
+          staff_name: "Michael Patel",
+          course_id: "course-001",
+          course_name: "Responsible Gaming Certification",
+          enrollment_date: "2024-02-05",
+          completion_date: null,
+          status: "enrolled",
+          score: null,
+          time_spent_minutes: 60,
+          attempts: 0
+        },
+        {
+          id: "record-006",
+          staff_id: "staff-005",
+          staff_name: "Lisa Wang", 
+          course_id: "course-002",
+          course_name: "Anti-Money Laundering (AML) Training",
+          enrollment_date: "2024-01-25",
+          completion_date: "2024-01-30",
+          status: "completed",
+          score: 91,
+          time_spent_minutes: 380,
+          attempts: 1
+        }
+      ];
+      
+      return Promise.resolve({
+        training_records: trainingRecords,
+        total_records: trainingRecords.length
       });
     }
 
