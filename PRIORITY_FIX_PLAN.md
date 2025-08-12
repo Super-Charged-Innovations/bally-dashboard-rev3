@@ -27,7 +27,7 @@ allow_origins=["*"]
 
 # Fix to:
 allow_origins=[
-    "https://278d5cb3-1990-4612-af40-7935ae311bb8.preview.emergentagent.com",
+    "https://casino-enterprise.preview.emergentagent.com",
     "http://localhost:3000"  # Development only
 ]
 ```
@@ -119,7 +119,7 @@ sudo systemctl status mongod
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://278d5cb3-1990-4612-af40-7935ae311bb8.preview.emergentagent.com",
+        "https://casino-enterprise.preview.emergentagent.com",
         "http://localhost:3000"
     ],
     allow_credentials=True,

@@ -14,7 +14,7 @@ from datetime import datetime
 import time
 
 class PreDemoTester:
-    def __init__(self, base_url="https://278d5cb3-1990-4612-af40-7935ae311bb8.preview.emergentagent.com"):
+    def __init__(self, base_url="https://casino-enterprise.preview.emergentagent.com"):
         self.base_url = base_url
         self.superadmin_token = None
         self.manager_token = None
