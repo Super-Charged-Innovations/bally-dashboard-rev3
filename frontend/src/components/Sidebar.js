@@ -217,16 +217,20 @@ const Sidebar = ({ isOpen, onToggle, user }) => {
       {/* Logo Section */}
       <div className="flex items-center justify-center h-16 px-4 border-b border-gray-200">
         {isOpen ? (
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-full gradient-casino flex items-center justify-center">
-              <span className="text-sm font-bold text-white">B</span>
-            </div>
-            <span className="text-lg font-bold text-gray-900">Bally's Admin</span>
+          <div className="flex items-center space-x-3">
+            <img 
+              src="/ballys-logo.svg" 
+              alt="Bally's Casino" 
+              className="h-8 w-auto"
+            />
+            <span className="text-lg font-bold text-gray-900">Admin Panel</span>
           </div>
         ) : (
-          <div className="h-8 w-8 rounded-full gradient-casino flex items-center justify-center">
-            <span className="text-sm font-bold text-white">B</span>
-          </div>
+          <img 
+            src="/ballys-logo.svg" 
+            alt="Bally's Casino" 
+            className="h-8 w-8 rounded object-contain"
+          />
         )}
       </div>
 
