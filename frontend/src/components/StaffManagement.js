@@ -115,11 +115,11 @@ const StaffManagement = ({ user }) => {
           <p className="text-gray-600">Employee management, training, and performance tracking</p>
         </div>
         <div className="flex space-x-2">
-          <button className="btn-secondary flex items-center space-x-2">
+          <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
             <BookOpenIcon className="h-4 w-4" />
             <span>Add Training</span>
           </button>
-          <button className="btn-primary flex items-center space-x-2">
+          <button className="bg-primary-950 hover:bg-primary-800 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
             <UserPlusIcon className="h-4 w-4" />
             <span>Add Employee</span>
           </button>
