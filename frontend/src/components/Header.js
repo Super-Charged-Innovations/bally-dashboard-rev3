@@ -63,9 +63,19 @@ const Header = ({ user, onLogout, onMenuToggle }) => {
         >
           <Bars3Icon className="h-6 w-6" />
         </button>
+
+        {/* Bally's Logo */}
+        <div className="flex items-center space-x-4">
+          <img 
+            src="/ballys-logo.svg" 
+            alt="Bally's Casino" 
+            className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity duration-200"
+          />
+          <div className="border-l border-adaptive-border h-10"></div>
+        </div>
         
         <div className="animate-fade-in-up">
-          <h1 className="text-2xl font-bold text-adaptive-text font-casino-serif">
+          <h1 className="text-xl font-bold text-adaptive-text font-casino-serif">
             Welcome back, <span className="text-adaptive-text-accent">{user?.full_name?.split(' ')[0] || 'Admin'}</span>
           </h1>
           <p className="text-sm text-adaptive-text-muted font-casino-sans">
