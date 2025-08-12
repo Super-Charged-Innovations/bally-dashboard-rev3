@@ -53,17 +53,21 @@ const Login = ({ onLogin, onDirectAccess, loading }) => {
       <div className="max-w-md w-full space-y-8 relative z-10">
         {/* Logo and Title */}
         <div className="text-center animate-fade-in-up">
-          <div className="mx-auto h-24 w-24 casino-card flex items-center justify-center mb-6">
-            <span className="text-3xl font-bold text-adaptive-text-accent font-casino-serif">B</span>
+          <div className="mx-auto h-32 w-auto flex items-center justify-center mb-6">
+            <img 
+              src="/ballys-logo.svg" 
+              alt="Bally's Casino"
+              className="h-28 w-auto opacity-95 hover:opacity-100 transition-opacity duration-300"
+            />
           </div>
           <h2 className="mt-6 text-4xl font-extrabold text-adaptive-text font-casino-serif">
-            Bally's Casino
+            Admin Dashboard
           </h2>
           <p className="mt-3 text-lg text-adaptive-text-accent font-casino-sans font-medium">
-            Admin Dashboard
+            Sri Lanka's Premier Gaming Experience
           </p>
           <p className="mt-1 text-sm text-adaptive-text-muted">
-            Sri Lanka's Premier Gaming Experience
+            Secure Access Portal
           </p>
         </div>
 
