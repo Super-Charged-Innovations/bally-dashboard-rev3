@@ -468,7 +468,7 @@ const StaffManagement = ({ user }) => {
                   <TrophyIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Performance Management</h3>
                   <p className="text-gray-600">Advanced performance tracking and review management coming soon.</p>
-                  <button className="mt-4 btn-primary">
+                  <button className="mt-4 bg-primary-950 hover:bg-primary-800 text-white px-6 py-2 rounded-lg transition-colors duration-200">
                     Configure Performance System
                   </button>
                 </div>
