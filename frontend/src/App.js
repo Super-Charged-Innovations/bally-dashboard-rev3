@@ -44,6 +44,11 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  // Initialize auth check on mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
   // Check if this should be mobile app
   const shouldUseMobileApp = () => {
     const currentPath = window.location.pathname;
@@ -54,10 +59,6 @@ function App() {
   if (shouldUseMobileApp()) {
     return <MobileApp />;
   }
-
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
 
   const checkAuthStatus = async () => {
     try {
