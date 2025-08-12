@@ -354,14 +354,73 @@ const StaffManagement = ({ user }) => {
               {/* Training & LMS Tab */}
               {activeTab === 'training' && (
                 <div className="space-y-6">
+                  {/* Training Overview Stats */}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="bg-blue-50 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <BookOpenIcon className="h-8 w-8 text-blue-600 mr-3" />
+                        <div>
+                          <p className="text-sm text-blue-600 font-medium">Total Courses</p>
+                          <p className="text-2xl font-bold text-blue-900">{trainingCourses.length}</p>
+                          <p className="text-xs text-blue-600">Active courses</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-green-50 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <CheckCircleIcon className="h-8 w-8 text-green-600 mr-3" />
+                        <div>
+                          <p className="text-sm text-green-600 font-medium">Completed</p>
+                          <p className="text-2xl font-bold text-green-900">
+                            {trainingRecords.filter(r => r.status === 'completed').length}
+                          </p>
+                          <p className="text-xs text-green-600">This month</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-yellow-50 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <ClockIcon className="h-8 w-8 text-yellow-600 mr-3" />
+                        <div>
+                          <p className="text-sm text-yellow-600 font-medium">In Progress</p>
+                          <p className="text-2xl font-bold text-yellow-900">
+                            {trainingRecords.filter(r => r.status === 'in_progress').length}
+                          </p>
+                          <p className="text-xs text-yellow-600">Active learners</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-purple-50 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <TrophyIcon className="h-8 w-8 text-purple-600 mr-3" />
+                        <div>
+                          <p className="text-sm text-purple-600 font-medium">Avg Score</p>
+                          <p className="text-2xl font-bold text-purple-900">
+                            {Math.round(trainingRecords.filter(r => r.score).reduce((acc, r) => acc + r.score, 0) / trainingRecords.filter(r => r.score).length) || 0}%
+                          </p>
+                          <p className="text-xs text-purple-600">Overall performance</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Training Courses */}
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-gray-900">Training Courses</h3>
-                      <button className="bg-primary-950 hover:bg-primary-800 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
-                        <PlusIcon className="h-4 w-4" />
-                        <span>New Course</span>
-                      </button>
+                      <div className="flex space-x-3">
+                        <select className="border border-gray-300 rounded-md px-3 py-2 text-sm">
+                          <option value="">All Categories</option>
+                          <option value="Compliance">Compliance</option>
+                          <option value="Customer Service">Customer Service</option>
+                          <option value="Security">Security</option>
+                          <option value="Operations">Operations</option>
+                        </select>
+                        <button className="bg-primary-950 hover:bg-primary-800 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
+                          <PlusIcon className="h-4 w-4" />
+                          <span>New Course</span>
+                        </button>
+                      </div>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -397,17 +456,36 @@ const StaffManagement = ({ user }) => {
                               <p className="font-semibold">{course.passing_score}%</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Positions</p>
-                              <p className="font-semibold">{course.required_for_positions?.length || 0}</p>
+                              <p className="text-xs text-gray-500">Enrollments</p>
+                              <p className="font-semibold">{trainingRecords.filter(r => r.course_id === course.id).length}</p>
+                            </div>
+                          </div>
+
+                          {/* Course Progress Bar */}
+                          <div className="mb-4">
+                            <div className="flex justify-between text-sm mb-1">
+                              <span className="text-gray-600">Completion Rate</span>
+                              <span className="font-medium">
+                                {Math.round((trainingRecords.filter(r => r.course_id === course.id && r.status === 'completed').length / trainingRecords.filter(r => r.course_id === course.id).length) * 100) || 0}%
+                              </span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                              <div 
+                                className="bg-green-500 h-2 rounded-full" 
+                                style={{ width: `${Math.round((trainingRecords.filter(r => r.course_id === course.id && r.status === 'completed').length / trainingRecords.filter(r => r.course_id === course.id).length) * 100) || 0}%` }}
+                              ></div>
                             </div>
                           </div>
                           
                           <div className="flex space-x-2">
                             <button className="flex-1 text-sm bg-primary-950 text-white py-2 px-3 rounded-md hover:bg-primary-800 transition-colors">
-                              Manage
+                              Manage Course
                             </button>
                             <button className="text-sm bg-gray-100 text-gray-700 py-2 px-3 rounded-md hover:bg-gray-200 transition-colors">
                               <EyeIcon className="h-4 w-4" />
+                            </button>
+                            <button className="text-sm bg-gray-100 text-gray-700 py-2 px-3 rounded-md hover:bg-gray-200 transition-colors">
+                              <PencilIcon className="h-4 w-4" />
                             </button>
                           </div>
                         </div>
@@ -417,17 +495,31 @@ const StaffManagement = ({ user }) => {
 
                   {/* Recent Training Records */}
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Training Activity</h3>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-gray-900">Recent Training Activity</h3>
+                      <div className="flex space-x-2">
+                        <select className="border border-gray-300 rounded-md px-3 py-2 text-sm">
+                          <option value="">All Status</option>
+                          <option value="completed">Completed</option>
+                          <option value="in_progress">In Progress</option>
+                          <option value="enrolled">Enrolled</option>
+                        </select>
+                        <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200">
+                          Export Records
+                        </button>
+                      </div>
+                    </div>
                     <div className="overflow-x-auto">
                       <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Employee</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Course</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Enrolled</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Progress</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enrolled</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Spent</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -437,21 +529,45 @@ const StaffManagement = ({ user }) => {
                                 {record.staff_name || 'Unknown Staff'}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {record.course_name || 'Unknown Course'}
+                                <div>
+                                  <div className="font-medium">{record.course_name || 'Unknown Course'}</div>
+                                  <div className="text-xs text-gray-500">
+                                    {trainingCourses.find(c => c.id === record.course_id)?.category || 'Category'}
+                                  </div>
+                                </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {formatDate(record.enrollment_date)}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {Math.round((record.time_spent_minutes || 0) / 60)}h spent
+                                <div>
+                                  <div>{Math.round((record.time_spent_minutes || 0) / 60)}h {(record.time_spent_minutes || 0) % 60}m</div>
+                                  <div className="text-xs text-gray-500">
+                                    {record.attempts} attempt{record.attempts !== 1 ? 's' : ''}
+                                  </div>
+                                </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {record.score ? `${record.score}%` : '-'}
+                                {record.score ? (
+                                  <span className={`font-medium ${record.score >= 90 ? 'text-green-600' : record.score >= 75 ? 'text-blue-600' : record.score >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
+                                    {record.score}%
+                                  </span>
+                                ) : '-'}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getTrainingStatusColor(record.status)}`}>
-                                  {record.status}
+                                  {record.status.replace('_', ' ').toUpperCase()}
                                 </span>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <div className="flex space-x-1">
+                                  <button className="text-indigo-600 hover:text-indigo-900 p-1">
+                                    <EyeIcon className="h-4 w-4" />
+                                  </button>
+                                  <button className="text-gray-600 hover:text-gray-900 p-1">
+                                    <PencilIcon className="h-4 w-4" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
