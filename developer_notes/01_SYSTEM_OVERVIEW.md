@@ -51,7 +51,7 @@ motor==3.3.2
 - **Security**: CORS hardening, rate limiting, input validation
 
 ### **Environment Configuration**
-- **Frontend URL**: `https://d57b3cda-bd0b-4582-84a5-0465913d6d76.preview.emergentagent.com`
+- **Frontend URL**: `https://278d5cb3-1990-4612-af40-7935ae311bb8.preview.emergentagent.com`
 - **Backend Internal**: `http://localhost:8001`
 - **Database**: `mongodb://localhost:27017/ballys_casino_admin`
 - **Proxy Setup**: `/api` routes → port 8001, frontend → port 3000
