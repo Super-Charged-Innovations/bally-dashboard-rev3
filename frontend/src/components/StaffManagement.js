@@ -358,7 +358,7 @@ const StaffManagement = ({ user }) => {
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-gray-900">Training Courses</h3>
-                      <button className="btn-primary flex items-center space-x-2">
+                      <button className="bg-primary-950 hover:bg-primary-800 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
                         <PlusIcon className="h-4 w-4" />
                         <span>New Course</span>
                       </button>
