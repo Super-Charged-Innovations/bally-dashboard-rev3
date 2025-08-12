@@ -132,11 +132,15 @@ const MobileLogin = ({ onLogin }) => {
       <div className="w-full max-w-md">
         {/* Logo and Branding */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-2xl font-bold text-primary-950">B</span>
+          <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4 p-2">
+            <img 
+              src="/ballys-logo.svg" 
+              alt="Bally's Casino"
+              className="h-full w-full object-contain"
+            />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Bally's Casino</h1>
-          <p className="text-primary-200">Mobile Dashboard</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Mobile Dashboard</h1>
+          <p className="text-primary-200">Sri Lanka's Premier Gaming Experience</p>
         </div>
 
         {/* Login Card */}
